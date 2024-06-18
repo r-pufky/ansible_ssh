@@ -1,0 +1,7 @@
+---
+collections:
+  # https://docs.ansible.com/ansible/latest/collections/community/crypto/
+  # openssh_keypair
+  - community.crypto
+
+roles: []

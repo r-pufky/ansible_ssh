@@ -1,0 +1,245 @@
+# This is the ssh client system-wide configuration file.  See
+# ssh_config(5) for more information.  This file provides defaults for
+# users, and the values can be changed in per-user configuration files
+# or on the command line.
+
+# Configuration data is parsed as follows:
+#  1. command line options
+#  2. user-specific file
+#  3. system-wide file
+# Any configuration value is only changed the first time it is set.
+# Thus, host-specific definitions should be at the beginning of the
+# configuration file, and defaults at the end.
+
+# Site-wide defaults for some commonly used options.  For a comprehensive
+# list of available options, their meanings and defaults, please see the
+# ssh_config(5) man page.
+
+{% if ssh_client_include | length > 0 %}
+Include {{ ssh_client_include | join(' ') }}
+{% endif %}
+
+{% if ssh_client_host | length > 0 %}
+Host {{ ssh_client_host | default(['*']) | join(' ') }}
+{% else %}
+Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
+{% endif %}
+{% if ssh_client_ignore_unknown | length > 0 %}
+{# IgnoreUnknown only applies to options listed after it. #}
+  IgnoreUnknown {{ ssh_client_ignore_unknown }}
+{% endif %}
+{% if ssh_client_add_keys_to_agent is string %}
+  AddKeysToAgent {{ ssh_client_add_keys_to_agent | default('ask') | lower }}
+{% else %}
+  AddKeysToAgent {{ 'yes' if ssh_client_add_keys_to_agent else 'no' }}
+{% endif %}
+  AddressFamily {{ ssh_client_address_family | default('any') | lower }}
+  BatchMode {{ 'yes' if ssh_client_batch_mode else 'no' }}
+{% if ssh_client_bind_address | length > 0 %}
+  BindAddress {{ ssh_client_bind_address }}
+{% endif %}
+{% if ssh_client_bind_interface | length > 0 %}
+  BindInterface {{ ssh_client_bind_interface }}
+{% endif %}
+{% if ssh_client_canonical_domains | length > 0 %}
+  CanonicalDomains {{ ssh_client_canonical_domains | join(' ') }}
+{% else %}
+  CanonicalDomains none
+{% endif %}
+  CanonicalizeFallbackLocal {{ 'yes' if ssh_client_canonicalize_fallback_local else 'no' }}
+{% if ssh_client_canonicalize_hostname is string %}
+  CanonicalizeHostname none
+{% else %}
+  CanonicalizeHostname {{ 'yes' if ssh_client_canonicalize_hostname else 'no' }}
+{% endif %}
+  CanonicalizeMaxDots {{ ssh_client_canonicalize_max_dots | default(1) }}
+{% if ssh_client_canonicalize_permitted_cnames | length > 0 %}
+  CanonicalizePermittedCNAMEs{% for k, v in ssh_client_canonicalize_permitted_cnames.items() %} {{ k }}:{{ v | join(',') }}{% endfor +%}
+{% else %}
+  CanonicalizePermittedCNAMEs none
+{% endif %}
+  CASignatureAlgorithms {{ ssh_client_ca_signature_algorithms | join (',') }}
+{% for cert_file in ssh_client_certificate_file %}
+  CertificateFile {{ cert_file }}
+{% endfor %}
+  CheckHostIP {{ 'yes' if ssh_client_check_host_ip else 'no' }}
+  Ciphers {{ ssh_client_ciphers | join(',') }}
+  ClearAllForwardings {{ 'yes' if ssh_client_clear_all_forwardings else 'no' }}
+  Compression {{ 'yes' if ssh_client_compression else 'no' }}
+  ConnectionAttempts {{ ssh_client_connection_attempts | default(1) }}
+  ConnectTimeout {{ ssh_client_connect_timeout | default(0) }}
+{% if ssh_client_control_master is string %}
+  ControlMaster {{ ssh_client_control_master | default('ask') | lower }}
+{% else %}
+  ControlMaster {{ 'yes' if ssh_client_control_master else 'no' }}
+{% endif %}
+{% if ssh_client_control_path | length > 0 %}
+  ControlPath {{ ssh_client_control_path }}
+{% else %}
+  ControlPath none
+{% endif %}
+{% if ssh_client_control_persist is string %}
+  ControlPersist {{ ssh_client_control_persist }}
+{% else %}
+  ControlPersist {{ 'yes' if ssh_client_control_persist else 'no' }}
+{% endif %}
+{% for dynamic_forward in ssh_client_dynamic_forward %}
+  DynamicForward {{ dynamic_forward }}
+{% endfor %}
+  EnableEscapeCommandline {{ 'yes' if ssh_client_enable_escape_command_line else 'no' }}
+  EnableSSHKeysign {{ 'yes' if ssh_client_enable_ssh_keysign else 'no' }}
+  EscapeChar {{ ssh_client_escape_char | default('~') }}
+  ExitOnForwardFailure {{ 'yes' if ssh_client_exit_on_forward_failure else 'no' }}
+  FingerprintHash {{ ssh_client_fingerprint_hash | lower }}
+  ForkAfterAuthentication {{ 'yes' if ssh_client_fork_after_authentication else 'no' }}
+  ForwardAgent {{ 'yes' if ssh_client_forward_agent else 'no' }}
+  ForwardX11 {{ 'yes' if ssh_client_forward_x11 else 'no' }}
+  ForwardX11Timeout {{ ssh_client_forward_x11_timeout | default(1200) }}
+  ForwardX11Trusted {{ 'yes' if ssh_client_forward_x11_trusted else 'no' }}
+  GatewayPorts {{ 'yes' if ssh_client_gateway_ports else 'no' }}
+  GlobalKnownHostsFile {{ ssh_client_global_known_hosts_file | join(' ') }}
+  GSSAPIAuthentication {{ 'yes' if ssh_client_gssapi_authentication else 'no' }}
+{% if ssh_client_gssapi_client_identity | length > 0 %}
+  GSSAPIClientIdentity {{ ssh_client_gssapi_client_identity }}
+{% endif %}
+  GSSAPIDelegateCredentials {{ 'yes' if ssh_client_gssapi_delegate_credentials else 'no' }}
+  GSSAPIKeyExchange {{ 'yes' if ssh_client_gssapi_key_exchange else 'no' }}
+  GSSAPIRenewalForcesRekey {{ 'yes' if ssh_client_gssapi_renewal_forces_rekey else 'no' }}
+{% if ssh_client_gssapi_server_identity | length > 0 %}
+  GSSAPIServerIdentity {{ ssh_client_gssapi_server_identity }}
+{% endif %}
+  GSSAPITrustDNS {{ 'yes' if ssh_client_gssapi_trust_dns else 'no' }}
+  GSSAPIKexAlgorithms {{ ssh_client_gssapi_key_algorithms | join(',') }}
+  HashKnownHosts {{ 'yes' if ssh_client_hash_known_hosts else 'no' }}
+  HostbasedAcceptedAlgorithms {{ ssh_client_hostbased_accepted_algorithms | join(',') }}
+  HostbasedAuthentication {{ 'yes' if ssh_client_hostbased_authentication else 'no' }}
+  HostKeyAlgorithms {{ ssh_client_host_key_algorithms | join(',') }}
+{% if ssh_client_host_key_alias | length > 0 %}
+  HostKeyAlias {{ ssh_client_host_key_alias }}
+{% endif %}
+{% if ssh_client_hostname | length > 0 %}
+  Hostname {{ ssh_client_hostname }}
+{% endif %}
+  IdentitiesOnly {{ 'yes' if ssh_client_identities_only else 'no' }}
+{% if ssh_client_identity_agent | length > 0 %}
+  IdentityAgent {{ ssh_client_identity_agent }}
+{% endif %}
+{% for file in ssh_client_identity_file %}
+  IdentityFile {{ file }}
+{% endfor %}
+{# ssh_client_identity_unknown at beginning of block #}
+{% if ssh_client_ip_qos[0] == '' %}
+  IPQoS none
+{% else %}
+  IPQoS {{ ssh_client_ip_qos | join(' ') | lower }}
+{% endif %}
+  KbdInteractiveAuthentication {{ 'yes' if ssh_client_kbd_interactive_authentication else 'no' }}
+{% if ssh_client_kbd_interactive_devices | length > 0 %}
+  KbdInteractiveDevices {{ ssh_client_kbd_interactive_devices | join(',') }}
+{% endif %}
+  KexAlgorithms {{ ssh_client_kex_algorithms | join(',') }}
+{% if ssh_client_known_hosts_command | length > 0 %}
+  KnownHostsCommand {{ ssh_client_known_hosts_command }}
+{% endif %}
+{% if ssh_client_local_command | length > 0 %}
+  LocalCommand {{ ssh_client_local_command }}
+{% endif %}
+{% for forward in ssh_client_local_forward %}
+  LocalForward {{ forward.listener }} {{ forward.destination }}
+{% endfor %}
+  LogLevel {{ ssh_client_log_level | default('INFO') | upper }}
+{% if ssh_client_log_verbose | length > 0 %}
+  LogVerbose {{ ssh_client_log_verbose | join(',') }}
+{% else %}
+  LogVerbose none
+{% endif %}
+  MACs {{ ssh_client_macs | join(',') }}
+  NoHostAuthenticationForLocalhost {{ 'yes' if ssh_client_no_host_authentication_for_local_host else 'no' }}
+  NumberOfPasswordPrompts {{ ssh_client_number_of_password_prompts | default('3') }}
+  PasswordAuthentication {{ 'yes' if ssh_client_password_authentication else 'no' }}
+  PermitLocalCommand {{ 'yes' if ssh_client_permit_local_command else 'no' }}
+{% if ssh_client_permit_remote_open | length == 0 or ssh_client_permit_remote_open[0] == 'none' %}
+  PermitRemoteOpen none
+{% else %}
+  PermitRemoteOpen {{ ssh_client_permit_remote_open | join(' ') }}
+{% endif %}
+{% if ssh_client_pkcs11_provider | length > 0 %}
+  PKCS11Provider {{ ssh_client_pkcs11_provider }}
+{% endif %}
+  Port {{ ssh_client_port | default(22) }}
+  PreferredAuthentications {{ ssh_client_preferred_authentications | join(',') | lower }}
+{% if ssh_client_proxy_command | length > 0  %}
+  ProxyCommand {{ ssh_client_proxy_command }}
+{% endif %}
+{% if ssh_client_proxy_jump | length > 0 %}
+  ProxyJump {{ ssh_client_proxy_jump | join(',') }}
+{% endif %}
+  ProxyUseFdpass {{ 'yes' if ssh_client_proxy_use_fdpass else 'no' }}
+  PubkeyAcceptedAlgorithms {{ ssh_client_pubkey_accepted_algorithms | join(',') }}
+{% if ssh_client_pubkey_authentication is string %}
+  PubkeyAuthentication {{ ssh_client_pubkey_authentication | default('yes') | lower }}
+{% else %}
+  PubkeyAuthentication {{ 'yes' if ssh_client_pubkey_authentication else 'no' }}
+{% endif %}
+  RekeyLimit {{ ssh_client_rekey_limit.data | default('0') }} {{ ssh_client_rekey_limit.time | default('0') }}
+{% if ssh_client_remote_command | length > 0 %}
+  RemoteCommand {{ ssh_client_remote_command }}
+{% endif %}
+{% for forward in ssh_client_remote_forward %}
+  RemoteForward {{ forward.listener }} {{ forward.destination }}
+{% endfor %}
+{% if ssh_client_request_tty is string %}
+  RequestTTY {{ ssh_client_request_tty | default('auto') | lower }}
+{% else %}
+  RequestTTY {{ 'yes' if ssh_client_request_tty else 'no' }}
+{% endif %}
+  RequiredRSASize {{ ssh_client_required_rsa_size | default(ssh_role_debian_rsa_key_minimum_size) }}
+{% if ssh_client_revoked_host_keys | length > 0 %}
+  RevokedHostKeys {{ ssh_client_revoked_host_keys }}
+{% endif %}
+  SecurityKeyProvider {{ ssh_client_security_key_provider | default('internal') }}
+{% for env in ssh_client_send_env %}
+  SendEnv {{ env }}
+{% endfor %}
+  ServerAliveCountMax {{ ssh_client_server_alive_count_max | default(3) }}
+  ServerAliveInterval {{ ssh_client_server_alive_interval | default(0) }}
+  SessionType {{ ssh_client_session_type | default('default') | lower }}
+{% for env in ssh_client_set_env %}
+  SetEnv {{ env }}
+{% endfor %}
+  StdinNull {{ 'yes' if ssh_client_stdin_null else 'no' }}
+  StreamLocalBindMask {{ ssh_client_stream_local_bind_mask | default('0177') }}
+  StreamLocalBindUnlink {{ 'yes' if ssh_client_stream_local_bind_unlink else 'no' }}
+{% if ssh_client_strict_host_key_checking is string %}
+  StrictHostKeyChecking {{ ssh_client_strict_host_key_checking | default('ask') | lower }}
+{% else %}
+  StrictHostKeyChecking {{ 'yes' if ssh_client_strict_host_key_checking else 'no' }}
+{% endif %}
+  SyslogFacility {{ ssh_client_syslog_facility | default('USER') | upper }}
+  TCPKeepAlive {{ 'yes' if ssh_client_tcp_keep_alive else 'no' }}
+{% if ssh_client_tunnel is string %}
+  Tunnel {{ ssh_client_tunnel | default('point-to-point') | lower }}
+{% else %}
+  Tunnel {{ 'yes' if ssh_client_tunnel else 'no' }}
+{% endif %}
+{% if ssh_client_tunnel_device.remote | length > 0 %}
+  TunnelDevice {{ ssh_client_tunnel_device.local | default('any') }}:{{ ssh_client_tunnel_device.remote | default('any') }}
+{% else %}
+  TunnelDevice {{ ssh_client_tunnel_device.local | default('any') }}
+{% endif %}
+{% if ssh_client_update_host_keys is string %}
+  UpdateHostKeys {{ ssh_client_update_host_keys | default('ask') | lower }}
+{% else %}
+  UpdateHostKeys {{ 'yes' if ssh_client_update_host_keys else 'no' }}
+{% endif %}
+{% if ssh_client_user | length > 0 %}
+  User {{ ssh_client_user }}
+{% endif %}
+  UserKnownHostsFile {{ ssh_client_user_known_hosts_file | join(' ') }}
+{% if ssh_client_verify_host_key_dns is string %}
+  VerifyHostKeyDNS {{ ssh_client_verify_host_key_dns | default('ask') | lower }}
+{% else %}
+  VerifyHostKeyDNS {{ 'yes' if ssh_client_verify_host_key_dns else 'no' }}
+{% endif %}
+  VisualHostKey {{ 'yes' if ssh_client_visual_host_key else 'no' }}
+  XAuthLocation {{ ssh_client_xauth_location | default('/usr/bin/xauth') }}

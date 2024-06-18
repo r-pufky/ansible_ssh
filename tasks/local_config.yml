@@ -1,0 +1,31 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# SSH/SSHD (Local Configuration)
+###############################################################################
+# Configure SSH/SSHD local options.
+#
+# Args:
+#   include: str - include directory.
+#   config: str - name of local config ({INCLUDE}/{CONFIG}).
+#   state: str - whether config should be present or absent.
+#   options: str - raw SSH/SSHD config
+#
+# Reference:
+# * https://manpages.debian.org/bookworm/openssh-client/ssh_config.5.en.html
+# * https://manpages.debian.org/bookworm/openssh-server/sshd_config.5.en.html
+
+- name: 'Local config | remove local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path
+  ansible.builtin.file:
+    path: '{{ include }}/{{ config }}.conf'
+    state: 'absent'
+  when: state | lower == 'absent'
+
+- name: 'Local config | set local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path
+  ansible.builtin.copy:
+    dest: '{{ include }}/{{ config }}.conf'
+    content: '{{ options }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  when: state | lower == 'present'

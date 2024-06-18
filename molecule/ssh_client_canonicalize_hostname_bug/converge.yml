@@ -1,0 +1,11 @@
+---
+# yamllint disable rule:line-length
+- name: 'SSH client canonicalize hostname bug | converge'
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: 'SSH client canonicalize hostname bug | converge | test CanonicalizeHostname none debian bug'
+      ansible.builtin.include_role:
+        name: 'ssh'
+      vars:
+        ssh_client_canonicalize_hostname: ''

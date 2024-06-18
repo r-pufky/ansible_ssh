@@ -1,0 +1,56 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Manage Host Keys
+###############################################################################
+# Remove user-defined insecure keys and upgrade RSA host keys to minimum bit
+# length if specified.
+
+- name: 'Host keys | remove insecure host keys'
+  ansible.builtin.file:
+    path: '/etc/ssh/{{ item }}'
+    state: 'absent'
+  loop: '{{ ssh_security_remove_host_keys }}'
+  notify: 'Handlers | restart SSH'
+
+- name: 'Host keys | detect host RSA key'
+  ansible.builtin.stat:
+    path: '/etc/ssh/ssh_host_rsa_key'
+  register: _ssh_rsa_host_key
+
+- name: 'Host keys | query host RSA key strength'
+  ansible.builtin.command: 'ssh-keygen -lf /etc/ssh/ssh_host_rsa_key'
+  register: _ssh_rsa_host_key_strength
+  changed_when: false
+  failed_when: >
+    _ssh_rsa_host_key_strength.rc != 0 and
+    _ssh_rsa_host_key_strength.rc != 255
+  when: _ssh_rsa_host_key.stat.exists
+
+- name: 'Host keys | regnerate host RSA key to {{ ssh_security_regenerate_host_rsa_keys }}'
+  community.crypto.openssh_keypair:
+    path: '/etc/ssh/ssh_host_rsa_key'
+    size: '{{ ssh_security_regenerate_host_rsa_keys }}'
+    type: 'rsa'
+    state: 'present'
+    force: true
+  register: _ssh_rsa_host_key_changed
+  notify: 'Handlers | restart SSH'
+  when: |
+    _ssh_rsa_host_key.stat.exists and
+    ssh_security_regenerate_host_rsa_keys != '' and
+    _ssh_rsa_host_key_strength.stdout.split(' ')[0] | int < ssh_security_regenerate_host_rsa_keys
+
+- name: 'Host keys | HOST KEY CHANGE WARNING'  # noqa no-handler execute immediately warning message
+  ansible.builtin.debug:
+    msg: |
+      Target RSA host keys have changed. WILL produce host warning. Remove
+      previously saved key:
+
+        ssh-keygen -R {{ inventory_hostname }}
+
+      It might be prudent to ignore one-time for playbook:
+
+      ansible-playbook site.yml --ssh-common-args='-o UserKnownHostsFile=/dev/null'
+  changed_when: false
+  when: _ssh_rsa_host_key_changed.changed

@@ -1,0 +1,10 @@
+---
+###############################################################################
+# SSHD Handlers
+###############################################################################
+
+- name: 'Handlers | restart SSH'
+  ansible.builtin.systemd:
+    name: 'ssh'
+    state: 'restarted'
+    enabled: true

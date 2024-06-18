@@ -1,0 +1,11 @@
+---
+- name: 'Main | prep'
+  ansible.builtin.include_tasks: 'prep.yml'
+- name: 'Main | packages'
+  ansible.builtin.include_tasks: 'packages.yml'
+- name: 'Main | sshd config'
+  ansible.builtin.include_tasks: 'sshd_config.yml'
+- name: 'Main | ssh config'
+  ansible.builtin.include_tasks: 'ssh_config.yml'
+- name: 'Main | host keys'
+  ansible.builtin.include_tasks: 'host_keys.yml'

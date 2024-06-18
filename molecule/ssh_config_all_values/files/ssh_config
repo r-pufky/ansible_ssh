@@ -1,0 +1,121 @@
+# This is the ssh client system-wide configuration file.  See
+# ssh_config(5) for more information.  This file provides defaults for
+# users, and the values can be changed in per-user configuration files
+# or on the command line.
+
+# Configuration data is parsed as follows:
+#  1. command line options
+#  2. user-specific file
+#  3. system-wide file
+# Any configuration value is only changed the first time it is set.
+# Thus, host-specific definitions should be at the beginning of the
+# configuration file, and defaults at the end.
+
+# Site-wide defaults for some commonly used options.  For a comprehensive
+# list of available options, their meanings and defaults, please see the
+# ssh_config(5) man page.
+
+Include /etc/ssh/ssh_config.d/*.conf
+
+Match canonical host="*.example.com"
+  IgnoreUnknown HostName
+  AddKeysToAgent confirm
+  AddressFamily inet
+  BatchMode yes
+  BindAddress *
+  BindInterface *
+  CanonicalDomains example.com
+  CanonicalizeFallbackLocal no
+  CanonicalizeHostname yes
+  CanonicalizeMaxDots 2
+  CanonicalizePermittedCNAMEs *.a.example.com:*.b.example.com,*.c.example.com *.test.com:*.t.example.com
+  CASignatureAlgorithms ssh-ed25519
+  CertificateFile ~/.ssh
+  CertificateFile /etc/ssh/clients
+  CheckHostIP no
+  Ciphers chacha20-poly1305@openssh.com
+  ClearAllForwardings yes
+  Compression yes
+  ConnectionAttempts 3
+  ConnectTimeout 3
+  ControlMaster auto
+  ControlPath ~/.ssh
+  ControlPersist 1h
+  DynamicForward localhost:8080
+  DynamicForward *:3000
+  DynamicForward 12345
+  EnableEscapeCommandline yes
+  EnableSSHKeysign yes
+  EscapeChar B
+  ExitOnForwardFailure yes
+  FingerprintHash md5
+  ForkAfterAuthentication yes
+  ForwardAgent yes
+  ForwardX11 yes
+  ForwardX11Timeout 0
+  ForwardX11Trusted no
+  GatewayPorts yes
+  GlobalKnownHostsFile /etc/ssh/ssh_known_hosts
+  GSSAPIAuthentication yes
+  GSSAPIClientIdentity test-identity
+  GSSAPIDelegateCredentials yes
+  GSSAPIKeyExchange yes
+  GSSAPIRenewalForcesRekey yes
+  GSSAPIServerIdentity test-server-identity
+  GSSAPITrustDNS yes
+  GSSAPIKexAlgorithms gss-group14-sha256-
+  HashKnownHosts no
+  HostbasedAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com
+  HostbasedAuthentication yes
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
+  HostKeyAlias test-alias
+  Hostname realhost
+  IdentitiesOnly yes
+  IdentityAgent SSH_AUTH_SOCK
+  IdentityFile ~/.ssh/id_rsa
+  IPQoS none
+  KbdInteractiveAuthentication no
+  KbdInteractiveDevices pam
+  KexAlgorithms diffie-hellman-group1-sha1
+  KnownHostsCommand ls -l ~/.ssh/hosts
+  LocalCommand uptime
+  LogLevel VERBOSE
+  LogVerbose kex.c:*:1000,*:kex_exchange_identification():*,packet.c:*
+  MACs umac-64-etm@openssh.com
+  NoHostAuthenticationForLocalhost yes
+  NumberOfPasswordPrompts 1
+  PasswordAuthentication no
+  PermitLocalCommand yes
+  PermitRemoteOpen localhost:1000 192.168.0.3:*
+  PKCS11Provider /opt/openssl-1.1.1i/include
+  Port 2222
+  PreferredAuthentications publickey
+  ProxyCommand /usr/bin/nc -X connect -x 192.0.2.0:8080 %h %p
+  ProxyJump test@jump1.example.com:22,ssh://test@jump2.example.com:2222
+  ProxyUseFdpass yes
+  PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com
+  PubkeyAuthentication unbound
+  RekeyLimit 100M 1h
+  RemoteCommand uptime
+  RequestTTY yes
+  RequiredRSASize 4096
+  RevokedHostKeys /etc/ssh/rkl
+  SecurityKeyProvider $FIDO-TEST
+  ServerAliveCountMax 1
+  ServerAliveInterval 15
+  SessionType none
+  SetEnv TEST_ENV="test value"
+  StdinNull yes
+  StreamLocalBindMask 0777
+  StreamLocalBindUnlink yes
+  StrictHostKeyChecking yes
+  SyslogFacility AUTH
+  TCPKeepAlive no
+  Tunnel ethernet
+  TunnelDevice 1234
+  UpdateHostKeys ask
+  User test_user
+  UserKnownHostsFile ~/.ssh/known_hosts
+  VerifyHostKeyDNS ask
+  VisualHostKey yes
+  XAuthLocation /usr/test/alt/xauth

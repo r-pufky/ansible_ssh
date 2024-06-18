@@ -1,0 +1,25 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# SSH Configuration (ssh_config)
+###############################################################################
+# Configure SSH clients.
+
+- name: 'SSH config | set /etc/ssh/ssh_config'
+  ansible.builtin.template:
+    src: 'ssh_config.j2'
+    dest: '/etc/ssh/ssh_config'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+- name: 'SSH config | local'
+  ansible.builtin.include_tasks: 'local_config.yml'
+  vars:
+    include: '{{ ssh_client_include[0] | default("/etc/ssh/ssh_config.d") | dirname }}'
+    config: '{{ local.config }}'
+    state: '{{ local.state | default("present") }}'
+    options: '{{ local.options }}'
+  loop: '{{ ssh_client_include_files | default([]) }}'
+  loop_control:
+    loop_var: local

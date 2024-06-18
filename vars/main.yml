@@ -1,0 +1,26 @@
+---
+###############################################################################
+# SSH Role Options
+###############################################################################
+
+# Last time SSH options were validated against a default configuration.
+ssh_role_validate_date: '2024-06-14'
+ssh_role_validate_release: 'bookworm'
+
+# Default packages for SSH/SSHD.
+ssh_role_packages:
+  - 'ssh'  # meta package provides both ssh and sshd.
+
+# Default state for apt package installation. See ansible.builtin.apt.
+ssh_role_package_state: 'latest'
+
+# Minimum debian enforced RSA key size
+ssh_role_debian_rsa_key_minimum_size: 1024
+
+# KerberosGetAFSToken (ssh_server_kerberos_get_afs_token) requires these
+# packages installed or SSHD will fail to start in addition to a custom SSHD
+# binary (not provided in debian packaging).
+ssh_role_kerberos_minimum_packages:
+  - 'krb5-user'
+  - 'openafs-krb5'
+  - 'libpam-krb5'

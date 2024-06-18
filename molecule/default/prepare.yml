@@ -1,0 +1,12 @@
+---
+- name: 'Default | prepare'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Default | prepare | create /run/sshd for testing SSHD (sshd -T)'
+      ansible.builtin.file:
+        path: '/run/sshd'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+        state: 'directory'

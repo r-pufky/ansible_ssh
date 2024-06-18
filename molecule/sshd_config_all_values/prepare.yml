@@ -1,0 +1,40 @@
+---
+# yamllint disable rule:line-length
+# Manually generate testing certificate authority and sign keys for
+# HostCertificate option testing.
+#
+# Reference:
+# * https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Certificate-based_Authentication
+- name: 'SSHD config all values | prepare'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'SSHD config all values | prepare | base packages for bare-metal equivalency'
+      ansible.builtin.apt:
+        name:
+          - 'openssh-client'  # required for ssh-keygen
+          - 'openssh-server'  # required for pre-existing host keys
+        update_cache: true
+        state: 'present'
+
+    - name: 'SSHD config all values | prepare | create /run/sshd for testing SSHD (sshd -T)'
+      ansible.builtin.file:
+        path: '/run/sshd'
+        owner: 'root'
+        group: 'root'
+        mode: '0755'
+        state: 'directory'
+
+    - name: 'SSHD config all values | prepare | query existing CA'
+      ansible.builtin.stat:
+        path: '/root/.ssh/ca_key'
+      register: _test_ssh_ca_key
+
+    - name: 'SSHD config all values | prepare | generate testing CA'
+      ansible.builtin.command: 'ssh-keygen -t ecdsa -f /root/.ssh/ca_key -C "Host Certficate Authority for *.example.com" -N ""'
+      changed_when: false
+      when: not _test_ssh_ca_key.stat.exists
+
+    - name: 'SSHD config all values | prepare | sign host key with testing CA'
+      ansible.builtin.command: 'ssh-keygen -h -s /root/.ssh/ca_key -V "+1d" -I abcd -z 00001 -n server.example.com /etc/ssh/ssh_host_ecdsa_key.pub'
+      changed_when: false

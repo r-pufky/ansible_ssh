@@ -1,0 +1,28 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# SSH Security Optimizations
+###############################################################################
+
+# Remove specified host keys from system.
+# Host keys are removed from /etc/ssh. DSA keys are considered insecure.
+#
+# Default:
+#  - 'ssh_host_dsa_key'
+#  - 'ssh_host_ecdsa_key'
+#
+# Reference:
+# * https://security.stackexchange.com/questions/178958/what-are-the-differences-between-the-rsa-dsa-and-ecdsa-keys-that-ssh-uses
+ssh_security_remove_host_keys:
+  - 'ssh_host_dsa_key'
+  - 'ssh_host_ecdsa_key'
+
+# Automatically regenerate weak host RSA keys to specified strength.
+# If RSA keys are disabled in ssh_security_remove_host_keys it will not be
+# re-created. RSA host keys below this value will be re-created using this
+# value.
+#
+# Special Case: '' disables regeneration.
+#
+# Default: 4096.
+ssh_security_regenerate_host_rsa_keys: 4096

@@ -1,0 +1,100 @@
+# This is the ssh client system-wide configuration file.  See
+# ssh_config(5) for more information.  This file provides defaults for
+# users, and the values can be changed in per-user configuration files
+# or on the command line.
+
+# Configuration data is parsed as follows:
+#  1. command line options
+#  2. user-specific file
+#  3. system-wide file
+# Any configuration value is only changed the first time it is set.
+# Thus, host-specific definitions should be at the beginning of the
+# configuration file, and defaults at the end.
+
+# Site-wide defaults for some commonly used options.  For a comprehensive
+# list of available options, their meanings and defaults, please see the
+# ssh_config(5) man page.
+
+Include /etc/ssh/ssh_config.d/*.conf
+
+Host *
+  AddKeysToAgent no
+  AddressFamily any
+  BatchMode no
+  CanonicalDomains none
+  CanonicalizeFallbackLocal yes
+  CanonicalizeHostname no
+  CanonicalizeMaxDots 1
+  CanonicalizePermittedCNAMEs none
+  CASignatureAlgorithms ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
+  CheckHostIP yes
+  Ciphers chacha20-poly1305@openssh.com,aes128-ctr,aes192-ctr,aes256-ctr,aes128-gcm@openssh.com,aes256-gcm@openssh.com
+  ClearAllForwardings no
+  Compression no
+  ConnectionAttempts 1
+  ConnectTimeout 0
+  ControlMaster no
+  ControlPath none
+  ControlPersist no
+  EnableEscapeCommandline no
+  EnableSSHKeysign no
+  EscapeChar ~
+  ExitOnForwardFailure no
+  FingerprintHash sha256
+  ForkAfterAuthentication no
+  ForwardAgent no
+  ForwardX11 no
+  ForwardX11Timeout 1200
+  ForwardX11Trusted yes
+  GatewayPorts no
+  GlobalKnownHostsFile /etc/ssh/ssh_known_hosts /etc/ssh/ssh_known_hosts2
+  GSSAPIAuthentication no
+  GSSAPIDelegateCredentials no
+  GSSAPIKeyExchange no
+  GSSAPIRenewalForcesRekey no
+  GSSAPITrustDNS no
+  GSSAPIKexAlgorithms gss-group14-sha256-,gss-group16-sha512-,gss-nistp256-sha256-,gss-curve25519-sha256-,gss-group14-sha1-,gss-gex-sha1-
+  HashKnownHosts yes
+  HostbasedAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
+  HostbasedAuthentication no
+  HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
+  IdentitiesOnly no
+  IdentityFile ~/.ssh/id_rsa
+  IdentityFile ~/.ssh/id_ed25519
+  IPQoS lowdelay throughput
+  KbdInteractiveAuthentication yes
+  KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256
+  LogLevel INFO
+  LogVerbose none
+  MACs umac-64-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha1-etm@openssh.com,umac-64@openssh.com,umac-128@openssh.com,hmac-sha2-256,hmac-sha2-512,hmac-sha1
+  NoHostAuthenticationForLocalhost no
+  NumberOfPasswordPrompts 3
+  PasswordAuthentication yes
+  PermitLocalCommand no
+  PermitRemoteOpen any
+  Port 22
+  PreferredAuthentications gssapi-with-mic,hostbased,publickey,keyboard-interactive,password
+  ProxyUseFdpass no
+  PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
+  PubkeyAuthentication yes
+  RekeyLimit 0 0
+  RequestTTY auto
+  RequiredRSASize 1024
+  SecurityKeyProvider internal
+  SendEnv LANG LC_*
+  ServerAliveCountMax 3
+  ServerAliveInterval 0
+  SessionType default
+  StdinNull no
+  StreamLocalBindMask 0177
+  StreamLocalBindUnlink no
+  StrictHostKeyChecking ask
+  SyslogFacility USER
+  TCPKeepAlive yes
+  Tunnel no
+  TunnelDevice any:any
+  UpdateHostKeys yes
+  UserKnownHostsFile ~/.ssh/known_hosts ~/.ssh/known_hosts2
+  VerifyHostKeyDNS no
+  VisualHostKey no
+  XAuthLocation /usr/bin/xauth

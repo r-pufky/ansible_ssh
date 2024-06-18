@@ -1,0 +1,14 @@
+---
+###############################################################################
+# SSH Packages
+###############################################################################
+- name: 'Packages | install'
+  ansible.builtin.apt:
+    name: '{{ ssh_role_packages }}'
+    state: '{{ ssh_role_package_state }}'
+
+- name: 'Packages | install required kerberos packages'
+  ansible.builtin.apt:
+    name: '{{ ssh_role_kerberos_minimum_packages }}'
+    state: '{{ ssh_role_package_state }}'
+  when: ssh_server_kerberos_authentication

@@ -1,0 +1,110 @@
+#	$OpenBSD: sshd_config,v 1.103 2018/04/09 20:41:22 tj Exp $
+
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+
+# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options override the
+# default value.
+
+Include /etc/ssh/sshd_config.d/*.conf
+
+AddressFamily inet
+AllowAgentForwarding yes
+AllowGroups ssh mono
+AllowStreamLocalForwarding local
+AllowTcpForwarding local
+AllowUsers ssh mono
+AuthenticationMethods keyboard-interactive
+AuthorizedKeysCommand /run/authorized-keys-command
+AuthorizedKeysCommandUser authorize-keys-users
+AuthorizedKeysFile .ssh/authorized_keys
+AuthorizedPrincipalsCommand /run/authorized-principals-command
+AuthorizedPrincipalsCommandUser principal-commands-user
+AuthorizedPrincipalsFile /etc/ssh/principals-file
+CASignatureAlgorithms ssh-ed25519
+ChannelTimeout session=5m tun-connection=1h *=30m
+ChrootDirectory /tmp
+Ciphers chacha20-poly1305@openssh.com
+ClientAliveCountMax 5
+ClientAliveInterval 10
+Compression no
+DebianBanner no
+DenyGroups deny-groups
+DenyUsers denied-user
+DisableForwarding yes
+ExposeAuthInfo yes
+FingerprintHash md5
+ForceCommand force-command
+GatewayPorts clientspecified
+GSSAPIAuthentication yes
+GSSAPICleanupCredentials no
+GSSAPIKeyExchange no
+GSSAPIStrictAcceptorCheck no
+GSSAPIStoreCredentialsOnRekey yes
+GSSAPIKexAlgorithms gss-group14-sha256-
+HostbasedAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com
+HostbasedAuthentication yes
+HostbasedUsesNameFromPacketOnly yes
+HostCertificate /etc/ssh/ssh_host_ecdsa_key-cert.pub
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKeyAgent none
+HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
+IgnoreRhosts shosts-only
+IgnoreUserKnownHosts yes
+IPQoS none
+KbdInteractiveAuthentication yes
+KerberosAuthentication yes
+KerberosOrLocalPasswd no
+KerberosTicketCleanup no
+KexAlgorithms sntrup761x25519-sha512@openssh.com
+ListenAddress 127.0.0.1:22
+LoginGraceTime 10
+LogLevel DEBUG
+MACs umac-64-etm@openssh.com
+MaxAuthTries 3
+MaxSessions 1
+MaxStartups 10
+ModuliFile /etc/ssh/moduli
+PasswordAuthentication no
+PermitEmptyPasswords yes
+PermitListen 127.0.0.1:22
+PermitOpen localhost:1000 192.168.0.3:*
+PermitRootLogin no
+PermitTTY no
+PermitTunnel ethernet
+PermitUserEnvironment LANG,LC*
+PermitUserRC no
+PerSourceMaxStartups 15
+PerSourceNetBlockSize 32
+Port 22
+Port 2222
+PrintLastLog no
+PrintMotd no
+PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com
+PubkeyAuthOptions touch-required verify-required
+PubkeyAuthentication no
+RekeyLimit 1G 1h
+RequiredRSASize 4096
+RevokedKeys /etc/ssh/rkl
+SecurityKeyProvider fido-alternative-provider
+SetEnv TEST_ENV="value with spaces"
+StreamLocalBindMask 0177
+StreamLocalBindUnlink yes
+StrictModes no
+Subsystem sftp internal-sftp
+Subsystem scp internal-sftp
+SyslogFacility LOCAL7
+TCPKeepAlive no
+TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys
+UnusedConnectionTimeout 1h
+UseDNS yes
+UsePAM yes
+VersionAddendum test ssh protocol banner
+X11DisplayOffset 5
+X11Forwarding no
+X11UseLocalhost no
+XAuthLocation /usr/bin/xauth-alternative

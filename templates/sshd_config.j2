@@ -1,0 +1,254 @@
+#	$OpenBSD: sshd_config,v 1.103 2018/04/09 20:41:22 tj Exp $
+
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+
+# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options override the
+# default value.
+
+{% if ssh_server_include | length > 0 %}
+Include {{ ssh_server_include | join(' ') }}
+{% endif %}
+
+{% for env in ssh_server_accept_env %}
+AcceptEnv {{ env }}
+{% endfor %}
+AddressFamily {{ ssh_server_address_family | default('any') | lower }}
+AllowAgentForwarding {{ 'yes' if ssh_server_address_family else 'no' }}
+{% if ssh_server_allow_groups | length > 0 %}
+AllowGroups {{ ssh_server_allow_groups | default([]) | join(' ') }}
+{% endif %}
+{% if ssh_server_allow_stream_local_forwarding is string %}
+AllowStreamLocalForwarding {{ ssh_server_allow_stream_local_forwarding | default('all') | lower }}
+{% else %}
+AllowStreamLocalForwarding {{ 'yes' if ssh_server_allow_stream_local_forwarding else 'no' }}
+{% endif %}
+{% if ssh_server_allow_stream_local_forwarding is string %}
+AllowTcpForwarding {{ ssh_server_allow_stream_local_forwarding | default('all') | lower }}
+{% else %}
+AllowTcpForwarding {{ 'yes' if ssh_server_allow_stream_local_forwarding else 'no' }}
+{% endif %}
+{% if ssh_server_allow_users | length > 0 %}
+AllowUsers {{ ssh_server_allow_users | default([]) | join(' ') }}
+{% endif %}
+{% if ssh_server_authentication_methods | length > 0 %}
+AuthenticationMethods{% for methods in ssh_server_authentication_methods %} {{ methods | join(',') }}{% endfor +%}
+{% else %}
+AuthenticationMethods any
+{% endif %}
+{% if ssh_server_authorized_keys_command | length > 0 %}
+AuthorizedKeysCommand {{ ssh_server_authorized_keys_command }}
+{% else %}
+AuthorizedKeysCommand none
+{% endif %}
+{% if ssh_server_authorized_keys_command_user | length > 0 %}
+AuthorizedKeysCommandUser {{ ssh_server_authorized_keys_command_user }}
+{% else %}
+AuthorizedKeysCommandUser none
+{% endif %}
+{% if ssh_server_authorized_keys_file | length > 0 %}
+AuthorizedKeysFile {{ ssh_server_authorized_keys_file | join(' ') }}
+{% else %}
+AuthorizedKeysFile none
+{% endif %}
+{% if ssh_server_authorized_principals_command | length > 0 %}
+AuthorizedPrincipalsCommand {{ ssh_server_authorized_principals_command }}
+{% else %}
+AuthorizedPrincipalsCommand none
+{% endif %}
+{% if ssh_server_authorized_principals_command_user | length > 0 %}
+AuthorizedPrincipalsCommandUser {{ ssh_server_authorized_principals_command_user }}
+{% else %}
+AuthorizedPrincipalsCommandUser none
+{% endif %}
+{% if ssh_server_authorized_principals_file | length > 0 %}
+AuthorizedPrincipalsFile {{ ssh_server_authorized_principals_file }}
+{% else %}
+AuthorizedPrincipalsFile none
+{% endif %}
+{# implement ssh_server_banner - Banner #}
+CASignatureAlgorithms {{ ssh_server_ca_signature_algorithms | join (',') }}
+{% if ssh_server_channel_timeout | length > 0 %}
+ChannelTimeout{% for k, v in ssh_server_channel_timeout.items() %} {{ k }}={{ v }}{%- endfor +%}
+{% endif %}
+{% if ssh_server_chroot_directory | length > 0 %}
+ChrootDirectory {{ ssh_server_chroot_directory }}
+{% else %}
+ChrootDirectory none
+{% endif %}
+Ciphers {{ ssh_client_ciphers | join(',') }}
+ClientAliveCountMax {{ ssh_server_client_alive_count_max | default(3) }}
+ClientAliveInterval {{ ssh_server_client_alive_interval | default(0) }}
+Compression {{ 'yes' if ssh_server_compression else 'no' }}
+DebianBanner {{ 'yes' if ssh_server_debian_banner else 'no' }}
+{% if ssh_server_deny_groups | length > 0 %}
+DenyGroups {{ ssh_server_deny_groups | default([]) | join(' ') }}
+{% endif %}
+{% if ssh_server_deny_users | length > 0 %}
+DenyUsers {{ ssh_server_deny_users | default([]) | join(' ') }}
+{% endif %}
+DisableForwarding {{ 'yes' if ssh_server_disable_forwarding else 'no' }}
+ExposeAuthInfo {{ 'yes' if ssh_server_expose_auth_info else 'no' }}
+FingerprintHash {{ ssh_server_fingerprint_hash | lower }}
+{% if ssh_server_force_command | length > 0 %}
+ForceCommand {{ ssh_server_force_command }}
+{% else %}
+ForceCommand none
+{% endif %}
+{% if ssh_server_gateway_ports is string %}
+GatewayPorts {{ ssh_server_gateway_ports | default('clientspecified') | lower }}
+{% else %}
+GatewayPorts {{ 'yes' if ssh_server_gateway_ports else 'no' }}
+{% endif %}
+GSSAPIAuthentication {{ 'yes' if ssh_server_gssapi_authentication else 'no' }}
+GSSAPICleanupCredentials {{ 'yes' if ssh_server_gssapi_cleanup_credentials else 'no' }}
+GSSAPIKeyExchange {{ 'yes' if ssh_client_gssapi_key_exchange else 'no' }}
+GSSAPIStrictAcceptorCheck {{ 'yes' if ssh_server_gssapi_strict_acceptor_check else 'no' }}
+GSSAPIStoreCredentialsOnRekey {{ 'yes' if ssh_server_gssapi_store_credentials_on_rekey else 'no' }}
+GSSAPIKexAlgorithms {{ ssh_server_gssapi_key_algorithms | join(',') }}
+HostbasedAcceptedAlgorithms {{ ssh_server_hostbased_accepted_algorithms | join(',') }}
+HostbasedAuthentication {{ 'yes' if ssh_server_hostbased_authentication else 'no' }}
+HostbasedUsesNameFromPacketOnly {{ 'yes' if ssh_server_hostbased_uses_name_from_packet_only else 'no' }}
+{% if ssh_server_host_certificate | length > 0 %}
+HostCertificate {{ ssh_server_host_certificate }}
+{% endif %}
+{% for key in ssh_server_host_key %}
+HostKey {{ key }}
+{% endfor %}
+{% if ssh_server_host_key_agent | length > 0 %}
+HostKeyAgent {{ ssh_server_host_key_agent }}
+{% else %}
+HostKeyAgent none
+{% endif %}
+HostKeyAlgorithms {{ ssh_server_host_key_algorithms | join(',') }}
+{% if ssh_server_ignore_rhosts is string %}
+IgnoreRhosts {{ ssh_server_ignore_rhosts }}
+{% else %}
+IgnoreRhosts {{ 'yes' if ssh_server_ignore_rhosts else 'no' }}
+{% endif %}
+IgnoreUserKnownHosts {{ 'yes' if ssh_server_ignore_user_known_hosts else 'no' }}
+{# ssh_server_identity_unknown at beginning of block #}
+{% if ssh_server_ip_qos[0] == '' %}
+IPQoS none
+{% else %}
+IPQoS {{ ssh_server_ip_qos | join(' ') | lower }}
+{% endif %}
+KbdInteractiveAuthentication {{ 'yes' if ssh_server_kbd_interactive_authentication else 'no' }}
+KerberosAuthentication {{ 'yes' if ssh_server_kerberos_authentication else 'no' }}
+{#
+openssh-server not compiled with support; enabling this option will prevent SSHD server start
+KerberosGetAFSToken {{ 'yes' if ssh_server_kerberos_get_afs_token else 'no' }}
+#}
+KerberosOrLocalPasswd {{ 'yes' if ssh_server_kerberos_or_local_passwd else 'no' }}
+KerberosTicketCleanup {{ 'yes' if ssh_server_kerberos_ticket_cleanup else 'no' }}
+KexAlgorithms {{ ssh_server_kex_algorithms | join(',') }}
+{% for address in ssh_server_listen_address %}
+ListenAddress {{ address }}
+{% endfor %}
+LoginGraceTime {{ ssh_server_login_grace_time | default(120) }}
+LogLevel {{ ssh_server_log_level | default('INFO') | upper }}
+{% if ssh_server_log_verbose | length > 0 %}
+LogVerbose {{ ssh_server_log_verbose | join(',') }}
+{% endif %}
+MACs {{ ssh_server_macs | join(',') }}
+MaxAuthTries {{ ssh_server_max_auth_tries | default(6) }}
+MaxSessions {{ ssh_server_max_sessions | default(10) }}
+{% if ssh_server_max_startups | length > 1 %}
+MaxStartups {{ ssh_server_max_startups.start }}:{{ ssh_server_max_startups.rate }}:{{ ssh_server_max_startups.full }}
+{% else %}
+MaxStartups {{ ssh_server_max_startups.start }}
+{% endif %}
+ModuliFile {{ ssh_server_moduli_file | default('/etc/ssh/moduli') }}
+PasswordAuthentication {{ 'yes' if ssh_server_password_authentication else 'no' }}
+PermitEmptyPasswords {{ 'yes' if ssh_server_permit_empty_passwords else 'no' }}
+{% for listen in ssh_server_permit_listen %}
+PermitListen {{ 'none' if listen | length == 0 else listen }}
+{% endfor %}
+{% if ssh_server_permit_open | length == 0 or ssh_server_permit_open[0] == 'none' %}
+PermitOpen none
+{% else %}
+PermitOpen {{ ssh_server_permit_open | join(' ') }}
+{% endif %}
+{% if ssh_server_permit_root_login is string %}
+PermitRootLogin {{ ssh_server_permit_root_login | default('prohibit-password') | lower }}
+{% else %}
+PermitRootLogin {{ 'yes' if ssh_server_permit_root_login else 'no' }}
+{% endif %}
+PermitTTY {{ 'yes' if ssh_server_permit_tty else 'no' }}
+{% if ssh_server_permit_tunnel is string %}
+PermitTunnel {{ ssh_server_permit_tunnel | default('point-to-point') | lower }}
+{% else %}
+PermitTunnel {{ 'yes' if ssh_server_permit_tunnel else 'no' }}
+{% endif %}
+{% if ssh_server_permit_user_environment is iterable and ssh_server_permit_user_environment is not string %}
+PermitUserEnvironment {{ ssh_server_permit_user_environment | join(',') }}
+{% else %}
+PermitUserEnvironment {{ 'yes' if ssh_server_permit_user_environment else 'no' }}
+{% endif %}
+PermitUserRC {{ 'yes' if ssh_server_permit_user_rc else 'no' }}
+{% if ssh_server_per_source_max_startups >= 0 %}
+PerSourceMaxStartups {{ ssh_server_per_source_max_startups }}
+{% else %}
+PerSourceMaxStartups none
+{% endif %}
+{% if ssh_server_per_source_net_block_size | length > 1 %}
+PerSourceNetBlockSize {{ ssh_server_per_source_net_block_size.ipv4 }}:{{ ssh_server_per_source_net_block_size.ipv6 }}
+{% else %}
+PerSourceNetBlockSize {{ ssh_server_per_source_net_block_size.ipv4 }}
+{% endif %}
+{% for port in ssh_server_port %}
+Port {{ port }}
+{% endfor %}
+PrintLastLog {{ 'yes' if ssh_server_print_last_log else 'no' }}
+PrintMotd {{ 'yes' if ssh_server_print_motd else 'no' }}
+PubkeyAcceptedAlgorithms {{ ssh_server_pubkey_accepted_algorithms | join(',') }}
+{% if ssh_server_pubkey_auth_options | length > 0 %}
+PubkeyAuthOptions {{ ssh_server_pubkey_auth_options | join(' ') }}
+{% else %}
+PubkeyAuthOptions none
+{% endif %}
+PubkeyAuthentication {{ 'yes' if ssh_server_pubkey_authentication else 'no' }}
+RekeyLimit {{ ssh_server_rekey_limit.data | default('0') }} {{ ssh_server_rekey_limit.time | default('0') }}
+RequiredRSASize {{ ssh_server_required_rsa_size | default(ssh_role_debian_rsa_key_minimum_size) }}
+{% if ssh_server_revoked_keys | length > 0 %}
+RevokedKeys {{ ssh_server_revoked_keys }}
+{% else %}
+RevokedKeys none
+{% endif %}
+SecurityKeyProvider {{ ssh_server_security_key_provider | default('internal') }}
+{% for env in ssh_server_set_env %}
+SetEnv {{ env }}
+{% endfor %}
+StreamLocalBindMask {{ ssh_server_stream_local_bind_mask | default('0177') }}
+StreamLocalBindUnlink {{ 'yes' if ssh_server_stream_local_bind_unlink else 'no' }}
+StrictModes {{ 'yes' if ssh_server_strict_modes else 'no' }}
+{% for system in ssh_server_subsystem %}
+Subsystem {{ system.system }} {{ system.config }}
+{% endfor %}
+SyslogFacility {{ ssh_server_syslog_facility | default('AUTH') | upper }}
+TCPKeepAlive {{ 'yes' if ssh_server_tcp_keep_alive else 'no' }}
+{% if ssh_server_trusted_user_ca_keys | length > 0 %}
+TrustedUserCAKeys {{ ssh_server_trusted_user_ca_keys }}
+{% else %}
+TrustedUserCAKeys none
+{% endif %}
+{% if ssh_server_unused_connection_timeout | length > 0 %}
+UnusedConnectionTimeout {{ ssh_server_unused_connection_timeout }}
+{% else %}
+UnusedConnectionTimeout none
+{% endif %}
+UseDNS {{ 'yes' if ssh_server_use_dns else 'no' }}
+UsePAM {{ 'yes' if ssh_server_use_pam else 'no' }}
+{% if ssh_server_version_addendum | length > 0 %}
+VersionAddendum {{ ssh_server_version_addendum }}
+{% else %}
+VersionAddendum none
+{% endif %}
+X11DisplayOffset {{ ssh_server_x11_display_offset | default(10) }}
+X11Forwarding {{ 'yes' if ssh_server_x11_forwarding else 'no' }}
+X11UseLocalhost {{ 'yes' if ssh_server_x11_use_localhost else 'no' }}
+XAuthLocation {{ ssh_server_xauth_location | default('/use/bin/xauth') }}

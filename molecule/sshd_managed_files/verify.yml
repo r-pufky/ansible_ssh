@@ -1,0 +1,37 @@
+---
+# yamllint disable rule:line-length
+# Test manage_file code path. One test will test all options that use this
+# to manage a file via path, content or no value:
+#   * ssh_server_banner
+#   * ssh_server_host_certificate
+#   * ssh_server_host_key
+#   * ssh_server_trusted_user_ca_keys
+- name: 'SSHD managed files | verify | content'
+  hosts: 'debian-12-banner-content'
+  gather_facts: false
+  tasks:
+    - name: 'SSHD managed files | verify | content | ssh server banner'
+      ansible.builtin.slurp:
+        src: '/etc/ssh/ssh_server_banner'
+      register: _test_ssh_sshd_server_banner
+
+    - name: 'SSHD managed files | verify | content | assert generated banner'
+      ansible.builtin.assert:
+        that:
+          - _test_ssh_sshd_server_banner.content | b64decode == 'test login banner'
+        fail_msg: '/etc/ssh/ssh_server_banner is not in expected format: {{ _test_ssh_sshd_server_banner.content | b64decode }}'
+
+- name: 'SSHD managed files | verify | file path'
+  hosts: 'debian-12-banner-static'
+  gather_facts: false
+  tasks:
+    - name: 'SSHD managed files | verify | file path | ssh server banner'
+      ansible.builtin.slurp:
+        src: '/etc/ssh/test_static_file_path'
+      register: _test_ssh_static_server_banner
+
+    - name: 'SSHD managed files | verify | file path | assert static banner'
+      ansible.builtin.assert:
+        that:
+          - _test_ssh_static_server_banner.content | b64decode == 'test login banner'
+        fail_msg: '/etc/ssh/test_static_file_path is not in expected format: {{ _test_ssh_static_server_banner.content | b64decode }}'
