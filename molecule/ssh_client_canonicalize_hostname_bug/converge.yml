@@ -6,6 +6,6 @@
   tasks:
     - name: 'SSH client canonicalize hostname bug | converge | test CanonicalizeHostname none debian bug'
       ansible.builtin.include_role:
-        name: 'ssh'
+        name: 'r_pufky.srv.ssh'
       vars:
         ssh_client_canonicalize_hostname: ''

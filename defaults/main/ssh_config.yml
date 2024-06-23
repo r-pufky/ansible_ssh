@@ -5,7 +5,7 @@
 ###############################################################################
 # Use referenced man pages for detailed option usage. Options mirror man pages:
 #
-#   CanonicalizeFallbackLocal -> ssh_client_canonicalize_fallback_local
+#   ssh_client_canonicalize_fallback_local ➤ CanonicalizeFallbackLocal
 #
 # List current system configuration using:
 #
@@ -15,7 +15,7 @@
 #
 #   ssh -Q help; ssh -Q key
 #
-# See references for TOKEN, TIME FORMATS, PATTERNS, ENVIRONMENT VARIBALES.
+# See references for TOKEN, TIME FORMATS, PATTERNS, ENVIRONMENT VARIABLES.
 #
 # Algorithm lists do not apply modifiers (+, -, etc) - command line only.
 #
@@ -29,7 +29,7 @@
 # Source include directives from location.
 #
 # Additional directives are included before global configuration values.
-# Wildcards (*) may be used and will be expanded in lexcial order; files
+# Wildcards (*) may be used and will be expanded in lexical order; files
 # without absolute paths are assumed to be in /etc/ssh.
 #
 # See ssh_client_include_files to configure ssh_config.d local configs.
@@ -45,13 +45,15 @@ ssh_client_include:
   - '/etc/ssh/ssh_config.d/*.conf'
 
 # Host match to apply client configuration.
+#
 # If more than one pattern is provided they should be separated by whitespace.
 # A single '*' as a pattern can be used to provide global defaults for all
 # hosts.
 #
 # If Host is specified, Match will NOT be applied (role decision).
 #
-# Special Case: [] - disable host matching (ssh_client_match must be set).
+# Special Case:
+#   []: disable host matching (ssh_client_match must be set)
 #
 # Default: ['*'] (all hosts).
 ssh_client_host:
@@ -64,21 +66,21 @@ ssh_client_host:
 # (see reference).
 #
 # ssh_client_match:
-#     dict containing one or more match keywords and options.
+#     dict - one or more match keywords and options.
 #   all: str - always match (empty string)
 #   canonical: str - hostname canonicalization conditions that work with
-#       canonical host names only (or 'all').
+#         canonical host names only (or 'all').
 #   final: str - re-parse canonicalization files and match conditions only on
-#       final pass (or 'all').
-#   exec: execute command under the user's shell. Whitespace must be quoted.
-#       Tokens as specified from TOKENS section (see reference). Condition
-#       considered True on 0 exit status.
+#         final pass (or 'all').
+#   exec: execute command under the user's shell. Whitespace must be quoted,
+#         tokens as specified from TOKENS section (see reference). Condition
+#         considered True on 0 exit status.
 #   host: str - match against target hostname
-#   originalhost: str - matche against the hostname as it was specified on the
-#       command-line.
+#   originalhost: str - matched against the hostname as it was specified on the
+#         command-line.
 #   user: str - matches against the target username on the remote host
-#   localuser: matches against the name of the local user running SSH useful in
-#       system-wide ssh_config.
+#   localuser: str - matches against the name of the local user running SSH
+#         useful in system-wide ssh_config.
 #
 # ssh_client_match:
 #   all: ''
@@ -131,7 +133,7 @@ ssh_client_batch_mode: false
 #
 # Special Case:
 #   '': bind to any address automatic detection (default)
-#    *: bind to any address automatic detection (affeects RemoteForward config)
+#    *: bind to any address automatic detection (affects RemoteForward config)
 #
 # Default: '' (automatic detection).
 ssh_client_bind_address: ''
@@ -182,7 +184,7 @@ ssh_client_canonicalize_max_dots: 1
 # Rules to determine when CNAMEs should be followed canonicalizing hostnames.
 #
 # ssh_client_canonicalize_permitted_cnames:
-#     dict containing one or more source domains and target domains.
+#     dict - one or more source domains and target domains.
 #   {SOURCE DOMAIN}: list of str - target domain list
 #
 # ssh_client_canonicalize_permitted_cnames:
@@ -232,7 +234,7 @@ ssh_client_ca_signature_algorithms:
 # Special Case:
 #   ~: user home directory
 #   *: Tokens as specified from TOKENS section (see reference)
-#   *: ENVIRONMENT VARIBALES as specified from tokens section (see reference)
+#   *: ENVIRONMENT VARIABLES as specified from tokens section (see reference)
 #
 # Default: [] (disabled).
 ssh_client_certificate_file: []
@@ -590,7 +592,7 @@ ssh_client_identities_only: false
 # Special Case:
 #   ~: user home directory
 #   *: Tokens as specified from TOKENS section (see reference)
-#   *: ENVIRONMENT VARIBALES as specified from tokens section (see reference)
+#   *: ENVIRONMENT VARIABLES as specified from tokens section (see reference)
 #
 # Values:
 #            none: explicitly disable use of an authentication agent
@@ -677,7 +679,7 @@ ssh_client_ignore_unknown: ''
 #             #: raw numeric value for DSCP field
 #            '': use static defaults
 #
-# Default: ['lowdelay', 'throughput']
+# Default: ['lowdelay', 'throughput'].
 #
 # Reference:
 # * https://en.wikipedia.org/wiki/Differentiated_services
@@ -765,7 +767,7 @@ ssh_client_local_command: ''
 # reference).
 #
 # ssh_client_local_forward:
-#     list of dicts containing local forward configuration.
+#     list of dict - local forward configuration.
 #   - listener: str - [bind_address:]port or unix domain socket
 #     destination: str - host:port or unix domain socket
 #
@@ -785,7 +787,7 @@ ssh_client_local_forward: []
 #     FATAL: fatal errors only
 #     ERROR: fatal and non-fatal errors
 #      INFO: informational and ERROR, FATAL
-#   VERBOSE: extra informtion and INFO
+#   VERBOSE: extra information and INFO
 #     DEBUG: equivalent to DEBUG1, log extra details and VERBOSE
 #    DEBUG1: equivalent to DEBUG, log extra details and VERBOSE
 #    DEBUG2: log even more details and VERBOSE, DEBUG
@@ -890,11 +892,11 @@ ssh_client_port: 22
 # Client order for authentication methods.
 #
 # Values:
-#      gssapi-with-mic: GSSAPI authentication
-#            hostbased: host based authentication
-#            publickey: public key authentication
-# keyboard-interactive: keyboard interactive authentication
-#             password: password authentication
+#        gssapi-with-mic: GSSAPI authentication
+#              hostbased: host based authentication
+#              publickey: public key authentication
+#   keyboard-interactive: keyboard interactive authentication
+#               password: password authentication
 #
 # Default:
 #   - 'gssapi-with-mic'
@@ -1005,16 +1007,17 @@ ssh_client_pubkey_authentication: true
 # Session rekey limits.
 #
 # ssh_client_rekey_limit:
-#     dict defining SSH rekey limits.
+#     dict - SSH rekey limits.
 #   data: str - max data transmitted/received before session key renegotiation
 #       Valid suffixes:
 #         K: Kilobytes
 #         M: Megabytes
 #         G: Gigabytes
-#     Default: '0' (use cipher limit).
+#       Default: '0' (use cipher limit).
 #   time: max amount of time before session key renegotiation; Use TIME FORMAT
-#       Special Case: '' (no time based session key renegotiation).
-#     Default: '0' (use cipher limit).
+#       Special Case:
+#         '': no time based session key renegotiation
+#       Default: '0' (use cipher limit).
 #
 # Default: {data: '0', time: '0'} (use cipher limits).
 ssh_client_rekey_limit:
@@ -1042,7 +1045,7 @@ ssh_client_remote_command: ''
 # reference).
 #
 # ssh_client_remote_forwards:
-#     list of dicts containing remote forward configuration.
+#     list of dict - remote forward configuration.
 #   - listener: str - [bind_address:]port or unix domain socket
 #     destination: str - host:port or unix domain socket
 #
@@ -1055,7 +1058,7 @@ ssh_client_remote_command: ''
 # Default: [] (no remote forwards).
 ssh_client_remote_forward: []
 
-# Request a pseduo-tty for session.
+# Request a pseudo-tty for session.
 #
 # Values:
 #    True: always when standard input is a TTY
@@ -1084,8 +1087,9 @@ ssh_client_revoked_host_keys: ''
 # Library path for loading any FIDO-based authenticator-hosted keys.
 # Overrides default use of built-in USB HID support.
 #
-# Special Case: ^$* - String starting with '$' will be treated as environment
-#     variable containing the path to the library.
+# Special Case:
+#   ^$*: str starting with '$' will be treated as environment variable
+#        containing the path to the library.
 #
 # Default: 'internal'.
 ssh_client_security_key_provider: 'internal'
@@ -1173,7 +1177,7 @@ ssh_client_stream_local_bind_mask: '0177'
 # Default: False.
 ssh_client_stream_local_bind_unlink: false
 
-# Eanble strict host key checking?
+# Enable strict host key checking?
 #
 # The host keys of known hosts will be verified automatically in all cases.
 #
@@ -1198,7 +1202,7 @@ ssh_client_strict_host_key_checking: 'ask'
 # Values:
 #   DAEMON: system daemon messages
 #     USER: user-level messages (default)
-#     AUTH: security/authoritization messages
+#     AUTH: security/authorization messages
 #   LOCAL0: local use 0
 #   LOCAL1: local use 1
 #   LOCAL2: local use 2
@@ -1235,7 +1239,7 @@ ssh_client_tunnel: false
 # Tunnel device to open on the client.
 #
 # ssh_client_tunnel_device:
-#     dicts containing tunnel configuration.
+#     dict - tunnel configuration.
 #   local: str - local tunnel
 #       Values:
 #           #: int numerical tunnel ID
@@ -1275,8 +1279,8 @@ ssh_client_user: ''
 # Special Case:
 #      ~: user home directory
 #      *: Tokens as specified from TOKENS section (see reference)
-#      *: ENVIRONMENT VARIBALES as specified from tokens section (see
-#         reference)
+#      *: ENVIRONMENT VARIABLES as specified from tokens section (see
+#         reference).
 #   none: ignore any user-specific known hosts file
 #
 # Default: ['~/.ssh/known_hosts', '~/.ssh/known_hosts2']
@@ -1310,19 +1314,19 @@ ssh_client_visual_host_key: false
 ssh_client_xauth_location: '/usr/bin/xauth'
 
 ###############################################################################
-# SSH Includes Directory ('/etc/ssh/ssh_config.d)
+# SSH Includes Directory (/etc/ssh/ssh_config.d)
 ###############################################################################
 # Manage files within the first directory listed in ssh_client_include.
 #
 # ssh_client_include_files:
-#     list of dict definitions for ssh_config local configuration.
+#     list of dict - ssh_config local configuration.
 #   - config: str - name of local config ({INCLUDE}/{CONFIG})
 #     state: str - whether config should be managed or removed
 #         Values:
 #           present: manage configuration
 #           absent: remove configuration
-#       Default: 'present'.
-#     options: str - ssh_config options to manage (per ssh_config options).
+#         Default: 'present'.
+#     options: str - ssh_config options to manage (per ssh_config options)
 #
 # ssh_client_include_files:
 #   - config: 'custom_ssh_config'
@@ -1333,7 +1337,7 @@ ssh_client_xauth_location: '/usr/bin/xauth'
 #  - config: 'old_ssh_config'
 #    state: 'absent'
 #
-# Default: [] (unmanaged).
+# Default: [] (un-managed).
 #
 # Reference:
 # * https://manpages.debian.org/bookworm/openssh-client/ssh_config.5.en.html

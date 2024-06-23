@@ -31,7 +31,7 @@
       register: _test_ssh_ca_key
 
     - name: 'SSHD config all values | prepare | generate testing CA'
-      ansible.builtin.command: 'ssh-keygen -t ecdsa -f /root/.ssh/ca_key -C "Host Certficate Authority for *.example.com" -N ""'
+      ansible.builtin.command: 'ssh-keygen -t ecdsa -f /root/.ssh/ca_key -C "Host Certificate Authority for *.example.com" -N ""'
       changed_when: false
       when: not _test_ssh_ca_key.stat.exists
 

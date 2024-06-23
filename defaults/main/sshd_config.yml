@@ -5,7 +5,7 @@
 ###############################################################################
 # Use referenced man pages for detailed option usage. Options mirror man pages:
 #
-#   AllowTcpForwarding -> ssh_server_allow_tcp_forwarding
+#   ssh_server_allow_tcp_forwarding ➤ AllowTcpForwarding
 #
 # List current system configuration using:
 #
@@ -17,7 +17,7 @@
 #
 # Define Host and Match directives within ssh_server_include_files.
 #
-# See references for TOKEN, TIME FORMATS, PATTERNS, ENVIRONMENT VARIBALES.
+# See references for TOKEN, TIME FORMATS, PATTERNS, ENVIRONMENT VARIABLES.
 #
 # Algorithm lists do not apply modifiers (+, -, etc) - command line only.
 #
@@ -31,7 +31,7 @@
 # Source include directives from location.
 #
 # Additional directives are included before global configuration values.
-# Wildcards (*) may be used and will be expanded in lexcial order; files
+# Wildcards (*) may be used and will be expanded in lexical order; files
 # without absolute paths are assumed to be in /etc/ssh.
 #
 # See ssh_server_include_files to configure sshd_config.d local configs.
@@ -88,7 +88,7 @@ ssh_server_allow_agent_forwarding: true
 # Default: [] (allow all groups).
 ssh_server_allow_groups: []
 
-# Permite stream local (Unix-domain socket) forwarding?
+# Permit stream local (Unix-domain socket) forwarding?
 #
 # Disabling stream local forwarding does not improve security unless users are
 # also denied shell access, as they can always install their own forwarders.
@@ -126,8 +126,7 @@ ssh_server_allow_stream_remote_forwarding: true
 #
 # If the pattern takes the form USER@HOST then USER and HOST are separately
 # checked, restricting logins to particular users from particular hosts. HOST
-# criteria may additionally contain addresses to match in CIDR address/masklen
-# format.
+# criteria may additionally contain addresses to match in CIDR format.
 #
 # The allow/deny users directives are processed in the following order:
 #   - DenyUsers
@@ -150,7 +149,7 @@ ssh_server_allow_users: []
 #   keyboard-interactive:bsdauth: BSD auth keyboard interactive only
 #       keyboard-interactive:pam: PAM auht keyboard interactive only
 #                           none: passwordless authentication when
-#                                 ssh_server_permit_empty_passwords is True
+#                                 ssh_server_permit_empty_passwords is True.
 #                       password: password authentication
 #                      publickey: publickey authentication; if listed more
 #                                 than once, SSH verifies that keys that have
@@ -171,7 +170,8 @@ ssh_server_allow_users: []
 #     - - 'publickey'
 #       - 'publickey'
 #
-# Special Case: '' - default behavior (any authentication method).
+# Special Case:
+#   '': default behavior (any authentication method)
 #
 # Default: [].
 ssh_server_authentication_methods: []
@@ -199,7 +199,7 @@ ssh_server_authorized_keys_command: ''
 # Recommend using a dedicated user that has no other role on the host than
 # running authorized keys commands.
 #
-# Defualt: '' (no user).
+# Default: '' (no user).
 ssh_server_authorized_keys_command_user: ''
 
 # Files that contain public keys for user authentication.
@@ -208,7 +208,11 @@ ssh_server_authorized_keys_command_user: ''
 # expansion, ssh_server_authorized_keys_file is taken to be an absolute path or
 # one relative to the user's home directory.
 #
-# Special Case: '' - skip checking for user keys in files.
+# Special Case:
+#   '': skip checking for user keys in files.
+#
+# Default: ['.ssh/authorized_keys', '.ssh/authorized_keys2'].
+
 ssh_server_authorized_keys_file:
   - '.ssh/authorized_keys'
   - '.ssh/authorized_keys2'
@@ -298,9 +302,11 @@ ssh_server_ca_signature_algorithms:
 
 # How quickly to close inactive SSH channels.
 #
+# Special Case:
+#   0: all time specifications use TIME FORMAT; 0 disables timeout.
+#
 # ssh_server_channel_timeout:
-#     dict containing one or more channel type and time specifications; all
-#     time specifications use TIME FORMAT (0 disables timeout).
+#     dict - one or more channel type and time specifications
 #   agent-connection: str - TIME FORMAT open connections to ssh-agent
 #   direct-tcpip: str - TIME FORMAT open TCP socket established from
 #       ssh_client_local_forward or ssh_client_dynamic_forward.
@@ -334,11 +340,11 @@ ssh_server_channel_timeout: {}
 #
 # Directory must contain the necessary files and directories to support user
 # sessions:
-#   intertactive: shell (typically sh) and basic /dev nodes such as null, zero,
-#                 stdin, stdout, stderr, and tty devices.
-#           SFTP: no additional configuration necessary if the in-process
-#                 sftp-server is used, though sessions which use logging may
-#                 require /dev/log inside the chroot directory.
+#   interactive: shell (typically sh) and basic /dev nodes such as null, zero,
+#                stdin, stdout, stderr, and tty devices.
+#          SFTP: no additional configuration necessary if the in-process
+#                sftp-server is used, though sessions which use logging may
+#                require /dev/log inside the chroot directory.
 #
 # It is very important that the directory hierarchy be prevented from
 # modification by other processes on the system (especially those outside the
@@ -420,8 +426,7 @@ ssh_server_deny_groups: []
 #
 # If the pattern takes the form USER@HOST then USER and HOST are separately
 # checked, restricting logins to particular users from particular hosts. HOST
-# criteria may additionally contain addresses to match in CIDR address/masklen
-# format.
+# criteria may additionally contain addresses to match in CIDR format.
 #
 # The allow/deny users directives are processed in the following order:
 #   - DenyUsers
@@ -569,7 +574,7 @@ ssh_server_hostbased_accepted_algorithms:
 # Host based authentication with public key authentication? Default: False.
 ssh_server_hostbased_authentication: false
 
-# Performe a reverse lookup when matching host names.
+# Perform a reverse lookup when matching host names.
 #
 # Enabling uses the name supplied by the client rather than attempting to
 # resolve the name from the TCP connection itself.
@@ -585,7 +590,7 @@ ssh_server_hostbased_uses_name_from_packet_only: false
 # Values:
 #       {FILE}: str - path to file containing host certificate (not managed)
 #   {CONTENTS}: str - contents of host certificate; file will be managed
-#               automatically in /etc/ssh/ssh_server_host_ceritifcate.
+#               automatically in /etc/ssh/ssh_server_host_certificate.
 #           '': str - disabled.
 #
 # Default: ''.
@@ -614,8 +619,9 @@ ssh_server_host_key:
 
 # Unix socket to communicate with agent for private host keys.
 #
-# Special Case: 'SSH_AUTH_SOCK' - location of socket read from SSH_AUTH_SOCK
-#     environment variable.
+# Special Case:
+#   SSH_AUTH_SOCK: location of socket read from SSH_AUTH_SOCK environment
+#                  variable.
 #
 # Default: ''
 ssh_server_host_key_agent: ''
@@ -718,7 +724,7 @@ ssh_server_ignore_user_known_hosts: false
 #             #: raw numeric value for DSCP field
 #            '': use static defaults
 #
-# Default: ['lowdelay', 'throughput']
+# Default: ['lowdelay', 'throughput'].
 #
 # Reference:
 # * https://en.wikipedia.org/wiki/Differentiated_services
@@ -735,7 +741,7 @@ ssh_server_kbd_interactive_authentication: false
 # Server needs a Kerberos servtab which allows the verification of the KDC's
 # identity.
 #
-# Enabling this option will triger kerberos dependencies to install; see
+# Enabling this option will trigger kerberos dependencies to install; see
 # vars/ssh_role_kerberos_minimum_packages.
 #
 # Default: False.
@@ -743,7 +749,7 @@ ssh_server_kerberos_authentication: false
 
 # Get AFS token before accessing user home directory. Default: False.
 #
-# openssh-server is compiled WITHOUT kerberos suppport; installing required
+# openssh-server is compiled WITHOUT kerberos support; installing required
 # kerberos packages will not enable kerberos AFS support.
 #
 # This option provided for completeness of sshd_config options but will NOT be
@@ -805,7 +811,8 @@ ssh_server_listen_address:
 
 # Disconnect user after time (in seconds) if not successfully logged in.
 #
-# Special Case: 0 - disable time limit.
+# Special Case:
+#   0: disable time limit
 #
 # Default: 120.
 ssh_server_login_grace_time: 120
@@ -820,7 +827,7 @@ ssh_server_login_grace_time: 120
 #     FATAL: fatal errors only
 #     ERROR: fatal and non-fatal errors
 #      INFO: informational and ERROR, FATAL
-#   VERBOSE: extra informtion and INFO
+#   VERBOSE: extra information and INFO
 #     DEBUG: equivalent to DEBUG1, log extra details and VERBOSE
 #    DEBUG1: equivalent to DEBUG, log extra details and VERBOSE
 #    DEBUG2: log even more details and VERBOSE, DEBUG
@@ -907,7 +914,7 @@ ssh_server_max_sessions: 10
 #     dict - start/rate/full startup specification.
 #   start: int - number of started unauthenticated connections
 #   rate: int - optional probability of refusing unauthenticated connections
-#       (rate/100)
+#       (rate/100).
 #   full: int - optional refuse all connections after this limit
 #
 # ssh_server_max_startups:
@@ -989,7 +996,7 @@ ssh_server_permit_open:
 #                  False: do NOT allow root login
 ssh_server_permit_root_login: 'prohibit-password'
 
-# Allow pseduo-tty (pty) allocations? Default: True.
+# Allow pseudo-tty (pty) allocations? Default: True.
 ssh_server_permit_tty: true
 
 # Allow tunnel device forwarding between the client and the server.
@@ -1018,7 +1025,7 @@ ssh_server_permit_tunnel: false
 #              reference) for environment names to accept.
 #       False: do NOT allow user environments
 #
-# ssh_server_premit_user_environment:
+# ssh_server_permit_user_environment:
 #   - 'LANG'
 #   - 'LC*'
 #
@@ -1032,7 +1039,8 @@ ssh_server_permit_user_rc: true
 #
 # Applied in addition to ssh_server_max_startups; whichever is lower.
 #
-# Special Case: -1 - no limit.
+# Special Case:
+#   -1: no limit
 #
 # Default: -1 (no limit).
 ssh_server_per_source_max_startups: -1
@@ -1129,16 +1137,17 @@ ssh_server_pubkey_authentication: true
 # Session rekey limits.
 #
 # ssh_server_rekey_limit:
-#     dict defining SSH rekey limits.
+#     dict - SSH rekey limits.
 #   data: str - max data transmitted/received before session key renegotiation
 #       Valid suffixes:
 #         K: Kilobytes
 #         M: Megabytes
 #         G: Gigabytes
-#     Default: '0' (use cipher limit).
+#       Default: '0' (use cipher limit).
 #   time: max amount of time before session key renegotiation; Use TIME FORMAT
-#       Special Case: '' (no time based session key renegotiation).
-#     Default: '0' (use cipher limit).
+#       Special Case:
+#         '': no time based session key renegotiation
+#       Default: '0' (use cipher limit).
 #
 # Default: {data: '0', time: '0'} (use cipher limits).
 ssh_server_rekey_limit:
@@ -1163,13 +1172,14 @@ ssh_server_revoked_keys: ''
 # Library path for loading any FIDO-based authenticator-hosted keys.
 # Overrides default use of built-in USB HID support.
 #
-# Special Case: ^$* - String starting with '$' will be treated as environment
-#     variable containing the path to the library.
+# Special Case:
+#   ^$*: String starting with '$' will be treated as environment variable
+#        containing the path to the library.
 #
 # Default: 'internal'.
 ssh_server_security_key_provider: 'internal'
 
-# Environment variables and contents set in child sessons started by SSHD.
+# Environment variables and contents set in child sessions started by SSHD.
 #
 # Spaces require quotes. Environment variables set by ssh_server_set_env
 # override the default environment and any variables specified by the user via
@@ -1231,7 +1241,7 @@ ssh_server_subsystem:
 # Values:
 #   DAEMON: system daemon messages
 #     USER: user-level messages (default)
-#     AUTH: security/authoritization messages
+#     AUTH: security/authorization messages
 #   LOCAL0: local use 0
 #   LOCAL1: local use 1
 #   LOCAL2: local use 2
@@ -1253,7 +1263,7 @@ ssh_server_syslog_facility: 'AUTH'
 # Default: True.
 ssh_server_tcp_keep_alive: true
 
-# Absolute file path, or cotents containing public keys of trusted CAs.
+# Absolute file path, or contents containing public keys of trusted CAs.
 #
 # These are trusted to sign user certificates for authentication. If a
 # certificate is presented for authentication and has its signing CA key listed
@@ -1288,7 +1298,8 @@ ssh_server_trusted_user_ca_keys: ''
 #
 # This option may be useful in conjunction with ssh_server_channel_timeout.
 #
-# Special Case: '' - never expire connections.
+# Special Case:
+#   '': never expire connections
 #
 # Default: ''.
 ssh_server_unused_connection_timeout: ''
@@ -1355,18 +1366,18 @@ ssh_server_x11_use_localhost: true
 ssh_server_xauth_location: '/usr/bin/xauth'
 
 ###############################################################################
-# SSHD Includes Directory ('/etc/ssh/sshd_config.d)
+# SSHD Includes Directory (/etc/ssh/sshd_config.d)
 ###############################################################################
 # Manage files within the first directory listed in ssh_server_include.
 #
 # ssh_server_include_files:
-#     list of dict definitions for sshd_config local configuration.
+#     list of dict - for sshd_config local configuration.
 #   - config: str - name of local config ({INCLUDE}/{CONFIG})
 #     state: str - whether config should be managed or removed
 #         Values:
 #           present: manage configuration
 #           absent: remove configuration
-#       Default: 'present'.
+#         Default: 'present'.
 #     options: str - sshd_config options to manage (per sshd_config options).
 #
 # ssh_server_include_files:
@@ -1378,7 +1389,7 @@ ssh_server_xauth_location: '/usr/bin/xauth'
 #  - config: 'old_sshd_config'
 #    state: 'absent'
 #
-# Default: [] (unmanaged).
+# Default: [] (un-managed).
 #
 # Reference:
 # * https://manpages.debian.org/bookworm/openssh-server/sshd_config.5.en.html

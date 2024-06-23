@@ -6,7 +6,7 @@
   tasks:
     - name: 'SSH config all values | converge | apply SSH role'
       ansible.builtin.include_role:
-        name: 'ssh'
+        name: 'r_pufky.srv.ssh'
       vars:
         ssh_client_host: []
         ssh_client_match:

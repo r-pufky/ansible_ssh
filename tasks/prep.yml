@@ -4,6 +4,7 @@
 # SSH Prep
 ###############################################################################
 # Prep SSH/SSHD variables for installation and upgrade.
+
 - name: 'Prep | assert RSA required key strength only increased'
   ansible.builtin.assert:
     that:

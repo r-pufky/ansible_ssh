@@ -6,9 +6,9 @@
 # Configure SSH/SSHD local options.
 #
 # Args:
-#   include: str - include directory.
-#   config: str - name of local config ({INCLUDE}/{CONFIG}).
-#   state: str - whether config should be present or absent.
+#   include: str - include directory
+#   config: str - name of local config ({INCLUDE}/{CONFIG})
+#   state: str - whether config should be present or absent
 #   options: str - raw SSH/SSHD config
 #
 # Reference:

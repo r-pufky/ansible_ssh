@@ -9,12 +9,12 @@
 # * If empty, do nothing
 #
 # Args:
-#   managed_file_name: str - name of variable.
-#   managed_file_path: str - file path for managed file (if determined).
-#   managed_file_contents: str - variable contents.
-#   managed_file_owner: str - file owner. Default: 'root'.
-#   managed_file_group: str - file group. Default: 'root'.
-#   managed_file_mode: str - octal file mode. Default: '0644'.
+#   managed_file_name: str - name of variable
+#   managed_file_path: str - file path for managed file (if determined)
+#   managed_file_contents: str - variable contents
+#   managed_file_owner: str - file owner. Default: 'root'
+#   managed_file_group: str - file group. Default: 'root'
+#   managed_file_mode: str - octal file mode. Default: '0644'
 
 - name: 'Manage file | manage {{ managed_file_name }}'
   when: managed_file_contents | length > 0

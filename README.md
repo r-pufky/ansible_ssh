@@ -14,7 +14,7 @@ N/A
 
 ## Example Playbook
 Read through defaults before using; all `ssh_config` and `sshd_config` options
-are suppported. A machine may simultaneously be configured with both.
+are supported. A machine may simultaneously be configured with both.
 
 This will remove DSA host keys, ensure RSA host keys are at least 4096bits,
 configure SSHD, and configure SSH for two hosts.
@@ -65,7 +65,7 @@ ssh_client_tcp_keep_alive: true
 
 Apply the role
 ``` yaml
-- name: 'manage ssh'
+- name: 'Manage SSH'
   hosts: '*'
   become: true
   roles:

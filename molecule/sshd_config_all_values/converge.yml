@@ -6,7 +6,7 @@
   tasks:
     - name: 'SSHD config all values | converge | apply SSH role'
       ansible.builtin.include_role:
-        name: 'ssh'
+        name: 'r_pufky.srv.ssh'
       vars:
         ssh_security_remove_host_keys:
           - 'ssh_host_dsa_key'

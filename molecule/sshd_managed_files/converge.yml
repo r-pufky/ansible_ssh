@@ -5,4 +5,4 @@
   tasks:
     - name: 'SSHD managed files |  converge | apply SSH role'
       ansible.builtin.include_role:
-        name: 'ssh'
+        name: 'r_pufky.srv.ssh'
