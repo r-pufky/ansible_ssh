@@ -622,13 +622,14 @@ ssh_client_identity_agent: ''
 # It is possible to have multiple identity files specified in configuration
 # files; all these identities will be tried in sequence.
 #
-# DSA keys are considered insecure.
+# DSA keys are considered insecure. These are forcibly removed in SSH 9.8.
 #
 # Default:
 #   - '~/.ssh/id_rsa'
 #   - '~/.ssh/id_ed25519'
 #
 # Reference:
+# * https://www.openssh.com/txt/release-9.8
 # * https://security.stackexchange.com/questions/178958/what-are-the-differences-between-the-rsa-dsa-and-ecdsa-keys-that-ssh-uses
 ssh_client_identity_file:
   - '~/.ssh/id_rsa'
