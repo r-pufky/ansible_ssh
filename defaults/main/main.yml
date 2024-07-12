@@ -6,13 +6,15 @@
 
 # Remove specified host keys from system.
 #
-# Host keys are removed from /etc/ssh. DSA keys are considered insecure.
+# Host keys are removed from /etc/ssh. DSA keys are considered insecure. These
+# are forcibly removed in SSH 9.8.
 #
 # Default:
 #  - 'ssh_host_dsa_key'
 #  - 'ssh_host_ecdsa_key'
 #
 # Reference:
+# * https://www.openssh.com/txt/release-9.8
 # * https://security.stackexchange.com/questions/178958/what-are-the-differences-between-the-rsa-dsa-and-ecdsa-keys-that-ssh-uses
 ssh_security_remove_host_keys:
   - 'ssh_host_dsa_key'

@@ -599,7 +599,8 @@ ssh_server_host_certificate: ''
 # Absolute file paths, path, or contents containing a private host key.
 #
 # SSHD will refuse to use a file if it is group/world-accessible, and
-# ssh_server_host_key_algorithms restrictions.
+# ssh_server_host_key_algorithms restrictions. DSA keys are considered
+# insecure. These are forcibly removed in SSH 9.8.
 #
 # Values:
 #       {FILE}: str - path to file containing host key (not managed)
@@ -612,6 +613,9 @@ ssh_server_host_certificate: ''
 #   - '/etc/ssh/ssh_host_rsa_key'
 #   - '/etc/ssh/ssh_host_ecdsa_key'
 #   - '/etc/ssh/ssh_host_ed25519_key''
+#
+# Reference:
+# * https://www.openssh.com/txt/release-9.8
 ssh_server_host_key:
   - '/etc/ssh/ssh_host_rsa_key'
   - '/etc/ssh/ssh_host_ecdsa_key'

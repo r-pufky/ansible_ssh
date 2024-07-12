@@ -36,7 +36,7 @@
     force: true
   register: _ssh_rsa_host_key_changed
   notify: 'Handlers | restart SSH'
-  when: |
+  when: >
     _ssh_rsa_host_key.stat.exists and
     ssh_security_regenerate_host_rsa_keys != '' and
     _ssh_rsa_host_key_strength.stdout.split(' ')[0] | int < ssh_security_regenerate_host_rsa_keys
