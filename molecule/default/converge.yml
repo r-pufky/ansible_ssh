@@ -1,7 +1,7 @@
 ---
 - name: 'Default | converge'
-  hosts: all
-  gather_facts: true
+  hosts: 'all'
+  gather_facts: false
   tasks:
     - name: 'Default | converge | apply SSH role'
       ansible.builtin.include_role:

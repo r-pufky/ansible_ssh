@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 dependency:
   name: 'galaxy'
 driver:
@@ -12,7 +13,7 @@ provisioner:
     ssh_connection:
       pipelining: false
 platforms:
-  - name: 'debian-12-ssh'
+  - name: 'debian-12-sshd_config_remove'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:

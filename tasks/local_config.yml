@@ -16,16 +16,16 @@
 # * https://manpages.debian.org/bookworm/openssh-server/sshd_config.5.en.html
 
 - name: 'Local config | remove local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path
+  when: state | lower == 'absent'
   ansible.builtin.file:
     path: '{{ include }}/{{ config }}.conf'
     state: 'absent'
-  when: state | lower == 'absent'
 
 - name: 'Local config | set local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path
+  when: state | lower == 'present'
   ansible.builtin.copy:
     dest: '{{ include }}/{{ config }}.conf'
     content: '{{ options }}'
     owner: 'root'
     group: 'root'
     mode: '0644'
-  when: state | lower == 'present'

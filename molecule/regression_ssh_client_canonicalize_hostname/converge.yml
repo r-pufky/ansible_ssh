@@ -1,0 +1,9 @@
+---
+# yamllint disable rule:line-length
+- name: 'Regression | SSH client canonicalize hostname | converge'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Regression | SSH client canonicalize hostname | converge | test CanonicalizeHostname none debian bug'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.ssh'

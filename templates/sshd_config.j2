@@ -70,10 +70,15 @@ AuthorizedPrincipalsFile {{ ssh_server_authorized_principals_file }}
 {% else %}
 AuthorizedPrincipalsFile none
 {% endif %}
-{# implement ssh_server_banner - Banner #}
+{% if ssh_server_banner | length > 0 %}
+Banner /etc/ssh/ssh_server_banner
+{% else %}
+Banner none
+{% endif%}
 CASignatureAlgorithms {{ ssh_server_ca_signature_algorithms | join (',') }}
+{# dict return random order, use list to get idempotent config #}
 {% if ssh_server_channel_timeout | length > 0 %}
-ChannelTimeout{% for k, v in ssh_server_channel_timeout.items() %} {{ k }}={{ v }}{%- endfor +%}
+ChannelTimeout{% for i in ssh_server_channel_timeout %}{% for k, v in i.items() %} {{ k }}={{ v }}{%- endfor +%}{%- endfor +%}
 {% endif %}
 {% if ssh_server_chroot_directory | length > 0 %}
 ChrootDirectory {{ ssh_server_chroot_directory }}
@@ -114,11 +119,15 @@ HostbasedAcceptedAlgorithms {{ ssh_server_hostbased_accepted_algorithms | join('
 HostbasedAuthentication {{ 'yes' if ssh_server_hostbased_authentication else 'no' }}
 HostbasedUsesNameFromPacketOnly {{ 'yes' if ssh_server_hostbased_uses_name_from_packet_only else 'no' }}
 {% if ssh_server_host_certificate | length > 0 %}
-HostCertificate {{ ssh_server_host_certificate }}
+HostCertificate /etc/ssh/ssh_server_host_certificate
 {% endif %}
-{% for key in ssh_server_host_key %}
+{% if ssh_server_host_key is iterable and ssh_server_host_key is not string -%}
+{% for key in ssh_server_host_key -%}
 HostKey {{ key }}
 {% endfor %}
+{% else -%}
+HostKey /etc/ssh/ssh_server_host_key
+{% endif %}
 {% if ssh_server_host_key_agent | length > 0 %}
 HostKeyAgent {{ ssh_server_host_key_agent }}
 {% else %}
@@ -232,7 +241,7 @@ Subsystem {{ system.system }} {{ system.config }}
 SyslogFacility {{ ssh_server_syslog_facility | default('AUTH') | upper }}
 TCPKeepAlive {{ 'yes' if ssh_server_tcp_keep_alive else 'no' }}
 {% if ssh_server_trusted_user_ca_keys | length > 0 %}
-TrustedUserCAKeys {{ ssh_server_trusted_user_ca_keys }}
+TrustedUserCAKeys /etc/ssh/ssh_server_trusted_user_ca_keys
 {% else %}
 TrustedUserCAKeys none
 {% endif %}

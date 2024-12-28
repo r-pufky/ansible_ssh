@@ -9,7 +9,7 @@
     state: '{{ ssh_role_package_state }}'
 
 - name: 'Packages | install required kerberos packages'
+  when: ssh_server_kerberos_authentication
   ansible.builtin.apt:
     name: '{{ ssh_role_kerberos_minimum_packages }}'
     state: '{{ ssh_role_package_state }}'
-  when: ssh_server_kerberos_authentication

@@ -1,8 +1,0 @@
----
-- name: 'SSHD managed files | converge'
-  hosts: all
-  gather_facts: true
-  tasks:
-    - name: 'SSHD managed files |  converge | apply SSH role'
-      ansible.builtin.include_role:
-        name: 'r_pufky.srv.ssh'

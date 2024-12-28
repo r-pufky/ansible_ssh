@@ -8,48 +8,74 @@
 # User specified files are created before configuring sshd_config and not in
 # host_keys to ensure configuration checks do not fail.
 
-- name: 'SSHD config | manage sshd banner'
-  ansible.builtin.include_tasks: 'manage_file.yml'
-  vars:
-    managed_file_contents: '{{ ssh_server_banner }}'
-    managed_file_name: 'ssh_server_banner'
-    managed_file_path: '/etc/ssh/ssh_server_banner'
+- name: 'SSHD config | manage banner'
+  when: ssh_server_banner | length > 0
+  ansible.builtin.copy:
+    dest: '/etc/ssh/ssh_server_banner'
+    content: '{{ ssh_server_banner }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+- name: 'SSD config | remove banner'
+  when: ssh_server_banner | length == 0
+  ansible.builtin.file:
+    path: '/etc/ssh/ssh_server_banner'
+    state: 'absent'
 
 - name: 'SSHD config | manage host certificate'
-  ansible.builtin.include_tasks: 'manage_file.yml'
-  vars:
-    managed_file_contents: '{{ ssh_server_host_certificate }}'
-    managed_file_name: 'ssh_server_host_certificate'
-    managed_file_path: '/etc/ssh/ssh_server_host_certificate'
+  when: ssh_server_host_certificate | length > 0
+  ansible.builtin.copy:
+    dest: '/etc/ssh/ssh_server_host_certificate'
+    content: '{{ ssh_server_host_certificate }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
 
-- name: 'SSHD config | manage host key'
-  ansible.builtin.include_tasks: 'manage_file.yml'
-  vars:
-    managed_file_contents: '{{ ssh_server_host_key }}'
-    managed_file_name: 'ssh_server_host_key'
-    managed_file_path: '/etc/ssh/ssh_server_host_key'
-    managed_file_owner: 'root'
-    managed_file_group: 'root'
-    managed_file_mode: '0400'
+- name: 'SSD config | remove host certificate'
+  when: ssh_server_host_certificate | length == 0
+  ansible.builtin.file:
+    path: '/etc/ssh/ssh_server_host_certificate'
+    state: 'absent'
+
+- name: 'SSD config | manage host key'
+  when: ssh_server_host_key is string
+  ansible.builtin.copy:
+    dest: '/etc/ssh/ssh_server_host_key'
+    content: '{{ ssh_server_host_key }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0400'
+
+- name: 'SSD config | remove host key'
+  when: ssh_server_host_key is not string
+  ansible.builtin.file:
+    path: '/etc/ssh/ssh_server_host_key'
+    state: 'absent'
 
 - name: 'SSHD config | manage trusted user CA keys'
-  ansible.builtin.include_tasks: 'manage_file.yml'
-  vars:
-    managed_file_contents: '{{ ssh_server_trusted_user_ca_keys }}'
-    managed_file_name: 'ssh_server_trusted_user_ca_keys'
-    managed_file_path: '/etc/ssh/ssh_server_trusted_user_ca_keys'
-    managed_file_owner: 'root'
-    managed_file_group: 'root'
-    managed_file_mode: '0400'
+  when: ssh_server_trusted_user_ca_keys | length > 0
+  ansible.builtin.copy:
+    dest: '/etc/ssh/ssh_server_trusted_user_ca_keys'
+    content: '{{ ssh_server_trusted_user_ca_keys }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0400'
+
+- name: 'SSD config | remove trusted user CA keys'
+  when: ssh_server_trusted_user_ca_keys | length == 0
+  ansible.builtin.file:
+    path: '/etc/ssh/ssh_server_trusted_user_ca_keys'
+    state: 'absent'
 
 - name: 'SSHD config | set /etc/ssh/sshd_config'
+  notify: 'Handlers | restart SSH'
   ansible.builtin.template:
     src: 'sshd_config.j2'
     dest: '/etc/ssh/sshd_config'
     owner: 'root'
     group: 'root'
     mode: '0644'
-  notify: 'Handlers | restart SSH'
 
 - name: 'SSHD config | local'
   ansible.builtin.include_tasks: 'local_config.yml'
