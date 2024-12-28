@@ -1,6 +1,18 @@
 ---
-# Confirm default settings are set to expected values and config loads without
-# error.
+# A value of '' (CanonicalizeHostname none) fails ssh -G test with unsupported
+# option. Verify that debian 13+ (trixie or later) fixes it with:
+#
+#   CanonicalizeHostname none
+#   ssh -G test
+#
+# This should not return 'unsupported option "none".'
+#
+# This test confirms that ssh_client_canonicalize_hostname: '' fails as
+# expected. Once fixed, update ssh_config_all_values test with
+#
+#   converge.yml/ssh_client_canonicalize_hostname: ''
+#
+# Which will enforce testing the 'none' option.
 dependency:
   name: 'galaxy'
 driver:
@@ -13,8 +25,12 @@ provisioner:
       callback_whitelist: 'profile_tasks, timer, yaml'
     ssh_connection:
       pipelining: false
+  inventory:
+    group_vars:
+      all:
+        ssh_client_canonicalize_hostname: ''
 platforms:
-  - name: 'ssh-debian-12-default'
+  - name: 'ssh-debian-12-regression_ssh_client_canonicalize_hostname'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
@@ -34,7 +50,7 @@ scenario:
     - 'destroy'
     - 'syntax'
     - 'create'
-    - 'prepare'
+    # - 'prepare'
     - 'converge'
     - 'idempotence'
     # - 'side_effect'

@@ -1,6 +1,9 @@
 ---
-# Confirm default settings are set to expected values and config loads without
-# error.
+# yamllint disable rule:line-length
+# Confirm setting string data then reverted removes generated files; see
+# sshd_config.yml for current list of managed files.
+#
+# This should revert back to an exact copy of the default sshd_config test.
 dependency:
   name: 'galaxy'
 driver:
@@ -14,7 +17,7 @@ provisioner:
     ssh_connection:
       pipelining: false
 platforms:
-  - name: 'ssh-debian-12-default'
+  - name: 'ssh-debian-12-sshd_config_remove'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
@@ -36,7 +39,7 @@ scenario:
     - 'create'
     - 'prepare'
     - 'converge'
-    - 'idempotence'
+    # - 'idempotence'  # * sshd_config managed files are created and removed.
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

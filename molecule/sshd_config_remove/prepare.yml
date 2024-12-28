@@ -5,7 +5,7 @@
 #
 # Reference:
 # * https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Certificate-based_Authentication
-- name: 'SSHD config all values | prepare'
+- name: 'SSHD config remove | prepare'
   hosts: 'all'
   gather_facts: false
   tasks:
@@ -17,7 +17,7 @@
         update_cache: true
         state: 'present'
 
-    - name: 'SSHD config all values | prepare | create /run/sshd for testing SSHD (sshd -T)'
+    - name: 'SSHD config remove | prepare | create /run/sshd for testing SSHD (sshd -T)'
       ansible.builtin.file:
         path: '/run/sshd'
         owner: 'root'
@@ -30,12 +30,12 @@
       args:
         creates: '/tmp/ssh_host_rsa_key'  # and ssh_host_rsa_key.pub
 
-    - name: 'SSHD config all values | prepare | generate testing CA'
+    - name: 'SSHD config remove | prepare | generate testing CA'
       ansible.builtin.command: 'ssh-keygen -t ecdsa -f /tmp/ssh_host_ca_key -C "Host Certificate Authority for *.example.com" -N ""'
       args:
         creates: '/tmp/ssh_host_ca_key'
 
-    - name: 'SSHD config all values | prepare | sign testing host key with testing CA'
+    - name: 'SSHD config remove | prepare | sign testing host key with testing CA'
       ansible.builtin.command: 'ssh-keygen -h -s /tmp/ssh_host_ca_key -V "+1d" -I abcd -z 00001 -n server.example.com /tmp/ssh_host_rsa_key'
       args:
         creates: '/tmp/ssh_host_rsa_key-cert.pub'

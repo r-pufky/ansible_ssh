@@ -25,6 +25,7 @@ AuthorizedKeysFile .ssh/authorized_keys
 AuthorizedPrincipalsCommand /run/authorized-principals-command
 AuthorizedPrincipalsCommandUser principal-commands-user
 AuthorizedPrincipalsFile /etc/ssh/principals-file
+Banner /etc/ssh/ssh_server_banner
 CASignatureAlgorithms ssh-ed25519
 ChannelTimeout session=5m tun-connection=1h *=30m
 ChrootDirectory /tmp
@@ -49,8 +50,8 @@ GSSAPIKexAlgorithms gss-group14-sha256-
 HostbasedAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com
 HostbasedAuthentication yes
 HostbasedUsesNameFromPacketOnly yes
-HostCertificate /etc/ssh/ssh_host_ecdsa_key-cert.pub
-HostKey /etc/ssh/ssh_host_ecdsa_key
+HostCertificate /etc/ssh/ssh_server_host_certificate
+HostKey /etc/ssh/ssh_server_host_key
 HostKeyAgent none
 HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
 IgnoreRhosts shosts-only
@@ -99,7 +100,7 @@ Subsystem sftp internal-sftp
 Subsystem scp internal-sftp
 SyslogFacility LOCAL7
 TCPKeepAlive no
-TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys
+TrustedUserCAKeys /etc/ssh/ssh_server_trusted_user_ca_keys
 UnusedConnectionTimeout 1h
 UseDNS yes
 UsePAM yes

@@ -1,7 +1,7 @@
 ---
+# yamllint disable rule:line-length
 collections:
-  # https://docs.ansible.com/ansible/latest/collections/community/crypto/
-  # openssh_keypair
-  - community.crypto
+  - 'community.crypto'  # https://docs.ansible.com/ansible/latest/collections/community/crypto/
+  - 'r_pufky.srv'  # https://github.com/r-pufky/ansible_collection_srv
 
 roles: []

@@ -1,7 +1,5 @@
 ---
 # yamllint disable rule:line-length
-# Confirm explicit settings are set to expected values and config loads without
-# error.
 - name: 'SSHD config all values | verify | sshd_config'
   hosts: 'all'
   gather_facts: false

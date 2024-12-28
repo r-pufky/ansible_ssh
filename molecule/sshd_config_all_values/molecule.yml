@@ -1,4 +1,7 @@
 ---
+# yamllint disable rule:line-length
+# Confirm explicit settings are set to expected values and config loads without
+# error.
 dependency:
   name: 'galaxy'
 driver:
@@ -11,14 +14,142 @@ provisioner:
       callback_whitelist: 'profile_tasks, timer, yaml'
     ssh_connection:
       pipelining: false
+  inventory:
+    group_vars:
+      all:
+        ssh_security_remove_host_keys:
+          - 'ssh_host_dsa_key'
+        ssh_server_accept_env: ''
+        ssh_server_address_family: 'inet'
+        ssh_server_allow_agent_forwarding: false
+        ssh_server_allow_groups: ['ssh', 'mono']
+        ssh_server_allow_stream_local_forwarding: 'local'
+        ssh_server_allow_stream_remote_forwarding: 'local'
+        ssh_server_allow_users: ['ssh', 'mono']
+        ssh_server_authentication_methods:
+          - - 'keyboard-interactive'
+        ssh_server_authorized_keys_command: '/run/authorized-keys-command'
+        ssh_server_authorized_keys_command_user: 'authorize-keys-users'
+        ssh_server_authorized_keys_file: ['.ssh/authorized_keys']
+        ssh_server_authorized_principals_command: '/run/authorized-principals-command'
+        ssh_server_authorized_principals_command_user: 'principal-commands-user'
+        ssh_server_authorized_principals_file: '/etc/ssh/principals-file'
+        ssh_server_banner: 'this is a test banner'
+        ssh_server_ca_signature_algorithms: ['ssh-ed25519']
+        ssh_server_channel_timeout:
+          - 'session': '5m'
+          - 'tun-connection': '1h'
+          - '*': '30m'
+        ssh_server_chroot_directory: '/tmp'
+        ssh_client_ciphers: ['chacha20-poly1305@openssh.com']
+        ssh_server_client_alive_count_max: 5
+        ssh_server_client_alive_interval: 10
+        ssh_server_compression: false
+        ssh_server_debian_banner: false
+        ssh_server_deny_groups: ['deny-groups']
+        ssh_server_deny_users: ['denied-user']
+        ssh_server_disable_forwarding: true
+        ssh_server_expose_auth_info: true
+        ssh_server_fingerprint_hash: 'md5'
+        ssh_server_force_command: 'force-command'
+        ssh_server_gateway_ports: 'clientspecified'
+        ssh_server_gssapi_authentication: true
+        ssh_server_gssapi_cleanup_credentials: false
+        ssh_server_gssapi_key_exchange: true
+        ssh_server_gssapi_strict_acceptor_check: false
+        ssh_server_gssapi_store_credentials_on_rekey: true
+        ssh_server_gssapi_key_algorithms: ['gss-group14-sha256-']
+        ssh_server_hostbased_accepted_algorithms: ['ssh-ed25519-cert-v01@openssh.com']
+        ssh_server_hostbased_authentication: true
+        ssh_server_hostbased_uses_name_from_packet_only: true
+        # Dynamically generated keys/signature in prepare.yml
+        # ssh_server_host_certificate:
+        # ssh_server_host_key:
+        ssh_server_host_key_algorithms: ['ssh-ed25519-cert-v01@openssh.com']
+        ssh_server_ignore_rhosts: 'shosts-only'
+        ssh_server_ignore_user_known_hosts: true
+        ssh_server_ip_qos: ['']
+        ssh_server_kbd_interactive_authentication: true
+        ssh_server_kerberos_authentication: true
+        ssh_server_kerberos_get_afs_token: true
+        ssh_server_kerberos_or_local_passwd: false
+        ssh_server_kerberos_ticket_cleanup: false
+        ssh_server_kex_algorithms: ['sntrup761x25519-sha512@openssh.com']
+        ssh_server_listen_address: ['127.0.0.1:22']
+        ssh_server_login_grace_time: 10
+        ssh_server_log_level: 'DEBUG'
+        ssh_client_log_verbose:
+          - 'kex.c:*:1000'
+          - '*:kex_exchange_identification():*'
+          - 'packet.c:*'
+        ssh_server_macs: ['umac-64-etm@openssh.com']
+        ssh_server_max_auth_tries: 3
+        ssh_server_max_sessions: 1
+        ssh_server_max_startups:
+          start: 10
+        ssh_server_password_authentication: false
+        ssh_server_permit_empty_passwords: true
+        ssh_server_permit_listen:
+          - '127.0.0.1:22'
+        ssh_server_permit_open:
+          - 'localhost:1000'
+          - '192.168.0.3:*'
+        ssh_server_permit_root_login: false
+        ssh_server_permit_tty: false
+        ssh_server_permit_tunnel: 'ethernet'
+        ssh_server_permit_user_environment:
+          - 'LANG'
+          - 'LC*'
+        ssh_server_permit_user_rc: false
+        ssh_server_per_source_max_startups: 15
+        ssh_server_per_source_net_block_size:
+          ipv4: 32
+        ssh_server_port:
+          - 22
+          - 2222
+        ssh_server_print_last_log: false
+        ssh_server_print_motd: false
+        ssh_server_pubkey_accepted_algorithms: ['ssh-ed25519-cert-v01@openssh.com']
+        ssh_server_pubkey_auth_options: ['touch-required', 'verify-required']
+        ssh_server_pubkey_authentication: false
+        ssh_server_rekey_limit:
+          data: '1G'
+          time: '1h'
+        ssh_server_required_rsa_size: 4096
+        ssh_server_revoked_keys: '/etc/ssh/rkl'
+        ssh_server_security_key_provider: 'fido-alternative-provider'
+        ssh_server_set_env:
+          - 'TEST_ENV="value with spaces"'
+        ssh_server_stream_local_bind_unlink: true
+        ssh_server_strict_modes: false
+        ssh_server_subsystem:
+          - system: 'sftp'
+            config: 'internal-sftp'
+          - system: 'scp'
+            config: 'internal-sftp'
+        ssh_server_syslog_facility: 'local7'
+        ssh_server_tcp_keep_alive: false
+        # Dynamically generated keys/signature in prepare.yml
+        # ssh_server_trusted_user_ca_keys:
+        ssh_server_unused_connection_timeout: '1h'
+        ssh_server_use_dns: true
+        ssh_server_use_pam: true
+        ssh_server_version_addendum: 'test ssh protocol banner'
+        ssh_server_x11_display_offset: 5
+        ssh_server_x11_forwarding: false
+        ssh_server_x11_use_localhost: false
+        ssh_server_xauth_location: '/usr/bin/xauth-alternative'
+        ssh_server_include_files:
+          - config: 'test_config'
+            state: 'present'
+            options: |
+              AllowAgentForwarding yes
 platforms:
-  - name: 'debian-12'
+  - name: 'ssh-debian-12-sshd_config_all_values'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    capabilities:
-      - 'SYS_ADMIN'
     command: '/lib/systemd/systemd'
     pre_build_image: true
 verifier:
@@ -27,3 +158,17 @@ lint: |
   set -e
   yamllint .
   ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    - 'prepare'
+    - 'converge'
+    - 'idempotence'
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

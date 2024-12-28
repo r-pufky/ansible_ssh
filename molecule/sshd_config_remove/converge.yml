@@ -1,29 +1,35 @@
 ---
-- name: 'SSHD config all values | converge'
+# yamllint disable rule:line-length
+- name: 'SSHD config remove | converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'SSHD config all values | converge | read testing host keys'
+    - name: 'SSHD config remove | converge | read testing host keys'
       ansible.builtin.slurp:
         src: '/tmp/ssh_host_rsa_key'
       register: _test_ssh_host_key
 
-    - name: 'SSHD config all values | converge | read testing host pub keys'
+    - name: 'SSHD config remove | converge | read testing host pub keys'
       ansible.builtin.slurp:
         path: '/tmp/ssh_host_rsa_key.pub'
       register: _test_ssh_host_key_pub
 
-    - name: 'SSHD config all values | converge | read testing trusted user key'
+    - name: 'SSHD config remove | converge | read testing trusted user key'
       ansible.builtin.slurp:
         src: '/tmp/ssh_host_rsa_key-cert.pub'
       register: _test_ssh_trusted_user_key
 
-    - name: 'SSHD config all values | converge | apply r_pufky.srv.ssh'
+    - name: 'SSHD config remove | converge | apply r_pufky.srv.ssh (managed files)'
       ansible.builtin.include_role:
         name: 'r_pufky.srv.ssh'
       vars:
+        ssh_server_banner: 'this is a test banner'
         ssh_server_host_certificate: >-
           {{ _test_ssh_host_key_pub.content | b64decode }}
         ssh_server_host_key: '{{ _test_ssh_host_key.content | b64decode }}'
         ssh_server_trusted_user_ca_keys: >-
           {{ _test_ssh_trusted_user_key.content | b64decode }}
+
+    - name: 'SSHD config remove | converge | apply r_pufky.srv.ssh (defaults)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.ssh'

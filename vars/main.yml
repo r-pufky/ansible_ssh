@@ -9,12 +9,9 @@ ssh_role_validate_release: 'bookworm'
 
 # Default packages for SSH/SSHD.
 ssh_role_packages:
-  - 'ssh'  # meta package provides both ssh and sshd.
+  - 'ssh'  # ssh, sshd
 
-# Default state for apt package installation. See ansible.builtin.apt.
-ssh_role_package_state: 'latest'
-
-# Minimum debian enforced RSA key size
+# Minimum debian enforced RSA key size.
 ssh_role_debian_rsa_key_minimum_size: 1024
 
 # KerberosGetAFSToken (ssh_server_kerberos_get_afs_token) requires these

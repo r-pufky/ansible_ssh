@@ -264,10 +264,9 @@ ssh_server_authorized_principals_file: ''
 # Pre-login banner.
 #
 # Values:
-#       {FILE}: str - path to file containing banner (not managed)
-#   {CONTENTS}: str - contents of banner; file will be managed automatically in
+#   {CONTENTS}: contents of banner; file automatically managed in
 #               /etc/ssh/ssh_server_banner.
-#           '': str - no pre-login banner
+#           '': no pre-login banner
 #
 # Default: ''.
 ssh_server_banner: ''
@@ -306,31 +305,31 @@ ssh_server_ca_signature_algorithms:
 #   0: all time specifications use TIME FORMAT; 0 disables timeout.
 #
 # ssh_server_channel_timeout:
-#     dict - one or more channel type and time specifications
-#   agent-connection: str - TIME FORMAT open connections to ssh-agent
-#   direct-tcpip: str - TIME FORMAT open TCP socket established from
-#       ssh_client_local_forward or ssh_client_dynamic_forward.
-#   direct-streamlocal@openssh.com: str - TIME FORMAT open Unix socket
-#       established from ssh_client_local_forward or
-#       ssh_client_dynamic_forward.
-#   forwarded-tcpip: str - TIME FORMAT open TCP socket established from
-#       ssh_client_remote_forward.
-#   forwarded-streamlocal@openssh.com: str - TIME FORMAT open Unix socket
-#       established from ssh_client_remote_forward.
-#   session: str - TIME FORMAT interactive sessions - shell, session, commands,
-#       scp, sfp, etc.
-#   tun-connection: str - TIME FORMAT open ssh_client_tunnel_forward
-#       connections.
-#   x11-connection: str - TIME FORMAT open X11 forwarding sessions
-#   *: str - TIME FORMAT all connections
+#     list of dict - one or more channel type and time specifications
+#   - agent-connection: str - TIME FORMAT open connections to ssh-agent
+#   - direct-tcpip: str - TIME FORMAT open TCP socket established from
+#         ssh_client_local_forward or ssh_client_dynamic_forward.
+#   - direct-streamlocal@openssh.com: str - TIME FORMAT open Unix socket
+#         established from ssh_client_local_forward or
+#         ssh_client_dynamic_forward.
+#   - forwarded-tcpip: str - TIME FORMAT open TCP socket established from
+#         ssh_client_remote_forward.
+#   - forwarded-streamlocal@openssh.com: str - TIME FORMAT open Unix socket
+#         established from ssh_client_remote_forward.
+#   - session: str - TIME FORMAT interactive sessions - shell, session,
+#         commands, scp, sfp, etc.
+#   - tun-connection: str - TIME FORMAT open ssh_client_tunnel_forward
+#         connections.
+#   - x11-connection: str - TIME FORMAT open X11 forwarding sessions
+#   - *: str - TIME FORMAT all connections
 #
 # ssh_server_channel_timeout:
-#   'session': '5m'
-#   'tun-connection': '1h'
-#   '*': '30m'
+#   - 'session': '5m'
+#   - 'tun-connection': '1h'
+#   - '*': '30m'
 #
-# Default: {}
-ssh_server_channel_timeout: {}
+# Default: []
+ssh_server_channel_timeout: []
 
 # Directory directory to chroot to after authentication.
 #
@@ -582,32 +581,30 @@ ssh_server_hostbased_authentication: false
 # Default: False.
 ssh_server_hostbased_uses_name_from_packet_only: false
 
-# Absolute file path or contents containing public host certificate.
+# Public host certificate.
 #
 # The certificate's public key must match a private host key already specified
 # by ssh_server_host_key.
 #
 # Values:
-#       {FILE}: str - path to file containing host certificate (not managed)
-#   {CONTENTS}: str - contents of host certificate; file will be managed
-#               automatically in /etc/ssh/ssh_server_host_certificate.
-#           '': str - disabled.
+#   {CONTENTS}: contents of host certificate; file automatically managed in
+#               /etc/ssh/ssh_server_host_certificate.
+#           '': disabled
 #
 # Default: ''.
 ssh_server_host_certificate: ''
 
-# Absolute file paths, path, or contents containing a private host key.
+# Absolute file paths or contents containing a private host key.
 #
 # SSHD will refuse to use a file if it is group/world-accessible, and
 # ssh_server_host_key_algorithms restrictions. DSA keys are considered
 # insecure. These are forcibly removed in SSH 9.8.
 #
 # Values:
-#       {FILE}: str - path to file containing host key (not managed)
-#   {CONTENTS}: str - contents of host key; file will be managed
-#               automatically in /etc/ssh/ssh_server_host_key.
-#           []: list of str - list of pre-generated host keys
-#           '': disabled.
+#     [{FILE}]: paths to files containing host key (not managed)
+#   {CONTENTS}: contents of host key; file will be managed automatically in
+#               /etc/ssh/ssh_server_host_key.
+#           '': disabled
 #
 # Default:
 #   - '/etc/ssh/ssh_host_rsa_key'
@@ -714,7 +711,7 @@ ssh_server_ignore_user_known_hosts: false
 #          af43: DSCP 38 (class 4 - high)
 #           cs0: DSCP 0 (standard)
 #           cs1: DSCP 8 (low-priority data)
-#           cs2: DSCP 16 (network operations, administration and management OAM)
+#           cs2: DSCP 16 (network operations, administration & management OAM)
 #           cs3: DSCP 24 (broadcast video)
 #           cs4: DSCP 32 (real-time interactive)
 #           cs5: DSCP 40 (signaling)
@@ -1267,7 +1264,7 @@ ssh_server_syslog_facility: 'AUTH'
 # Default: True.
 ssh_server_tcp_keep_alive: true
 
-# Absolute file path, or contents containing public keys of trusted CAs.
+# Public keys of trusted CAs.
 #
 # These are trusted to sign user certificates for authentication. If a
 # certificate is presented for authentication and has its signing CA key listed
@@ -1277,10 +1274,9 @@ ssh_server_tcp_keep_alive: true
 # ssh_server_trusted_user_ca_keys.
 #
 # Values:
-#       {FILE}: str - path to file containing trusted CA keys (not managed)
-#   {CONTENTS}: str - contents of trusted CA keys; file will be managed
-#               automatically in /etc/ssh/ssh_server_trusted_user_ca_keys.
-#           '': str - no pre-login banner
+#   {CONTENTS}: contents of trusted CA keys; file automatically managed in
+#               /etc/ssh/ssh_server_trusted_user_ca_keys.
+#           '': disabled
 #
 # Reference:
 # * https://manpages.debian.org/bookworm/openssh-client/ssh-keygen.1.en.html#CERTIFICATES

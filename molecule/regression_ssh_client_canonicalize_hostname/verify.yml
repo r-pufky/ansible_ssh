@@ -1,25 +1,10 @@
 ---
 # yamllint disable rule:line-length
-#
-# A value of '' (CanonicalizeHostname none) fails ssh -G test with unsupported
-# option. Verify that debian 13+ (trixie or later) fixes it with:
-#
-#   CanonicalizeHostname none
-#   ssh -G test
-#
-# This should not return 'unsupported option "none".'
-#
-# This test confirms that ssh_client_canonicalize_hostname: '' fails as
-# expected. Once fixed, update ssh_config_all_values test with
-#
-#   converge.yml/ssh_client_canonicalize_hostname: ''
-#
-# Which will enforce testing the 'none' option.
-- name: 'SSH client canonicalize hostname bug | verify'
+- name: 'Regression | SSH client canonicalize hostname | verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'SSH client canonicalize hostname bug | verify | query global expected config'
+    - name: 'Regression | SSH client canonicalize hostname | verify | query global expected config'
       ansible.builtin.copy:
         src: 'files/ssh_config'
         dest: '/etc/ssh/ssh_config'
@@ -30,20 +15,20 @@
       diff: true
       register: _test_ssh_ssh_config
 
-    - name: 'SSH client canonicalize hostname bug | verify | assert global config'
+    - name: 'Regression | SSH client canonicalize hostname | verify | assert global config'
       ansible.builtin.assert:
         that:
           - not _test_ssh_ssh_config.changed
         fail_msg: '/etc/ssh/ssh_config is not in expected format: {{ _test_ssh_ssh_config.diff }}.'
 
     # values are internal values NOT ssh_config values; check exit code only.
-    - name: 'SSH client canonicalize hostname bug | verify | test ssh configuration for static errors'
+    - name: 'Regression | SSH client canonicalize hostname | verify | test ssh configuration for static errors'
       ansible.builtin.command: 'ssh -G test'
       changed_when: false
       failed_when: false
       register: _test_ssh_ssh_g_test
 
-    - name: 'SSH client canonicalize hostname bug | verify | assert static error'
+    - name: 'Regression | SSH client canonicalize hostname | verify | assert static error'
       ansible.builtin.assert:
         that:
           - _test_ssh_ssh_g_test.rc == 255

@@ -1,0 +1,87 @@
+---
+# yamllint disable rule:line-length
+- name: 'SSHD config remove | verify | sshd_config'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'SSHD config remove | verify | sshd_config | query global expected config'
+      ansible.builtin.copy:
+        src: 'files/sshd_config'
+        dest: '/etc/ssh/sshd_config'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+      check_mode: true
+      diff: true
+      register: _test_ssh_sshd_config
+
+    - name: 'SSHD config remove | verify | sshd_config | assert global config'
+      ansible.builtin.assert:
+        that:
+          - not _test_ssh_sshd_config.changed
+        fail_msg: '/etc/ssh/sshd_config is not in expected format: {{ _test_ssh_sshd_config.diff }}.'
+
+- name: 'SSHD config remove | verify | no static errors'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    # values are internal values NOT ssh_config values; check exit code only.
+    - name: 'SSHD config remove | verify | no static errors | test ssh configuration for static errors'
+      ansible.builtin.command: 'sshd -T'  # requires /run/sshd to exist.
+      changed_when: false
+      failed_when: false
+      register: _test_ssh_sshd_t_test
+
+    - name: 'SSHD config remove | verify | no static errors | assert no static errors'
+      ansible.builtin.assert:
+        that:
+          - _test_ssh_sshd_t_test.rc == 0
+        fail_msg: "'sshd -T' returned static errors: {{ _test_ssh_sshd_t_test.stderr }}."
+
+- name: 'SSHD config remove | verify | managed files removed'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'SSH config remove | verify | query /etc/ssh/ssh_server_banner'
+      ansible.builtin.stat:
+        path: '/etc/ssh/ssh_server_banner'
+      register: _test_ssh_server_banner
+
+    - name: 'SSH config remove | verify | assert deleted /etc/ssh/ssh_server_banner'
+      ansible.builtin.assert:
+        that:
+          - not _test_ssh_server_banner.stat.exists
+        fail_msg: '/etc/ssh/ssh_server_banner should be deleted.'
+
+    - name: 'SSH config remove | verify | query /etc/ssh/ssh_server_host_certificate'
+      ansible.builtin.stat:
+        path: '/etc/ssh/ssh_server_host_certificate'
+      register: _test_ssh_server_host_certificate
+
+    - name: 'SSH config remove | verify | assert deleted /etc/ssh/ssh_server_host_certificate'
+      ansible.builtin.assert:
+        that:
+          - not _test_ssh_server_host_certificate.stat.exists
+        fail_msg: '/etc/ssh/ssh_server_host_certificate should be deleted.'
+
+    - name: 'SSH config remove | verify | query /etc/ssh/ssh_server_host_key'
+      ansible.builtin.stat:
+        path: '/etc/ssh/ssh_server_host_key'
+      register: _test_ssh_server_host_key
+
+    - name: 'SSH config remove | verify | assert deleted /etc/ssh/ssh_server_host_key'
+      ansible.builtin.assert:
+        that:
+          - not _test_ssh_server_host_key.stat.exists
+        fail_msg: '/etc/ssh/ssh_server_host_key should be deleted.'
+
+    - name: 'SSH config remove | verify | query /etc/ssh/ssh_server_trusted_user_ca_keys'
+      ansible.builtin.stat:
+        path: '/etc/ssh/ssh_server_trusted_user_ca_keys'
+      register: _test_ssh_server_trusted_user_ca_keys
+
+    - name: 'SSH config remove | verify | assert deleted /etc/ssh/ssh_server_trusted_user_ca_keys'
+      ansible.builtin.assert:
+        that:
+          - not _test_ssh_server_trusted_user_ca_keys.stat.exists
+        fail_msg: '/etc/ssh/ssh_server_trusted_user_ca_keys should be deleted.'

@@ -1,4 +1,6 @@
 ---
+# Confirm explicit settings are set to expected values and config loads without
+# error.
 dependency:
   name: 'galaxy'
 driver:
@@ -11,14 +13,173 @@ provisioner:
       callback_whitelist: 'profile_tasks, timer, yaml'
     ssh_connection:
       pipelining: false
+  inventory:
+    group_vars:
+      all:
+        ssh_client_host: []
+        ssh_client_match:
+          canonical: 'host="*.example.com"'
+        ssh_client_add_keys_to_agent: 'confirm'
+        ssh_client_address_family: 'inet'
+        ssh_client_batch_mode: true
+        ssh_client_bind_address: '*'
+        ssh_client_bind_interface: '*'
+        ssh_client_canonical_domains:
+          - 'example.com'
+        ssh_client_canonicalize_fallback_local: false
+        ssh_client_canonicalize_hostname: true
+        ssh_client_canonicalize_max_dots: 2
+        ssh_client_canonicalize_permitted_cnames:
+          '*.a.example.com':
+            - '*.b.example.com'
+            - '*.c.example.com'
+          '*.test.com':
+            - '*.t.example.com'
+        ssh_client_ca_signature_algorithms:
+          - 'ssh-ed25519'
+        ssh_client_certificate_file:
+          - '~/.ssh'
+          - '/etc/ssh/clients'
+        ssh_client_channel_timeout:
+          'session': '5m'
+          'tun-connection': '1h'
+          '*': '30m'
+        ssh_client_check_host_ip: false
+        ssh_client_ciphers:
+          - 'chacha20-poly1305@openssh.com'
+        ssh_client_clear_all_forwardings: true
+        ssh_client_compression: true
+        ssh_client_connection_attempts: 3
+        ssh_client_connect_timeout: 3
+        ssh_client_control_master: 'auto'
+        ssh_client_control_path: '~/.ssh'
+        ssh_client_control_persist: '1h'
+        ssh_client_dynamic_forward:
+          - 'localhost:8080'
+          - '*:3000'
+          - '12345'
+        ssh_client_enable_escape_command_line: true
+        ssh_client_enable_ssh_keysign: true
+        ssh_client_escape_char: 'B'
+        ssh_client_exit_on_forward_failure: true
+        ssh_client_fingerprint_hash: 'md5'
+        ssh_client_fork_after_authentication: true
+        ssh_client_forward_agent: true
+        ssh_client_forward_x11: true
+        ssh_client_forward_x11_timeout: 0
+        ssh_client_forward_x11_trusted: false
+        ssh_client_gateway_ports: true
+        ssh_client_global_known_hosts_file:
+          - '/etc/ssh/ssh_known_hosts'
+        ssh_client_gssapi_authentication: true
+        ssh_client_gssapi_client_identity: 'test-identity'
+        ssh_client_gssapi_delegate_credentials: true
+        ssh_client_gssapi_key_exchange: true
+        ssh_client_gssapi_renewal_forces_rekey: true
+        ssh_client_gssapi_server_identity: 'test-server-identity'
+        ssh_client_gssapi_trust_dns: true
+        ssh_client_gssapi_key_algorithms:
+          - 'gss-group14-sha256-'
+        ssh_client_hash_known_hosts: false
+        ssh_client_hostbased_accepted_algorithms:
+          - 'ssh-ed25519-cert-v01@openssh.com'
+        ssh_client_hostbased_authentication: true
+        ssh_client_host_key_algorithms:
+          - 'ssh-ed25519-cert-v01@openssh.com'
+        ssh_client_host_key_alias: 'test-alias'
+        ssh_client_hostname: 'realhost'
+        ssh_client_identities_only: true
+        ssh_client_identity_agent: 'SSH_AUTH_SOCK'
+        ssh_client_identity_file:
+          - '~/.ssh/id_rsa'
+        ssh_client_ignore_unknown: 'HostName'
+        ssh_client_ip_qos: ['']
+        ssh_client_kbd_interactive_authentication: false
+        ssh_client_kbd_interactive_devices:
+          - 'pam'
+        ssh_client_kex_algorithms:
+          - 'diffie-hellman-group1-sha1'
+        ssh_client_known_hosts_command: 'ls -l ~/.ssh/hosts'
+        ssh_client_local_command: 'uptime'
+        ssh_client_local_forwards:
+          - listener: '8888'
+            destination: 'localhost:8888'
+          - listener: '3000'
+            destination: '*:3000'
+        ssh_client_log_level: 'verbose'
+        ssh_client_log_verbose:
+          - 'kex.c:*:1000'
+          - '*:kex_exchange_identification():*'
+          - 'packet.c:*'
+        ssh_client_macs:
+          - 'umac-64-etm@openssh.com'
+        ssh_client_no_host_authentication_for_local_host: true
+        ssh_client_number_of_password_prompts: 1
+        ssh_client_password_authentication: false
+        ssh_client_permit_local_command: true
+        ssh_client_permit_remote_open:
+          - 'localhost:1000'
+          - '192.168.0.3:*'
+        ssh_client_pkcs11_provider: '/opt/openssl-1.1.1i/include'
+        ssh_client_port: 2222
+        ssh_client_preferred_authentications:
+          - 'publickey'
+        ssh_client_proxy_command: >-
+          /usr/bin/nc -X connect -x 192.0.2.0:8080 %h %p
+        ssh_client_proxy_jump:
+          - 'test@jump1.example.com:22'
+          - 'ssh://test@jump2.example.com:2222'
+        ssh_client_proxy_use_fdpass: true
+        ssh_client_pubkey_accepted_algorithms:
+          - 'ssh-ed25519-cert-v01@openssh.com'
+        ssh_client_pubkey_authentication: 'unbound'
+        ssh_client_rekey_limit:
+          data: '100M'
+          time: '1h'
+        ssh_client_remote_command: 'uptime'
+        ssh_client_remote_forwards:
+          - listener: '0.0.0.0:50091'
+            destination: 'localhost:10091'
+          - listener: '*:3000'
+            destination: ''
+        ssh_client_request_tty: true
+        ssh_client_required_rsa_size: 4096
+        ssh_client_revoked_host_keys: '/etc/ssh/rkl'
+        ssh_client_send_env: []
+        ssh_client_server_alive_count_max: 1
+        ssh_client_server_alive_interval: 15
+        ssh_client_session_type: 'none'
+        ssh_client_set_env:
+          - 'TEST_ENV="test value"'
+        ssh_client_stdin_null: true
+        ssh_client_stream_local_bind_mask: '0777'
+        ssh_client_stream_local_bind_unlink: true
+        ssh_client_strict_host_key_checking: true
+        ssh_client_syslog_facility: 'auth'
+        ssh_client_tcp_keep_alive: false
+        ssh_client_tunnel: 'ethernet'
+        ssh_client_tunnel_device:
+          local: '1234'
+          remote: ''
+        ssh_client_update_host_keys: 'ask'
+        ssh_client_user: 'test_user'
+        ssh_client_user_known_hosts_file:
+          - '~/.ssh/known_hosts'
+        ssh_client_verify_host_key_dns: 'ask'
+        ssh_client_visual_host_key: true
+        ssh_client_xauth_location: '/usr/test/alt/xauth'
+        ssh_client_include_files:
+          - config: 'test_config'
+            state: 'present'
+            options: |
+              Host *
+                EscapeChar ^b
 platforms:
-  - name: 'debian-12'
+  - name: 'ssh-debian-12-ssh_config_all_values'
     image: 'ghcr.io/hifis-net/debian-systemd:12'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
-    capabilities:
-      - 'SYS_ADMIN'
     command: '/lib/systemd/systemd'
     pre_build_image: true
 verifier:
@@ -27,3 +188,17 @@ lint: |
   set -e
   yamllint .
   ansible-lint .
+scenario:
+  test_sequence:
+    # - 'dependency'
+    # - 'cleanup'
+    - 'destroy'
+    - 'syntax'
+    - 'create'
+    # - 'prepare'
+    - 'converge'
+    - 'idempotence'
+    # - 'side_effect'
+    - 'verify'
+    # - 'cleanup'
+    - 'destroy'

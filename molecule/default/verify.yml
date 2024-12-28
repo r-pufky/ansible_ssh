@@ -1,7 +1,5 @@
 ---
 # yamllint disable rule:line-length
-# Confirm default settings are set to expected values and config loads without
-# error.
 - name: 'Default | verify | ssh_config'
   hosts: 'all'
   gather_facts: false
