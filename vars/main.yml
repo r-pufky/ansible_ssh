@@ -7,12 +7,15 @@
 ssh_role_validate_date: '2024-06-14'
 ssh_role_validate_release: 'bookworm'
 
-# Default packages for SSH/SSHD.
-ssh_role_packages:
-  - 'ssh'  # ssh, sshd
-
 # Minimum debian enforced RSA key size.
 ssh_role_debian_rsa_key_minimum_size: 1024
+
+###############################################################################
+# APT Packages
+###############################################################################
+
+ssh_role_packages:
+  - 'ssh'  # ssh, sshd
 
 # KerberosGetAFSToken (ssh_server_kerberos_get_afs_token) requires these
 # packages installed or SSHD will fail to start in addition to a custom SSHD
