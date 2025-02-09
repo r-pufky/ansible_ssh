@@ -14,11 +14,14 @@ Part of the [r_pufky.srv](https://github.com/r-pufky/ansible_collection_srv)
 collection.
 
 ## Example Playbook
-Read through defaults before using; all `ssh_config` and `sshd_config` options
-are supported. A machine may simultaneously be configured with both.
+Read through defaults and [Debian SSH Changes](#debian-ssh-changes) before
+proceeding.
+
+All `ssh_config` and `sshd_config` options are supported. A machine may
+simultaneously be configured with both.
 
 This will remove DSA host keys, ensure RSA host keys are at least 4096bits,
-configure SSHD, and configure SSH for two hosts.
+configure SSHD, and configure SSH for two hosts:
 
 group_vars/all/vars/main.yml
 ``` yaml
@@ -96,6 +99,27 @@ ssh_client_include_files:
     state: 'absent'
 ```
 
+## Debian SSH Changes
+Specific Debian SSH changes between major releases.
+
+### ssh group now _ssh
+`ssh` group migrated to `_ssh`. `ssh` group must be manually managed if used
+with existing users and groups, or migrate users to `_ssh`.
+
+https://salsa.debian.org/ssh-team/openssh/-/commit/18da782ebe789d0cf107a550e474ba6352e68911
+
+#### SSH pubkey authentication with locked accounts
+SSH now distinguishes between `!` and `*` password locking:
+
+* `*`: lock password, allow SSH pubkey auth.
+* `!`: lock password, deny SSH pubkey auth.
+
+Any other means to lock the password will result in SSH pubkey failures. Do not
+enable `ssh_server_use_pam=true` as this leads to security vulnerabilities.
+
+[Reference](https://github.com/r-pufky/ansible_ssh/blob/main/defaults/main/sshd_config.yml)
+
+####
 ## Development
 Configure [environment](https://github.com/r-pufky/ansible_collection_srv/blob/main/docs/dev/environment/README.md)
 
@@ -103,7 +127,7 @@ Run all unit tests:
 ``` bash
 molecule test --all
 ```
-
+chacha20-poly1305
 ### Issues
 Create a bug and provide as much information as possible.
 

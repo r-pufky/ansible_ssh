@@ -5,7 +5,7 @@
 ###############################################################################
 # Use referenced man pages for detailed option usage. Options mirror man pages:
 #
-#   ssh_client_canonicalize_fallback_local ➤ CanonicalizeFallbackLocal
+#   ssh_client_canonicalize_fallback_local > CanonicalizeFallbackLocal
 #
 # List current system configuration using:
 #
@@ -252,15 +252,30 @@ ssh_client_check_host_ip: true
 #
 #   ssh -Q Ciphers
 #
+# Security: CVE-2023-48795
+#   CVE:
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-48795
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46445
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46446
+#   * https://nvd.nist.gov/vuln/detail/cve-2024-41909
+#   Decision: remove chacha20 cipher, *-etm MAC - disables attack for modern
+#       systems, remove when OpenSSH 9.6 released with strict key exchange.
+#   Mitigation:
+#   * remove 'chacha20-poly1305@openssh.com' from client ciphers.
+#   * remove '*-etm@openssh.com' from server macs.
+#   Reference:
+#   * https://terrapin-attack.com/#scanner
+#   * https://www.openssh.com/txt/release-9.6
+#
 # Default:
-#   - 'chacha20-poly1305@openssh.com'
+#   # - 'chacha20-poly1305@openssh.com'
 #   - 'aes128-ctr'
 #   - 'aes192-ctr'
 #   - 'aes256-ctr'
 #   - 'aes128-gcm@openssh.com'
 #   - 'aes256-gcm@openssh.com'
 ssh_client_ciphers:
-  - 'chacha20-poly1305@openssh.com'
+  # - 'chacha20-poly1305@openssh.com'
   - 'aes128-ctr'
   - 'aes192-ctr'
   - 'aes256-ctr'
@@ -823,23 +838,38 @@ ssh_client_log_verbose: []
 #
 #   ssh -Q MACs
 #
+# Security: CVE-2023-48795
+#   CVE:
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-48795
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46445
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46446
+#   * https://nvd.nist.gov/vuln/detail/cve-2024-41909
+#   Decision: remove chacha20 cipher, *-etm MAC - disables attack for modern
+#       systems, remove when OpenSSH 9.6 released with strict key exchange.
+#   Mitigation:
+#   * remove 'chacha20-poly1305@openssh.com' from client ciphers.
+#   * remove '*-etm@openssh.com' from server macs.
+#   Reference:
+#   * https://terrapin-attack.com/#scanner
+#   * https://www.openssh.com/txt/release-9.6
+#
 # Default:
-#   - 'umac-64-etm@openssh.com'
-#   - 'umac-128-etm@openssh.com'
-#   - 'hmac-sha2-256-etm@openssh.com'
-#   - 'hmac-sha2-512-etm@openssh.com'
-#   - 'hmac-sha1-etm@openssh.com'
+#   # - 'umac-64-etm@openssh.com'
+#   # - 'umac-128-etm@openssh.com'
+#   # - 'hmac-sha2-256-etm@openssh.com'
+#   # - 'hmac-sha2-512-etm@openssh.com'
+#   # - 'hmac-sha1-etm@openssh.com'
 #   - 'umac-64@openssh.com'
 #   - 'umac-128@openssh.com'
 #   - 'hmac-sha2-256'
 #   - 'hmac-sha2-512'
 #   - 'hmac-sha1'
 ssh_client_macs:
-  - 'umac-64-etm@openssh.com'
-  - 'umac-128-etm@openssh.com'
-  - 'hmac-sha2-256-etm@openssh.com'
-  - 'hmac-sha2-512-etm@openssh.com'
-  - 'hmac-sha1-etm@openssh.com'
+  # - 'umac-64-etm@openssh.com'
+  # - 'umac-128-etm@openssh.com'
+  # - 'hmac-sha2-256-etm@openssh.com'
+  # - 'hmac-sha2-512-etm@openssh.com'
+  # - 'hmac-sha1-etm@openssh.com'
   - 'umac-64@openssh.com'
   - 'umac-128@openssh.com'
   - 'hmac-sha2-256'

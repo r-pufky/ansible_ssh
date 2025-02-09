@@ -17,7 +17,7 @@
     group: 'root'
     mode: '0644'
 
-- name: 'SSD config | remove banner'
+- name: 'SSHD config | remove banner'
   when: ssh_server_banner | length == 0
   ansible.builtin.file:
     path: '/etc/ssh/ssh_server_banner'
@@ -32,13 +32,13 @@
     group: 'root'
     mode: '0644'
 
-- name: 'SSD config | remove host certificate'
+- name: 'SSHD config | remove host certificate'
   when: ssh_server_host_certificate | length == 0
   ansible.builtin.file:
     path: '/etc/ssh/ssh_server_host_certificate'
     state: 'absent'
 
-- name: 'SSD config | manage host key'
+- name: 'SSHD config | manage host key'
   when: ssh_server_host_key is string
   ansible.builtin.copy:
     dest: '/etc/ssh/ssh_server_host_key'
@@ -47,7 +47,7 @@
     group: 'root'
     mode: '0400'
 
-- name: 'SSD config | remove host key'
+- name: 'SSHD config | remove host key'
   when: ssh_server_host_key is not string
   ansible.builtin.file:
     path: '/etc/ssh/ssh_server_host_key'
@@ -62,7 +62,7 @@
     group: 'root'
     mode: '0400'
 
-- name: 'SSD config | remove trusted user CA keys'
+- name: 'SSHD config | remove trusted user CA keys'
   when: ssh_server_trusted_user_ca_keys | length == 0
   ansible.builtin.file:
     path: '/etc/ssh/ssh_server_trusted_user_ca_keys'

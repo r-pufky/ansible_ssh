@@ -25,7 +25,7 @@
         mode: '0755'
         state: 'directory'
 
-    - name: 'SSD config all values | prepare | generate testing host key'
+    - name: 'SSHD config all values | prepare | generate testing host key'
       ansible.builtin.command: 'ssh-keygen -t rsa -b 4096 -f /tmp/ssh_host_rsa_key -C "" -N ""'
       args:
         creates: '/tmp/ssh_host_rsa_key'  # and ssh_host_rsa_key.pub

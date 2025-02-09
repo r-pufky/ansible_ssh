@@ -3,9 +3,9 @@
 ###############################################################################
 # SSH Global Server Configuration (/etc/ssh/sshd_config)
 ###############################################################################
-# Use referenced man pages for detailed option usage. Options mirror man pages:
+# Use referenced man pages for detailed option usage.
 #
-#   ssh_server_allow_tcp_forwarding ➤ AllowTcpForwarding
+# PascalCase: ssh_server_allow_tcp_forwarding > AllowTcpForwarding
 #
 # List current system configuration using:
 #
@@ -147,7 +147,7 @@ ssh_server_allow_users: []
 #                      hostbased: host based authentication
 #           keyboard-interactive: any keyboard interactive authentication
 #   keyboard-interactive:bsdauth: BSD auth keyboard interactive only
-#       keyboard-interactive:pam: PAM auht keyboard interactive only
+#       keyboard-interactive:pam: PAM auth keyboard interactive only
 #                           none: passwordless authentication when
 #                                 ssh_server_permit_empty_passwords is True.
 #                       password: password authentication
@@ -359,15 +359,30 @@ ssh_server_chroot_directory: ''
 #
 #   ssh -Q Ciphers
 #
+# Security: CVE-2023-48795
+#   CVE:
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-48795
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46445
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46446
+#   * https://nvd.nist.gov/vuln/detail/cve-2024-41909
+#   Decision: remove chacha20 cipher, *-etm MAC - disables attack for modern
+#       systems, remove when OpenSSH 9.6 released with strict key exchange.
+#   Mitigation:
+#   * remove 'chacha20-poly1305@openssh.com' from client ciphers.
+#   * remove '*-etm@openssh.com' from server macs.
+#   Reference:
+#   * https://terrapin-attack.com/#scanner
+#   * https://www.openssh.com/txt/release-9.6
+#
 # Default:
-#   - 'chacha20-poly1305@openssh.com'
+#   # - 'chacha20-poly1305@openssh.com'
 #   - 'aes128-ctr'
 #   - 'aes192-ctr'
 #   - 'aes256-ctr'
 #   - 'aes128-gcm@openssh.com'
 #   - 'aes256-gcm@openssh.com'
 ssh_client_ciphers:
-  - 'chacha20-poly1305@openssh.com'
+  # - 'chacha20-poly1305@openssh.com'
   - 'aes128-ctr'
   - 'aes192-ctr'
   - 'aes256-ctr'
@@ -606,16 +621,23 @@ ssh_server_host_certificate: ''
 #               /etc/ssh/ssh_server_host_key.
 #           '': disabled
 #
+# Security: CVE-2024-6387
+#   CVE: https://nvd.nist.gov/vuln/detail/cve-2024-6387
+#   Decision: remove DSA keys - OpenSSH will remove support in future releases.
+#   Mitigation: remove '/etc/ssh/ssh_host_ecdsa_key' from accepted host keys.
+#       Forcibly removed in SSH 9.8.
+#   Reference:
+#   * https://www.openssh.com/txt/release-9.8
+#   * https://linuxsecurity.com/news/security-projects/openssh-plans-to-remove-support-for-dsa-keys
+#   * https://security.stackexchange.com/questions/178958/what-are-the-differences-between-the-rsa-dsa-and-ecdsa-keys-that-ssh-uses
+#
 # Default:
 #   - '/etc/ssh/ssh_host_rsa_key'
-#   - '/etc/ssh/ssh_host_ecdsa_key'
-#   - '/etc/ssh/ssh_host_ed25519_key''
-#
-# Reference:
-# * https://www.openssh.com/txt/release-9.8
+#   # - '/etc/ssh/ssh_host_ecdsa_key'
+#   - '/etc/ssh/ssh_host_ed25519_key'
 ssh_server_host_key:
   - '/etc/ssh/ssh_host_rsa_key'
-  - '/etc/ssh/ssh_host_ecdsa_key'
+  # - '/etc/ssh/ssh_host_ecdsa_key'
   - '/etc/ssh/ssh_host_ed25519_key'
 
 # Unix socket to communicate with agent for private host keys.
@@ -863,23 +885,38 @@ ssh_server_log_verbose: []
 #
 #   ssh -Q MACs
 #
+# Security: CVE-2023-48795
+#   CVE:
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-48795
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46445
+#   * https://nvd.nist.gov/vuln/detail/cve-2023-46446
+#   * https://nvd.nist.gov/vuln/detail/cve-2024-41909
+#   Decision: remove chacha20 cipher, *-etm MAC - disables attack for modern
+#       systems, remove when OpenSSH 9.6 released with strict key exchange.
+#   Mitigation:
+#   * remove 'chacha20-poly1305@openssh.com' from client ciphers.
+#   * remove '*-etm@openssh.com' from server macs.
+#   Reference:
+#   * https://terrapin-attack.com/#scanner
+#   * https://www.openssh.com/txt/release-9.6
+#
 # Default:
-#   - 'umac-64-etm@openssh.com'
-#   - 'umac-128-etm@openssh.com'
-#   - 'hmac-sha2-256-etm@openssh.com'
-#   - 'hmac-sha2-512-etm@openssh.com'
-#   - 'hmac-sha1-etm@openssh.com'
+#   # - 'umac-64-etm@openssh.com'
+#   # - 'umac-128-etm@openssh.com'
+#   # - 'hmac-sha2-256-etm@openssh.com'
+#   # - 'hmac-sha2-512-etm@openssh.com'
+#   # - 'hmac-sha1-etm@openssh.com'
 #   - 'umac-64@openssh.com'
 #   - 'umac-128@openssh.com'
 #   - 'hmac-sha2-256'
 #   - 'hmac-sha2-512'
 #   - 'hmac-sha1'
 ssh_server_macs:
-  - 'umac-64-etm@openssh.com'
-  - 'umac-128-etm@openssh.com'
-  - 'hmac-sha2-256-etm@openssh.com'
-  - 'hmac-sha2-512-etm@openssh.com'
-  - 'hmac-sha1-etm@openssh.com'
+  # - 'umac-64-etm@openssh.com'
+  # - 'umac-128-etm@openssh.com'
+  # - 'hmac-sha2-256-etm@openssh.com'
+  # - 'hmac-sha2-512-etm@openssh.com'
+  # - 'hmac-sha1-etm@openssh.com'
   - 'umac-64@openssh.com'
   - 'umac-128@openssh.com'
   - 'hmac-sha2-256'
@@ -1132,7 +1169,20 @@ ssh_server_pubkey_accepted_algorithms:
 # Default: [] (no additional options enabled).
 ssh_server_pubkey_auth_options: []
 
-# Allow public key authentication. Default: True.
+# Allow public key authentication.
+#
+# Locked accounts cannot SSH pubkey auth. SSH now distinguishes between '!' and
+# '*' password locking:
+#   *: lock password, allow SSH pubkey auth
+#   !: lock password, deny SSH pubkey auth
+#
+# Any other means to lock the password will result in SSH pubkey failures. Do
+# not enable UsePam=yes as this leads to security vulnerabilites.
+#
+# Default: True.
+#
+# Reference:
+# * https://unix.stackexchange.com/questions/193066/how-to-unlock-account-for-public-key-ssh-authorization-but-not-for-password-aut
 ssh_server_pubkey_authentication: true
 
 # Session rekey limits.
@@ -1321,7 +1371,16 @@ ssh_server_use_dns: false
 # password authentication, disable either ssh_server_password_authentication
 # or ssh_server_kbd_interactive_authentication.
 #
-# If enabled SSHD will not run as a non-root user.
+# Enabling with passwordless accounts will lead to security vulnerabilites. If
+# enabled SSHD will not run as a non-root user.
+#
+# Security:
+#   CVE: https://arlimus.github.io/articles/usepam/
+#   Decision: disable - PAM enables locked accounts '!' the ability to login
+#       via SSH.
+#   Mitigation: Use '*' instead and keep PAM disabled.
+#   Reference:
+#   * https://unix.stackexchange.com/questions/193066/how-to-unlock-account-for-public-key-ssh-authorization-but-not-for-password-aut
 #
 # Default: False.
 ssh_server_use_pam: false
