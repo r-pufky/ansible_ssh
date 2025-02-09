@@ -5,7 +5,7 @@
 ###############################################################################
 # Use referenced man pages for detailed option usage.
 #
-# PascalCase: ssh_server_allow_tcp_forwarding > AllowTcpForwarding
+# PascalCase: ssh_server_allow_tcp_forwarding > AllowTcpForwarding.
 #
 # List current system configuration using:
 #
