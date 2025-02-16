@@ -75,6 +75,21 @@ ssh_server_address_family: 'any'
 # Default: True.
 ssh_server_allow_agent_forwarding: true
 
+# Allow TCP forwarding?
+#
+# Disabling TCP forwarding does not improve security unless users are also
+# denied shell access, as they can always install their own forwarders.
+#
+# Values:
+#     True: allow all
+#      all: allow all
+#    local: allow local only (from the perspective of SSH)
+#   remote: allow remote only
+#    False: prevent all
+#
+# Default: True.
+ssh_server_allow_tcp_forwarding: true
+
 # Allow login for users with matching primary or supplementary groups.
 #
 # List of group name patterns as specified from PATTERNS section (see
@@ -381,7 +396,7 @@ ssh_server_chroot_directory: ''
 #   - 'aes256-ctr'
 #   - 'aes128-gcm@openssh.com'
 #   - 'aes256-gcm@openssh.com'
-ssh_client_ciphers:
+ssh_server_ciphers:
   # - 'chacha20-poly1305@openssh.com'
   - 'aes128-ctr'
   - 'aes192-ctr'

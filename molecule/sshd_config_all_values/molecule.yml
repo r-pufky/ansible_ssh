@@ -24,6 +24,7 @@ provisioner:
         ssh_server_allow_agent_forwarding: false
         ssh_server_allow_groups: ['ssh', 'mono']
         ssh_server_allow_stream_local_forwarding: 'local'
+        ssh_server_allow_tcp_forwarding: 'local'
         ssh_server_allow_stream_remote_forwarding: 'local'
         ssh_server_allow_users: ['ssh', 'mono']
         ssh_server_authentication_methods:
@@ -41,7 +42,7 @@ provisioner:
           - 'tun-connection': '1h'
           - '*': '30m'
         ssh_server_chroot_directory: '/tmp'
-        ssh_client_ciphers: ['chacha20-poly1305@openssh.com']
+        ssh_server_ciphers: ['chacha20-poly1305@openssh.com']
         ssh_server_client_alive_count_max: 5
         ssh_server_client_alive_interval: 10
         ssh_server_compression: false

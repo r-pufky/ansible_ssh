@@ -27,10 +27,10 @@ AllowStreamLocalForwarding {{ ssh_server_allow_stream_local_forwarding | default
 {% else %}
 AllowStreamLocalForwarding {{ 'yes' if ssh_server_allow_stream_local_forwarding else 'no' }}
 {% endif %}
-{% if ssh_server_allow_stream_local_forwarding is string %}
-AllowTcpForwarding {{ ssh_server_allow_stream_local_forwarding | default('all') | lower }}
+{% if ssh_server_allow_tcp_forwarding is string %}
+AllowTcpForwarding {{ ssh_server_allow_tcp_forwarding | default('all') | lower }}
 {% else %}
-AllowTcpForwarding {{ 'yes' if ssh_server_allow_stream_local_forwarding else 'no' }}
+AllowTcpForwarding {{ 'yes' if ssh_server_allow_tcp_forwarding else 'no' }}
 {% endif %}
 {% if ssh_server_allow_users | length > 0 %}
 AllowUsers {{ ssh_server_allow_users | default([]) | join(' ') }}
@@ -85,7 +85,7 @@ ChrootDirectory {{ ssh_server_chroot_directory }}
 {% else %}
 ChrootDirectory none
 {% endif %}
-Ciphers {{ ssh_client_ciphers | join(',') }}
+Ciphers {{ ssh_server_ciphers | join(',') }}
 ClientAliveCountMax {{ ssh_server_client_alive_count_max | default(3) }}
 ClientAliveInterval {{ ssh_server_client_alive_interval | default(0) }}
 Compression {{ 'yes' if ssh_server_compression else 'no' }}
