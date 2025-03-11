@@ -87,3 +87,4 @@
   loop: '{{ ssh_server_include_files | default([]) }}'
   loop_control:
     loop_var: local
+    label: '{{ local.config }}'
