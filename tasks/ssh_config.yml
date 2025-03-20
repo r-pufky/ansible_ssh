@@ -22,5 +22,5 @@
     options: '{{ local.options }}'
   loop: '{{ ssh_client_include_files | default([]) }}'
   loop_control:
-    loop_var: local
+    loop_var: 'local'
     label: '{{ local.config }}'
