@@ -1,6 +1,15 @@
 ---
+###############################################################################
+# SSH Config All Values
+###############################################################################
 # Confirm explicit settings are set to expected values and config loads without
 # error.
+#
+# Tests:
+# * ssh_config all options correct.
+# * SSH local_config all options correct.
+# * No static errors.
+
 dependency:
   name: 'galaxy'
 driver:

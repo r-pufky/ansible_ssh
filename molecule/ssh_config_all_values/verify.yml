@@ -1,60 +1,50 @@
 ---
-# yamllint disable rule:line-length
-- name: 'SSH config all values | verify | ssh_config'
+- name: 'SSH config all values | verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'SSH config all values | verify | ssh_config | query global expected config'
-      ansible.builtin.copy:
-        src: 'files/ssh_config'
-        dest: '/etc/ssh/ssh_config'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_ssh_ssh_config
+    - name: 'SSH config all values | verify | /etc/ssh/ssh_config'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name:
+          'SSH config all values | verify | /etc/ssh/ssh_config'
+        test_src: 'files/ssh_config'
+        test_file: '/etc/ssh/ssh_config'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
 
-    - name: 'SSH config all values | verify | ssh_config | assert global config'
-      ansible.builtin.assert:
-        that:
-          - not _test_ssh_ssh_config.changed
-        fail_msg: '/etc/ssh/ssh_config is not in expected format: {{ _test_ssh_ssh_config.diff }}'
+    - name: >
+        SSH config all values | verify |
+        /etc/ssh/ssh_config.d/test_config.conf
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: >
+          SSH config all values | verify |
+          /etc/ssh/ssh_config.d/test_config.conf
+        test_src: 'files/local_config'
+        test_file: '/etc/ssh/ssh_config.d/test_config.conf'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
 
-- name: 'SSH config all values | verify | ssh local configs'
-  hosts: 'all'
-  gather_facts: false
-  tasks:
-    - name: 'SSH config all values | verify | ssh local configs | query local expected config'
-      ansible.builtin.copy:
-        src: 'files/local_config'
-        dest: '/etc/ssh/ssh_config.d/test_config.conf'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_ssh_local_config
-
-    - name: 'SSH config all values | verify | ssh local configs | assert local config'
-      ansible.builtin.assert:
-        that:
-          - not _test_ssh_local_config.changed
-        fail_msg: '/etc/ssh/ssh_config.d/test_config.conf is not in expected format: {{ _test_ssh_local_config.diff }}.'
-
-- name: 'SSH config all values | verify | no static errors'
-  hosts: 'all'
-  gather_facts: false
-  tasks:
-    # values are internal values NOT ssh_config values; check exit code only.
-    - name: 'SSH config all values | verify | no static errors | test ssh configuration for static errors'
+    # Values are internal values NOT ssh_config values; check exit code only.
+    - name: >
+        SSH config all values | verify |
+        test SSH configuration for static errors
       ansible.builtin.command: 'ssh -G test'
       changed_when: false
       failed_when: false
       register: _test_ssh_ssh_g_test
 
-    - name: 'SSH config all values | verify | no static errors | assert no static errors'
+    - name: 'SSH config all values | verify | assert no static errors'
       ansible.builtin.assert:
         that:
           - _test_ssh_ssh_g_test.rc == 0
-        fail_msg: "'ssh -G test' returned static errors: {{ _test_ssh_ssh_g_test.stderr }}."
+        fail_msg: >
+          ✘ 'ssh -G test' returned static errors:
+          {{ _test_ssh_ssh_g_test.stderr }}.*

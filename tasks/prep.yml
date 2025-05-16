@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # SSH Prep
 ###############################################################################
@@ -9,5 +8,8 @@
   ansible.builtin.assert:
     quiet: true
     that:
-      - ssh_client_required_rsa_size >= ssh_role_debian_rsa_key_minimum_size
-    fail_msg: 'ssh_client_required_rsa_size must be >= {{ ssh_role_debian_rsa_key_minimum_size }}. ({{ ssh_client_required_rsa_size }})'
+      - ssh_client_required_rsa_size >= ssh_role_os_rsa_key_minimum_size
+    fail_msg: >
+      ✘ ssh_client_required_rsa_size must be >=
+      {{ ssh_role_os_rsa_key_minimum_size }}
+      ({{ ssh_client_required_rsa_size }}).

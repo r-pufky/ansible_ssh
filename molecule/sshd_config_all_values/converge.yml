@@ -18,9 +18,9 @@
         src: '/tmp/ssh_host_rsa_key-cert.pub'
       register: _test_ssh_trusted_user_key
 
-    - name: 'SSHD config all values | converge | apply r_pufky.srv.ssh'
+    - name: 'SSHD config all values | converge | apply r_pufky.deb.ssh'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.ssh'
+        name: 'r_pufky.deb.ssh'
       vars:
         ssh_server_host_certificate: >-
           {{ _test_ssh_host_key_pub.content | b64decode }}

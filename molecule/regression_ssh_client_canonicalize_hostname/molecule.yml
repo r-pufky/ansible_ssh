@@ -1,4 +1,7 @@
 ---
+###############################################################################
+# Regression SSH Client Canonicalize Hostname
+###############################################################################
 # A value of '' (CanonicalizeHostname none) fails ssh -G test with unsupported
 # option. Verify that debian 13+ (trixie or later) fixes it with:
 #
@@ -13,6 +16,11 @@
 #   converge.yml/ssh_client_canonicalize_hostname: ''
 #
 # Which will enforce testing the 'none' option.
+#
+# Tests:
+# * ssh_config contains CanonicalizeHostname "none".
+# * ssh -G test returns exit code 255 with unsupported option 'none'.
+
 dependency:
   name: 'galaxy'
 driver:

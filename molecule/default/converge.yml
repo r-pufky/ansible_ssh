@@ -3,6 +3,6 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | converge | apply r_pufky.srv.ssh'
+    - name: 'Default | converge | apply r_pufky.deb.ssh'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.ssh'
+        name: 'r_pufky.deb.ssh'

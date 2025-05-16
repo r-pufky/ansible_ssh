@@ -1,12 +1,15 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Install packages'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
   vars:
     apt_packages:
       - '{{ ssh_role_packages }}'
-      - '{{ ssh_role_kerberos_minimum_packages if ssh_server_kerberos_authentication else [] }}'
+      - '{{
+          ssh_role_kerberos_minimum_packages
+          if ssh_server_kerberos_authentication else
+          []
+        }}'
     apt_package_update_cache: true
 
 - name: 'Prep'

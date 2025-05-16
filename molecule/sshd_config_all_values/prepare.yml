@@ -1,15 +1,21 @@
 ---
 # yamllint disable rule:line-length
+###############################################################################
+# Prepare
+###############################################################################
 # Manually generate testing certificate authority and sign keys for
 # HostCertificate option testing.
 #
 # Reference:
 # * https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Certificate-based_Authentication
+# yamllint enable rule:line-length
+
 - name: 'SSHD config all values | prepare'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'SSHD config all values | prepare | packages to generate testing keys'
+    - name:
+        'SSHD config all values | prepare | packages to generate testing keys'
       ansible.builtin.apt:
         name:
           - 'openssh-client'  # required for ssh-keygen
@@ -17,7 +23,9 @@
         update_cache: true
         state: 'present'
 
-    - name: 'SSHD config all values | prepare | create /run/sshd for testing SSHD (sshd -T)'
+    - name: >
+        SSHD config all values | prepare |
+        create /run/sshd for testing SSHD (sshd -T)
       ansible.builtin.file:
         path: '/run/sshd'
         owner: 'root'
@@ -26,16 +34,51 @@
         state: 'directory'
 
     - name: 'SSHD config all values | prepare | generate testing host key'
-      ansible.builtin.command: 'ssh-keygen -t rsa -b 4096 -f /tmp/ssh_host_rsa_key -C "" -N ""'
-      args:
-        creates: '/tmp/ssh_host_rsa_key'  # and ssh_host_rsa_key.pub
+      ansible.builtin.command:
+        argv:
+          - 'ssh-keygen'
+          - '-t'
+          - 'rsa'
+          - '-b'
+          - '4096'
+          - '-f'
+          - '/tmp/ssh_host_rsa_key'
+          - '-C'
+          - ''
+          - '-N'
+          - ''
+        creates: '/tmp/ssh_host_rsa_key'  # and ssh_host_rsa_key.pub.
 
     - name: 'SSHD config all values | prepare | generate testing CA'
-      ansible.builtin.command: 'ssh-keygen -t ecdsa -f /tmp/ssh_host_ca_key -C "Host Certificate Authority for *.example.com" -N ""'
-      args:
+      ansible.builtin.command:
+        argv:
+          - 'ssh-keygen'
+          - '-t'
+          - 'ecdsa'
+          - '-f'
+          - '/tmp/ssh_host_ca_key'
+          - '-C'
+          - 'Host Certificate Authority for *.example.com'
+          - '-N'
+          - ''
         creates: '/tmp/ssh_host_ca_key'
 
-    - name: 'SSHD config all values | prepare | sign testing host key with testing CA'
-      ansible.builtin.command: 'ssh-keygen -h -s /tmp/ssh_host_ca_key -V "+1d" -I abcd -z 00001 -n server.example.com /tmp/ssh_host_rsa_key'
-      args:
+    - name: >
+        SSHD config all values | prepare |
+        sign testing host key with testing CA
+      ansible.builtin.command:
+        argv:
+          - 'ssh-keygen'
+          - '-h'
+          - '-s'
+          - '/tmp/ssh_host_ca_key'
+          - '-V'
+          - '+1d'
+          - '-I'
+          - 'abcd'
+          - '-z'
+          - '00001'
+          - '-n'
+          - 'server.example.com'
+          - '/tmp/ssh_host_rsa_key'
         creates: '/tmp/ssh_host_rsa_key-cert.pub'

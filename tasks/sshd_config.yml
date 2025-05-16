@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # SSHD Configuration (sshd_config)
 ###############################################################################
@@ -80,7 +79,11 @@
 - name: 'SSHD config | local'
   ansible.builtin.include_tasks: 'local_config.yml'
   vars:
-    include: '{{ ssh_server_include[0] | default("/etc/ssh/sshd_config.d") | dirname }}'
+    include: '{{
+        ssh_server_include[0] |
+        default("/etc/ssh/sshd_config.d") |
+        dirname
+      }}'
     config: '{{ local.config }}'
     state: '{{ local.state | default("present") }}'
     options: '{{ local.options }}'

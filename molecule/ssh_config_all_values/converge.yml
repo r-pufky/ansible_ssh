@@ -8,8 +8,8 @@
     #
     # Reference:
     # * https://github.com/ansible/molecule/issues/4348
-    - name: 'SSH config all values | converge | apply r_pufky.srv.ssh'
+    - name: 'SSH config all values | converge | apply r_pufky.deb.ssh'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.ssh'
+        name: 'r_pufky.deb.ssh'
       vars:
         ssh_client_security_key_provider: !unsafe '$FIDO-TEST'

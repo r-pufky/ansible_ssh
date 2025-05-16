@@ -1,6 +1,16 @@
 ---
+###############################################################################
+# Default
+###############################################################################
 # Confirm default settings are set to expected values and config loads without
 # error.
+#
+# Tests:
+# * Default ssh_config is correct.
+# * Default sshd_config is correct.
+# * DSA host key removed.
+# * RSA host key strength is enforced at 4096.
+
 dependency:
   name: 'galaxy'
 driver:

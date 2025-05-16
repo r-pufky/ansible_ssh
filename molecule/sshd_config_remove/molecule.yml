@@ -1,9 +1,20 @@
 ---
-# yamllint disable rule:line-length
+###############################################################################
+# SSHD Config Remove
+###############################################################################
 # Confirm setting string data then reverted removes generated files; see
 # sshd_config.yml for current list of managed files.
 #
 # This should revert back to an exact copy of the default sshd_config test.
+#
+# Tests:
+# * sshd_config all options correct.
+# * No static errors.
+# * /etc/ssh/ssh_server_banner removed.
+# * /etc/ssh/ssh_server_host_certificate removed.
+# * /etc/ssh/ssh_server_host_key removed.
+# * /etc/ssh/ssh_server_trusted_user_ca_keys removed.
+
 dependency:
   name: 'galaxy'
 driver:
@@ -39,7 +50,7 @@ scenario:
     - 'create'
     - 'prepare'
     - 'converge'
-    # - 'idempotence'  # * sshd_config managed files are created and removed.
+    # - 'idempotence'  # sshd_config managed files are created and removed.
     # - 'side_effect'
     - 'verify'
     # - 'cleanup'

@@ -89,7 +89,7 @@ Ciphers {{ ssh_server_ciphers | join(',') }}
 ClientAliveCountMax {{ ssh_server_client_alive_count_max | default(3) }}
 ClientAliveInterval {{ ssh_server_client_alive_interval | default(0) }}
 Compression {{ 'yes' if ssh_server_compression else 'no' }}
-DebianBanner {{ 'yes' if ssh_server_debian_banner else 'no' }}
+DebianBanner {{ 'yes' if ssh_server_os_banner else 'no' }}
 {% if ssh_server_deny_groups | length > 0 %}
 DenyGroups {{ ssh_server_deny_groups | default([]) | join(' ') }}
 {% endif %}
@@ -222,7 +222,7 @@ PubkeyAuthOptions none
 {% endif %}
 PubkeyAuthentication {{ 'yes' if ssh_server_pubkey_authentication else 'no' }}
 RekeyLimit {{ ssh_server_rekey_limit.data | default('0') }} {{ ssh_server_rekey_limit.time | default('0') }}
-RequiredRSASize {{ ssh_server_required_rsa_size | default(ssh_role_debian_rsa_key_minimum_size) }}
+RequiredRSASize {{ ssh_server_required_rsa_size | default(ssh_role_os_rsa_key_minimum_size) }}
 {% if ssh_server_revoked_keys | length > 0 %}
 RevokedKeys {{ ssh_server_revoked_keys }}
 {% else %}

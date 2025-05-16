@@ -1,36 +1,41 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Regression | SSH client canonicalize hostname | verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Regression | SSH client canonicalize hostname | verify | query global expected config'
-      ansible.builtin.copy:
-        src: 'files/ssh_config'
-        dest: '/etc/ssh/ssh_config'
-        owner: 'root'
-        group: 'root'
-        mode: '0644'
-      check_mode: true
-      diff: true
-      register: _test_ssh_ssh_config
+    - name: >
+        Regression | SSH client canonicalize hostname | verify |
+        /etc/ssh/ssh_config
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: >
+          Regression | SSH client canonicalize hostname | verify |
+          /etc/ssh/ssh_config
+        test_src: 'files/ssh_config'
+        test_file: '/etc/ssh/ssh_config'
+        test_owner: 'root'
+        test_group: 'root'
+        test_mode: '0644'
 
-    - name: 'Regression | SSH client canonicalize hostname | verify | assert global config'
-      ansible.builtin.assert:
-        that:
-          - not _test_ssh_ssh_config.changed
-        fail_msg: '/etc/ssh/ssh_config is not in expected format: {{ _test_ssh_ssh_config.diff }}.'
-
-    # values are internal values NOT ssh_config values; check exit code only.
-    - name: 'Regression | SSH client canonicalize hostname | verify | test ssh configuration for static errors'
+    # Values are internal values NOT ssh_config values; check exit code only.
+    - name: >
+        Regression | SSH client canonicalize hostname | verify |
+        test SSH configuration for static errors
       ansible.builtin.command: 'ssh -G test'
       changed_when: false
       failed_when: false
       register: _test_ssh_ssh_g_test
 
-    - name: 'Regression | SSH client canonicalize hostname | verify | assert static error'
+    - name: >
+        Regression | SSH client canonicalize hostname | verify |
+        assert static error
       ansible.builtin.assert:
+        quiet: true
         that:
           - _test_ssh_ssh_g_test.rc == 255
-          - _test_ssh_ssh_g_test.stderr is match('^/etc/ssh/ssh_config line 26: unsupported option \"none\".*')
-        fail_msg: "'ssh -G test' returned static errors: {{ _test_ssh_ssh_g_test.stderr }}."
+          - _test_ssh_ssh_g_test.stderr is match('^/etc/ssh/ssh_config line 26: unsupported option \"none\".*')  # yamllint disable-line rule:line-length
+        fail_msg: >
+          ✘ 'ssh -G test' returned static errors:
+          {{ _test_ssh_ssh_g_test.stderr }}.

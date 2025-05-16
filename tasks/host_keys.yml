@@ -27,11 +27,14 @@
     _ssh_rsa_host_key_strength.rc != 0 and
     _ssh_rsa_host_key_strength.rc != 255
 
-- name: 'Host keys | regenerate host RSA key to {{ ssh_security_regenerate_host_rsa_keys }}'
+- name: >
+    Host keys |
+    regenerate host RSA key to {{ ssh_security_regenerate_host_rsa_keys }}
   when: >
     _ssh_rsa_host_key.stat.exists and
     ssh_security_regenerate_host_rsa_keys != '' and
-    _ssh_rsa_host_key_strength.stdout.split(' ')[0] | int < ssh_security_regenerate_host_rsa_keys
+    _ssh_rsa_host_key_strength.stdout.split(' ')[0] | int <
+        ssh_security_regenerate_host_rsa_keys
   notify: 'Handlers | restart SSH'
   community.crypto.openssh_keypair:
     path: '/etc/ssh/ssh_host_rsa_key'
@@ -41,12 +44,13 @@
     force: true
   register: _ssh_rsa_host_key_changed
 
-- name: 'Host keys | HOST KEY CHANGE WARNING'  # noqa no-handler execute immediately warning message
+- name: 'Host keys | HOST KEY CHANGE WARNING ⚠'  # noqa no-handler immediate.
   when: _ssh_rsa_host_key_changed.changed
   ansible.builtin.debug:
     msg: |
-      Target RSA host keys have changed. WILL produce host warning. Remove
-      previously saved key:
+      ⚠ Target RSA host keys have changed.
+
+      WILL produce host warning. Remove previously saved key:
 
         ssh-keygen -R {{ inventory_hostname }}
 

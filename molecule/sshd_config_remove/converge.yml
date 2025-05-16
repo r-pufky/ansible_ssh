@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 - name: 'SSHD config remove | converge'
   hosts: 'all'
   gather_facts: false
@@ -19,9 +18,10 @@
         src: '/tmp/ssh_host_rsa_key-cert.pub'
       register: _test_ssh_trusted_user_key
 
-    - name: 'SSHD config remove | converge | apply r_pufky.srv.ssh (managed files)'
+    - name:
+        'SSHD config remove | converge | apply r_pufky.deb.ssh (managed files)'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.ssh'
+        name: 'r_pufky.deb.ssh'
       vars:
         ssh_server_banner: 'this is a test banner'
         ssh_server_host_certificate: >-
@@ -30,6 +30,6 @@
         ssh_server_trusted_user_ca_keys: >-
           {{ _test_ssh_trusted_user_key.content | b64decode }}
 
-    - name: 'SSHD config remove | converge | apply r_pufky.srv.ssh (defaults)'
+    - name: 'SSHD config remove | converge | apply r_pufky.deb.ssh (defaults)'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.ssh'
+        name: 'r_pufky.deb.ssh'

@@ -1,7 +1,15 @@
 ---
-# yamllint disable rule:line-length
+###############################################################################
+# SSHD Config All Values
+###############################################################################
 # Confirm explicit settings are set to expected values and config loads without
 # error.
+#
+# Tests:
+# * sshd_config all options correct.
+# * SSHD local_config all options correct.
+# * No static errors.
+
 dependency:
   name: 'galaxy'
 driver:
@@ -32,8 +40,10 @@ provisioner:
         ssh_server_authorized_keys_command: '/run/authorized-keys-command'
         ssh_server_authorized_keys_command_user: 'authorize-keys-users'
         ssh_server_authorized_keys_file: ['.ssh/authorized_keys']
-        ssh_server_authorized_principals_command: '/run/authorized-principals-command'
-        ssh_server_authorized_principals_command_user: 'principal-commands-user'
+        ssh_server_authorized_principals_command:
+          '/run/authorized-principals-command'
+        ssh_server_authorized_principals_command_user:
+          'principal-commands-user'
         ssh_server_authorized_principals_file: '/etc/ssh/principals-file'
         ssh_server_banner: 'this is a test banner'
         ssh_server_ca_signature_algorithms: ['ssh-ed25519']
@@ -46,7 +56,7 @@ provisioner:
         ssh_server_client_alive_count_max: 5
         ssh_server_client_alive_interval: 10
         ssh_server_compression: false
-        ssh_server_debian_banner: false
+        ssh_server_os_banner: false
         ssh_server_deny_groups: ['deny-groups']
         ssh_server_deny_users: ['denied-user']
         ssh_server_disable_forwarding: true
@@ -60,7 +70,8 @@ provisioner:
         ssh_server_gssapi_strict_acceptor_check: false
         ssh_server_gssapi_store_credentials_on_rekey: true
         ssh_server_gssapi_key_algorithms: ['gss-group14-sha256-']
-        ssh_server_hostbased_accepted_algorithms: ['ssh-ed25519-cert-v01@openssh.com']
+        ssh_server_hostbased_accepted_algorithms:
+          - 'ssh-ed25519-cert-v01@openssh.com'
         ssh_server_hostbased_authentication: true
         ssh_server_hostbased_uses_name_from_packet_only: true
         # Dynamically generated keys/signature in prepare.yml
@@ -110,7 +121,8 @@ provisioner:
           - 2222
         ssh_server_print_last_log: false
         ssh_server_print_motd: false
-        ssh_server_pubkey_accepted_algorithms: ['ssh-ed25519-cert-v01@openssh.com']
+        ssh_server_pubkey_accepted_algorithms:
+          - 'ssh-ed25519-cert-v01@openssh.com'
         ssh_server_pubkey_auth_options: ['touch-required', 'verify-required']
         ssh_server_pubkey_authentication: false
         ssh_server_rekey_limit:

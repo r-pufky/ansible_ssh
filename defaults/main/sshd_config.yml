@@ -432,7 +432,7 @@ ssh_server_client_alive_interval: 0
 ssh_server_compression: true
 
 # Include distribution specific version suffix in handshake? Default: True.
-ssh_server_debian_banner: true
+ssh_server_os_banner: true
 
 # Deny login for users with matching primary or supplementary groups.
 #

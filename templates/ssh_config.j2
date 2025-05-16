@@ -193,7 +193,7 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
 {% else %}
   RequestTTY {{ 'yes' if ssh_client_request_tty else 'no' }}
 {% endif %}
-  RequiredRSASize {{ ssh_client_required_rsa_size | default(ssh_role_debian_rsa_key_minimum_size) }}
+  RequiredRSASize {{ ssh_client_required_rsa_size | default(ssh_role_os_rsa_key_minimum_size) }}
 {% if ssh_client_revoked_host_keys | length > 0 %}
   RevokedHostKeys {{ ssh_client_revoked_host_keys }}
 {% endif %}
