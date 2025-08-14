@@ -1,31 +1,32 @@
 ---
-- name: 'Default | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | verify | /etc/ssh'
+    - name: 'Verify | /etc/ssh'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Default | verify | /etc/ssh/{{ item }}'
+        test_name: 'Verify | /etc/ssh/{{ item }}'
         test_src: 'files/{{ item }}'
         test_file: '/etc/ssh/{{ item }}'
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
       loop:
         - 'ssh_config'
         - 'sshd_config'
 
     # Values are internal values NOT ssh_config values; check exit code only.
-    - name: 'Default | verify | test SSH configuration for static errors'
+    - name: 'Verify | test SSH configuration for static errors'
       ansible.builtin.command: 'ssh -G test'
       changed_when: false
       failed_when: false
       register: _test_ssh_ssh_g_test
 
-    - name: 'Default | verify | ssh_config | assert no static SSH errors'
+    - name: 'Verify | ssh_config | assert no static SSH errors'
       ansible.builtin.assert:
         quiet: true
         that:
@@ -35,13 +36,13 @@
           {{ _test_ssh_ssh_g_test.stderr }}.
 
     # values are internal values NOT ssh_config values; check exit code only.
-    - name: 'Default | verify | test SSHD configuration for static errors'
+    - name: 'Verify | test SSHD configuration for static errors'
       ansible.builtin.command: 'sshd -T'  # requires /run/sshd to exist.
       changed_when: false
       failed_when: false
       register: _test_ssh_sshd_t_test
 
-    - name: 'Default | verify | assert no static SSHD errors'
+    - name: 'Verify | assert no static SSHD errors'
       ansible.builtin.assert:
         quiet: true
         that:
@@ -50,19 +51,20 @@
           ✘ 'sshd -T' returned static errors:
           {{ _test_ssh_sshd_t_test.stderr }}.
 
-    - name: 'Default | verify | DSA host key removed'
+    - name: 'Verify | DSA host key removed'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
-        test_name: 'Default | verify | DSA host key removed'
+        test_name: 'Verify | DSA host key removed'
         test_file: '/etc/ssh/ssh_host_dsa_key'
         test_owner: '{{ omit }}'
         test_group: '{{ omit }}'
         test_mode: '{{ omit }}'
         test_state: 'absent'
+        test_diff: true
 
-    - name: 'Default | verify | query host RSA key strength'
+    - name: 'Verify | query host RSA key strength'
       ansible.builtin.command:
         argv:
           - 'ssh-keygen'
@@ -72,7 +74,7 @@
       changed_when: false
       failed_when: false
 
-    - name: 'Default | verify | assert correct RSA key strength'
+    - name: 'Verify | assert correct RSA key strength'
       ansible.builtin.assert:
         quiet: true
         that:

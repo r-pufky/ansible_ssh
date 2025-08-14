@@ -1,10 +1,8 @@
 ---
-- name: 'Regression | SSH client canonicalize hostname | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: >
-        Regression | SSH client canonicalize hostname | converge |
-        apply r_pufky.deb.users
+    - name: 'Converge | apply r_pufky.deb.users'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.ssh'

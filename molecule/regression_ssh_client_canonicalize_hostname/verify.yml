@@ -1,18 +1,14 @@
 ---
-- name: 'Regression | SSH client canonicalize hostname | verify'
+- name: 'Verify'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: >
-        Regression | SSH client canonicalize hostname | verify |
-        /etc/ssh/ssh_config
+    - name: 'Verify | /etc/ssh/ssh_config'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
-        test_name: >
-          Regression | SSH client canonicalize hostname | verify |
-          /etc/ssh/ssh_config
+        test_name: 'Verify | /etc/ssh/ssh_config'
         test_src: 'files/ssh_config'
         test_file: '/etc/ssh/ssh_config'
         test_owner: 'root'
@@ -20,17 +16,13 @@
         test_mode: '0644'
 
     # Values are internal values NOT ssh_config values; check exit code only.
-    - name: >
-        Regression | SSH client canonicalize hostname | verify |
-        test SSH configuration for static errors
+    - name: 'Verify | test SSH configuration for static errors'
       ansible.builtin.command: 'ssh -G test'
       changed_when: false
       failed_when: false
       register: _test_ssh_ssh_g_test
 
-    - name: >
-        Regression | SSH client canonicalize hostname | verify |
-        assert static error
+    - name: 'Verify | assert static error'
       ansible.builtin.assert:
         quiet: true
         that:

@@ -1,9 +1,9 @@
 ---
-- name: 'Default | prepare'
+- name: 'Prepare'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Default | prepare | create /run/sshd for verifying SSHD (sshd -T)'
+    - name: 'Prepare | create /run/sshd for verifying SSHD (sshd -T)'
       ansible.builtin.file:
         path: '/run/sshd'
         owner: 'root'

@@ -1,25 +1,24 @@
 ---
-- name: 'SSHD config remove | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'SSHD config remove | converge | read testing host keys'
+    - name: 'Converge | read testing host keys'
       ansible.builtin.slurp:
         src: '/tmp/ssh_host_rsa_key'
       register: _test_ssh_host_key
 
-    - name: 'SSHD config remove | converge | read testing host pub keys'
+    - name: 'Converge | read testing host pub keys'
       ansible.builtin.slurp:
         path: '/tmp/ssh_host_rsa_key.pub'
       register: _test_ssh_host_key_pub
 
-    - name: 'SSHD config remove | converge | read testing trusted user key'
+    - name: 'Converge | read testing trusted user key'
       ansible.builtin.slurp:
         src: '/tmp/ssh_host_rsa_key-cert.pub'
       register: _test_ssh_trusted_user_key
 
-    - name:
-        'SSHD config remove | converge | apply r_pufky.deb.ssh (managed files)'
+    - name: 'Converge | apply r_pufky.deb.ssh (managed files)'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.ssh'
       vars:
@@ -30,6 +29,6 @@
         ssh_server_trusted_user_ca_keys: >-
           {{ _test_ssh_trusted_user_key.content | b64decode }}
 
-    - name: 'SSHD config remove | converge | apply r_pufky.deb.ssh (defaults)'
+    - name: 'Converge | apply r_pufky.deb.ssh (defaults)'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.ssh'

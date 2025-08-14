@@ -1,5 +1,5 @@
 ---
-- name: 'SSH config all values | converge'
+- name: 'Converge'
   hosts: 'all'
   gather_facts: false
   tasks:
@@ -8,7 +8,7 @@
     #
     # Reference:
     # * https://github.com/ansible/molecule/issues/4348
-    - name: 'SSH config all values | converge | apply r_pufky.deb.ssh'
+    - name: 'Converge | apply r_pufky.deb.ssh'
       ansible.builtin.include_role:
         name: 'r_pufky.deb.ssh'
       vars:

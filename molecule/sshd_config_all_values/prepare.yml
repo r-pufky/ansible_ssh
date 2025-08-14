@@ -10,12 +10,11 @@
 # * https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Certificate-based_Authentication
 # yamllint enable rule:line-length
 
-- name: 'SSHD config all values | prepare'
+- name: 'Prepare'
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name:
-        'SSHD config all values | prepare | packages to generate testing keys'
+    - name: 'Prepare | packages to generate testing keys'
       ansible.builtin.apt:
         name:
           - 'openssh-client'  # required for ssh-keygen
@@ -23,9 +22,7 @@
         update_cache: true
         state: 'present'
 
-    - name: >
-        SSHD config all values | prepare |
-        create /run/sshd for testing SSHD (sshd -T)
+    - name: 'Prepare | create /run/sshd for testing SSHD (sshd -T)'
       ansible.builtin.file:
         path: '/run/sshd'
         owner: 'root'
@@ -33,7 +30,7 @@
         mode: '0755'
         state: 'directory'
 
-    - name: 'SSHD config all values | prepare | generate testing host key'
+    - name: 'Prepare | generate testing host key'
       ansible.builtin.command:
         argv:
           - 'ssh-keygen'
@@ -49,7 +46,7 @@
           - ''
         creates: '/tmp/ssh_host_rsa_key'  # and ssh_host_rsa_key.pub.
 
-    - name: 'SSHD config all values | prepare | generate testing CA'
+    - name: 'Prepare | generate testing CA'
       ansible.builtin.command:
         argv:
           - 'ssh-keygen'
@@ -63,9 +60,7 @@
           - ''
         creates: '/tmp/ssh_host_ca_key'
 
-    - name: >
-        SSHD config all values | prepare |
-        sign testing host key with testing CA
+    - name: 'Prepare | sign testing host key with testing CA'
       ansible.builtin.command:
         argv:
           - 'ssh-keygen'

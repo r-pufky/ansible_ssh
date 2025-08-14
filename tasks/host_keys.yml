@@ -48,13 +48,19 @@
   when: _ssh_rsa_host_key_changed.changed
   ansible.builtin.debug:
     msg: |
-      ⚠ Target RSA host keys have changed.
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                Target RSA host keys have changed.                 │
+      │                                                                   │
+      │  WILL produce host warning. Remove previously saved key:          │
+      │                                                                   │
+      │    ssh-keygen -R {{ _ssh_hostname_msg }} │
+      │                                                                   │
+      │  It might be prudent to ignore one-time for playbook:             │
+      │                                                                   │
+      │    ansible-playbook site.yml \                                    │
+      │        --ssh-common-args '-o UserKnownHostsFile=/dev/null'        │
+      │                                                                   │
+      ╰───────────────────────────────────────────────────────────────────╯
 
-      WILL produce host warning. Remove previously saved key:
-
-        ssh-keygen -R {{ inventory_hostname }}
-
-      It might be prudent to ignore one-time for playbook:
-
-      ansible-playbook site.yml --ssh-common-args '-o UserKnownHostsFile=/dev/null'
   changed_when: false
