@@ -13,7 +13,6 @@
 # * NSA Hardening Guide: https://media.defense.gov/2022/Jun/15/2003018261/-1/-1/0/CTR_NSA_NETWORK_INFRASTRUCTURE_SECURITY_GUIDE_20220615.PDF
 # * SSH Hardening for Audit: https://www.sshaudit.com/hardening_guides.html#os_12
 
-# TODO(role): confirm DSA keys are removed (by trixie).
 # Forcibly remove specified host keys from system.
 #
 # Host keys are explicitly removed from /etc/ssh. DSA keys are no longer
