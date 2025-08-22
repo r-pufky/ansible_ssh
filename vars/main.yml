@@ -4,8 +4,8 @@
 ###############################################################################
 
 # Last time SSH options were validated against a default configuration.
-ssh_role_validate_date: '2024-06-14'
-ssh_role_validate_release: 'bookworm'
+ssh_role_validate_date: '2025-08-21'
+ssh_role_validate_release: 'trixie'
 
 # Minimum debian enforced RSA key size.
 ssh_role_os_rsa_key_minimum_size: 1024

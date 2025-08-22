@@ -50,9 +50,9 @@ provisioner:
           - '~/.ssh'
           - '/etc/ssh/clients'
         ssh_client_channel_timeout:
-          'session': '5m'
-          'tun-connection': '1h'
-          '*': '30m'
+          - 'session': '5m'
+          - 'tun-connection': '1h'
+          - '*': '30m'
         ssh_client_check_host_ip: false
         ssh_client_ciphers:
           - 'chacha20-poly1305@openssh.com'
@@ -124,6 +124,7 @@ provisioner:
           - 'umac-64-etm@openssh.com'
         ssh_client_no_host_authentication_for_local_host: true
         ssh_client_number_of_password_prompts: 1
+        ssh_client_obscure_keystroke_timing: true
         ssh_client_password_authentication: false
         ssh_client_permit_local_command: true
         ssh_client_permit_remote_open:
@@ -175,6 +176,7 @@ provisioner:
         ssh_client_user_known_hosts_file:
           - '~/.ssh/known_hosts'
         ssh_client_verify_host_key_dns: 'ask'
+        ssh_client_version_addendum: 'banner end'
         ssh_client_visual_host_key: true
         ssh_client_xauth_location: '/usr/test/alt/xauth'
         ssh_client_include_files:
@@ -184,8 +186,8 @@ provisioner:
               Host *
                 EscapeChar ^b
 platforms:
-  - name: 'ssh-debian-12-ssh_config_all_values'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'ssh-debian-13-ssh_config_all_values'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

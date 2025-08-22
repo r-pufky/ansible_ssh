@@ -70,6 +70,7 @@ MaxAuthTries 3
 MaxSessions 1
 MaxStartups 10
 ModuliFile /etc/ssh/moduli
+PAMServiceName sshd
 PasswordAuthentication no
 PermitEmptyPasswords yes
 PermitListen 127.0.0.1:22
@@ -80,6 +81,8 @@ PermitTunnel ethernet
 PermitUserEnvironment LANG,LC*
 PermitUserRC no
 PerSourceMaxStartups 15
+PerSourcePenalties crash:90s authfail:5s refuseconnection:10s noauth:1s grace-exceeded:10s max:10m min:15s max-sources4:65536 overflow:permissive overflow6:permissive
+PerSourcePenaltyExemptList 192.168.0.0/24
 PerSourceNetBlockSize 32
 Port 22
 Port 2222
@@ -88,11 +91,14 @@ PrintMotd no
 PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com
 PubkeyAuthOptions touch-required verify-required
 PubkeyAuthentication no
+RefuseConnection yes
 RekeyLimit 1G 1h
 RequiredRSASize 4096
 RevokedKeys /etc/ssh/rkl
 SecurityKeyProvider fido-alternative-provider
 SetEnv TEST_ENV="value with spaces"
+SshdAuthPath /usr/lib/openssh/sshd-auth
+SshdSessionPath /usr/lib/openssh/sshd-session
 StreamLocalBindMask 0177
 StreamLocalBindUnlink yes
 StrictModes no

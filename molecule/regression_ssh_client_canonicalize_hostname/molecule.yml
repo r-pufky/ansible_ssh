@@ -3,7 +3,7 @@
 # Regression SSH Client Canonicalize Hostname
 ###############################################################################
 # A value of '' (CanonicalizeHostname none) fails ssh -G test with unsupported
-# option. Verify that debian 13+ (trixie or later) fixes it with:
+# option. Verify that debian 14+ (forky or later) fixes it with:
 #
 #   CanonicalizeHostname none
 #   ssh -G test
@@ -38,8 +38,8 @@ provisioner:
       all:
         ssh_client_canonicalize_hostname: ''
 platforms:
-  - name: 'ssh-debian-12-regression_ssh_client_canonicalize_hostname'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'ssh-debian-13-regression_ssh_client_canonicalize_hostname'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

@@ -8,7 +8,6 @@
 # Tests:
 # * Default ssh_config is correct.
 # * Default sshd_config is correct.
-# * DSA host key removed.
 # * RSA host key strength is enforced at 4096.
 
 dependency:
@@ -24,8 +23,8 @@ provisioner:
     ssh_connection:
       pipelining: false
 platforms:
-  - name: 'ssh-debian-12-default'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'ssh-debian-13-default'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

@@ -62,6 +62,10 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
 {% for cert_file in ssh_client_certificate_file %}
   CertificateFile {{ cert_file }}
 {% endfor %}
+{# dict return random order, use list to get idempotent config #}
+{% if ssh_client_channel_timeout | length > 0 %}
+  ChannelTimeout{% for i in ssh_client_channel_timeout %}{% for k, v in i.items() %} {{ k }}={{ v }}{%- endfor +%}{%- endfor +%}
+{% endif %}
   CheckHostIP {{ 'yes' if ssh_client_check_host_ip else 'no' }}
   Ciphers {{ ssh_client_ciphers | join(',') }}
   ClearAllForwardings {{ 'yes' if ssh_client_clear_all_forwardings else 'no' }}
@@ -156,6 +160,11 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
   MACs {{ ssh_client_macs | join(',') }}
   NoHostAuthenticationForLocalhost {{ 'yes' if ssh_client_no_host_authentication_for_local_host else 'no' }}
   NumberOfPasswordPrompts {{ ssh_client_number_of_password_prompts | default('3') }}
+{% if ssh_client_obscure_keystroke_timing is string %}
+  ObscureKeystrokeTiming {{ ssh_client_obscure_keystroke_timing | default('yes') | lower }}
+{% else %}
+  ObscureKeystrokeTiming {{ 'yes' if ssh_client_obscure_keystroke_timing else 'no' }}
+{% endif %}
   PasswordAuthentication {{ 'yes' if ssh_client_password_authentication else 'no' }}
   PermitLocalCommand {{ 'yes' if ssh_client_permit_local_command else 'no' }}
 {% if ssh_client_permit_remote_open | length == 0 or ssh_client_permit_remote_open[0] == 'none' %}
@@ -217,6 +226,9 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
 {% endif %}
   SyslogFacility {{ ssh_client_syslog_facility | default('USER') | upper }}
   TCPKeepAlive {{ 'yes' if ssh_client_tcp_keep_alive else 'no' }}
+{% if ssh_client_tag | length > 0 %}
+  Tag {{ ssh_client_tag }}
+{% endif %}
 {% if ssh_client_tunnel is string %}
   Tunnel {{ ssh_client_tunnel | default('point-to-point') | lower }}
 {% else %}
@@ -240,6 +252,9 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
   VerifyHostKeyDNS {{ ssh_client_verify_host_key_dns | default('ask') | lower }}
 {% else %}
   VerifyHostKeyDNS {{ 'yes' if ssh_client_verify_host_key_dns else 'no' }}
+{% endif %}
+{% if ssh_client_version_addendum | length > 0 %}
+  VersionAddendum {{ ssh_client_version_addendum }}
 {% endif %}
   VisualHostKey {{ 'yes' if ssh_client_visual_host_key else 'no' }}
   XAuthLocation {{ ssh_client_xauth_location | default('/usr/bin/xauth') }}

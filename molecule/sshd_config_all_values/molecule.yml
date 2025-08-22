@@ -99,6 +99,7 @@ provisioner:
         ssh_server_max_sessions: 1
         ssh_server_max_startups:
           start: 10
+        ssh_server_pam_service_name: 'sshd'
         ssh_server_password_authentication: false
         ssh_server_permit_empty_passwords: true
         ssh_server_permit_listen:
@@ -116,6 +117,19 @@ provisioner:
         ssh_server_per_source_max_startups: 15
         ssh_server_per_source_net_block_size:
           ipv4: 32
+        ssh_server_per_source_penalties:
+          - 'crash': '90s'
+          - 'authfail': '5s'
+          - 'refuseconnection': '10s'
+          - 'noauth': '1s'
+          - 'grace-exceeded': '10s'
+          - 'max': '10m'
+          - 'min': '15s'
+          - 'max-sources4': 65536
+          - 'overflow': 'permissive'
+          - 'overflow6': 'permissive'
+        ssh_server_per_source_penalty_exempt_list:
+          - '192.168.0.0/24'
         ssh_server_port:
           - 22
           - 2222
@@ -125,6 +139,7 @@ provisioner:
           - 'ssh-ed25519-cert-v01@openssh.com'
         ssh_server_pubkey_auth_options: ['touch-required', 'verify-required']
         ssh_server_pubkey_authentication: false
+        ssh_server_refuse_connection: true
         ssh_server_rekey_limit:
           data: '1G'
           time: '1h'
@@ -133,6 +148,8 @@ provisioner:
         ssh_server_security_key_provider: 'fido-alternative-provider'
         ssh_server_set_env:
           - 'TEST_ENV="value with spaces"'
+        ssh_server_sshd_auth_path: '/usr/lib/openssh/sshd-auth'
+        ssh_server_sshd_session_path: '/usr/lib/openssh/sshd-session'
         ssh_server_stream_local_bind_unlink: true
         ssh_server_strict_modes: false
         ssh_server_subsystem:
@@ -158,8 +175,8 @@ provisioner:
             options: |
               AllowAgentForwarding yes
 platforms:
-  - name: 'ssh-debian-12-sshd_config_all_values'
-    image: 'ghcr.io/hifis-net/debian-systemd:12'
+  - name: 'ssh-debian-13-sshd_config_all_values'
+    image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'

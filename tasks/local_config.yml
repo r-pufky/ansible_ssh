@@ -12,16 +12,16 @@
 #   options: str - raw SSH/SSHD config
 #
 # Reference:
-# * https://manpages.debian.org/bookworm/openssh-client/ssh_config.5.en.html
-# * https://manpages.debian.org/bookworm/openssh-server/sshd_config.5.en.html
+# * https://manpages.debian.org/trixie/openssh-client/ssh_config.5.en.html
+# * https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html
 
-- name: 'Local config | remove local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path
+- name: 'Local config | remove local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path.
   when: state | lower == 'absent'
   ansible.builtin.file:
     path: '{{ include }}/{{ config }}.conf'
     state: 'absent'
 
-- name: 'Local config | set local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path
+- name: 'Local config | set local config {{ include }}/{{ config }}.conf'  # noqa name[template] full path.
   when: state | lower == 'present'
   ansible.builtin.copy:
     dest: '{{ include }}/{{ config }}.conf'

@@ -172,6 +172,7 @@ MaxStartups {{ ssh_server_max_startups.start }}:{{ ssh_server_max_startups.rate 
 MaxStartups {{ ssh_server_max_startups.start }}
 {% endif %}
 ModuliFile {{ ssh_server_moduli_file | default('/etc/ssh/moduli') }}
+PAMServiceName {{ ssh_server_pam_service_name | default('sshd') }}
 PasswordAuthentication {{ 'yes' if ssh_server_password_authentication else 'no' }}
 PermitEmptyPasswords {{ 'yes' if ssh_server_permit_empty_passwords else 'no' }}
 {% for listen in ssh_server_permit_listen %}
@@ -204,6 +205,13 @@ PerSourceMaxStartups {{ ssh_server_per_source_max_startups }}
 {% else %}
 PerSourceMaxStartups none
 {% endif %}
+{# dict return random order, use list to get idempotent config #}
+{% if ssh_server_per_source_penalties | length > 0 %}
+PerSourcePenalties{% for i in ssh_server_per_source_penalties %}{% for k, v in i.items() %} {{ k }}:{{ v }}{%- endfor +%}{%- endfor +%}
+{% endif %}
+{% if ssh_server_per_source_penalty_exempt_list | length > 0 %}
+PerSourcePenaltyExemptList {{ ssh_server_per_source_penalty_exempt_list | join(',') }}
+{% endif %}
 {% if ssh_server_per_source_net_block_size | length > 1 %}
 PerSourceNetBlockSize {{ ssh_server_per_source_net_block_size.ipv4 }}:{{ ssh_server_per_source_net_block_size.ipv6 }}
 {% else %}
@@ -221,6 +229,7 @@ PubkeyAuthOptions {{ ssh_server_pubkey_auth_options | join(' ') }}
 PubkeyAuthOptions none
 {% endif %}
 PubkeyAuthentication {{ 'yes' if ssh_server_pubkey_authentication else 'no' }}
+RefuseConnection {{ 'yes' if ssh_server_refuse_connection else 'no' }}
 RekeyLimit {{ ssh_server_rekey_limit.data | default('0') }} {{ ssh_server_rekey_limit.time | default('0') }}
 RequiredRSASize {{ ssh_server_required_rsa_size | default(ssh_role_os_rsa_key_minimum_size) }}
 {% if ssh_server_revoked_keys | length > 0 %}
@@ -232,6 +241,8 @@ SecurityKeyProvider {{ ssh_server_security_key_provider | default('internal') }}
 {% for env in ssh_server_set_env %}
 SetEnv {{ env }}
 {% endfor %}
+SshdAuthPath {{ ssh_server_sshd_auth_path }}
+SshdSessionPath {{ ssh_server_sshd_session_path }}
 StreamLocalBindMask {{ ssh_server_stream_local_bind_mask | default('0177') }}
 StreamLocalBindUnlink {{ 'yes' if ssh_server_stream_local_bind_unlink else 'no' }}
 StrictModes {{ 'yes' if ssh_server_strict_modes else 'no' }}

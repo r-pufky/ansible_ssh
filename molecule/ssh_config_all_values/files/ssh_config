@@ -32,6 +32,7 @@ Match canonical host="*.example.com"
   CASignatureAlgorithms ssh-ed25519
   CertificateFile ~/.ssh
   CertificateFile /etc/ssh/clients
+  ChannelTimeout session=5m tun-connection=1h *=30m
   CheckHostIP no
   Ciphers chacha20-poly1305@openssh.com
   ClearAllForwardings yes
@@ -84,6 +85,7 @@ Match canonical host="*.example.com"
   MACs umac-64-etm@openssh.com
   NoHostAuthenticationForLocalhost yes
   NumberOfPasswordPrompts 1
+  ObscureKeystrokeTiming yes
   PasswordAuthentication no
   PermitLocalCommand yes
   PermitRemoteOpen localhost:1000 192.168.0.3:*
@@ -117,5 +119,6 @@ Match canonical host="*.example.com"
   User test_user
   UserKnownHostsFile ~/.ssh/known_hosts
   VerifyHostKeyDNS ask
+  VersionAddendum banner end
   VisualHostKey yes
   XAuthLocation /usr/test/alt/xauth

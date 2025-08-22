@@ -14,6 +14,7 @@
         test_owner: 'root'
         test_group: 'root'
         test_mode: '0644'
+        test_diff: true
 
     # Values are internal values NOT ssh_config values; check exit code only.
     - name: 'Verify | test SSH configuration for static errors'

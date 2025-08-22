@@ -47,6 +47,7 @@ HostbasedAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256
 HostbasedAuthentication no
 HostbasedUsesNameFromPacketOnly no
 HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
 HostKey /etc/ssh/ssh_host_ed25519_key
 HostKeyAgent none
 HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
@@ -57,7 +58,7 @@ KbdInteractiveAuthentication no
 KerberosAuthentication no
 KerberosOrLocalPasswd yes
 KerberosTicketCleanup yes
-KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group-exchange-sha256,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256
+KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512,sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521
 ListenAddress [::]:22
 ListenAddress 0.0.0.0:22
 LoginGraceTime 120
@@ -67,6 +68,7 @@ MaxAuthTries 6
 MaxSessions 10
 MaxStartups 10:30:100
 ModuliFile /etc/ssh/moduli
+PAMServiceName sshd
 PasswordAuthentication yes
 PermitEmptyPasswords no
 PermitListen any
@@ -77,6 +79,7 @@ PermitTunnel no
 PermitUserEnvironment no
 PermitUserRC yes
 PerSourceMaxStartups none
+PerSourcePenalties crash:90s authfail:5s refuseconnection:10s noauth:1s grace-exceeded:10s max:10m min:15s max-sources4:65536 overflow:permissive overflow6:permissive
 PerSourceNetBlockSize 32:128
 Port 22
 PrintLastLog yes
@@ -84,10 +87,13 @@ PrintMotd yes
 PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,ecdsa-sha2-nistp256-cert-v01@openssh.com,ecdsa-sha2-nistp384-cert-v01@openssh.com,ecdsa-sha2-nistp521-cert-v01@openssh.com,sk-ssh-ed25519-cert-v01@openssh.com,sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com,rsa-sha2-256-cert-v01@openssh.com,ssh-ed25519,ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,sk-ssh-ed25519@openssh.com,sk-ecdsa-sha2-nistp256@openssh.com,rsa-sha2-512,rsa-sha2-256
 PubkeyAuthOptions none
 PubkeyAuthentication yes
+RefuseConnection no
 RekeyLimit 0 0
 RequiredRSASize 1024
 RevokedKeys none
 SecurityKeyProvider internal
+SshdAuthPath /usr/lib/openssh/sshd-auth
+SshdSessionPath /usr/lib/openssh/sshd-session
 StreamLocalBindMask 0177
 StreamLocalBindUnlink no
 StrictModes yes

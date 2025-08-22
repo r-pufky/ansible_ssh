@@ -13,26 +13,14 @@
 # * NSA Hardening Guide: https://media.defense.gov/2022/Jun/15/2003018261/-1/-1/0/CTR_NSA_NETWORK_INFRASTRUCTURE_SECURITY_GUIDE_20220615.PDF
 # * SSH Hardening for Audit: https://www.sshaudit.com/hardening_guides.html#os_12
 
+# TODO(role): confirm DSA keys are removed (by trixie).
 # Forcibly remove specified host keys from system.
 #
-# Host keys are explicitly removed from /etc/ssh.
+# Host keys are explicitly removed from /etc/ssh. DSA keys are no longer
+# supported in Debian 13.
 #
-# Security: CVE-2024-6387
-#   CVE: https://nvd.nist.gov/vuln/detail/cve-2024-6387
-#   Decision: remove DSA keys - OpenSSH will remove support in future releases.
-#   Mitigation: remove '/etc/ssh/ssh_host_ecdsa_key' from accepted host keys.
-#       Forcibly removed in SSH 9.8.
-#   Reference:
-#   * https://www.openssh.com/txt/release-9.8
-#   * https://linuxsecurity.com/news/security-projects/openssh-plans-to-remove-support-for-dsa-keys
-#   * https://security.stackexchange.com/questions/178958/what-are-the-differences-between-the-rsa-dsa-and-ecdsa-keys-that-ssh-uses
-#
-# Default:
-#  - 'ssh_host_dsa_key'
-#  - 'ssh_host_ecdsa_key'
-ssh_security_remove_host_keys:
-  - 'ssh_host_dsa_key'
-  - 'ssh_host_ecdsa_key'
+# Default: [] (no keys removed).
+ssh_security_remove_host_keys: []
 
 # Automatically regenerate weak host RSA keys to specified strength.
 #
@@ -41,7 +29,7 @@ ssh_security_remove_host_keys:
 # value.
 #
 # Special Case:
-#   '': disables regeneration.
+#   '': Disable regeneration.
 #
 # Default: 4096.
 ssh_security_regenerate_host_rsa_keys: 4096
