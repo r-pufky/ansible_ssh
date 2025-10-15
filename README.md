@@ -118,7 +118,7 @@ enable `ssh_server_use_pam=true` as this leads to security vulnerabilities.
 [Reference](https://github.com/r-pufky/ansible_ssh/blob/main/defaults/main/sshd_config.yml)
 
 ## Development
-Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/dev/environment/README.md)
+Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/ansible/environment.md)
 
 Run all unit tests:
 ``` bash
