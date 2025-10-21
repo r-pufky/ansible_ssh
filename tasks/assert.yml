@@ -1,0 +1,103 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Assert Settings
+###############################################################################
+# Sanity check options to stop preventable errors and accidental data deletion.
+
+- name: 'Assert | DEPRECATED VARIABLES IN USE ⚠'
+  when: >
+    ssh_client_gssapi_key_algorithms is defined or
+    ssh_server_gssapi_key_algorithms is defined
+  ansible.builtin.fail:
+    msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                   DEPRECATED VARIABLES IN USE.                    │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ Refer to defaults and update variables:
+      │
+      │ ssh_client_gssapi_key_algorithms ➔ ssh_client_gssapi_kex_algorithms
+      │ ssh_server_gssapi_key_algorithms ➔ ssh_server_gssapi_kex_algorithms
+
+- name: 'Assert | host and match options mutually exclusive'
+  when: ssh_client_host | length > 0
+  ansible.builtin.assert:
+    quiet: true
+    that: 'ssh_client_match | length == 0'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │         Host and Match directives are mutually exclusive.         │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ Refer to defaults and update variables:
+      │
+      │ ssh_client_host: {{ ssh_client_host }}
+      │ ssh_client_match: {{ ssh_client_match }}
+
+- name: 'Assert | kerberos AFS token not used'
+  ansible.builtin.assert:
+    quiet: true
+    that: 'not ssh_server_kerberos_get_afs_token'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                 ssh_server_kerberos_get_afs_token                 │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ Kerberos AFS token support is not compiled in Debian SSH binaries.
+      │ This option cannot be enabled.
+      │
+      │ ssh_server_kerberos_get_afs_token: {{ ssh_server_kerberos_get_afs_token }}
+
+- name: 'Assert | RSA required key strength only increased'
+  ansible.builtin.assert:
+    quiet: true
+    that: 'ssh_client_required_rsa_size >= ssh_role_os_rsa_key_minimum_size'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                   ssh_client_required_rsa_size                    │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ ssh_client_required_rsa_size must be >= {{ ssh_role_os_rsa_key_minimum_size }}
+      │
+      │ ssh_client_required_rsa_size: {{ ssh_client_required_rsa_size }}
+
+- name: 'Assert | authorized keys command'
+  when: ssh_server_authorized_keys_command | length > 0
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - 'ssh_server_authorized_keys_command | length > 0'
+      - 'ssh_server_authorized_keys_command_user | length > 0'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                      Authorized Keys Command                      │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ Authorized keys command requires all options set.
+      │
+      │ ssh_server_authorized_keys_command: {{ ssh_server_authorized_keys_command }}
+      │ ssh_server_authorized_keys_command_user: {{ ssh_server_authorized_keys_command_user }}
+
+- name: 'Assert | authorized principals command'
+  when: ssh_server_authorized_principals_command | length > 0
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - 'ssh_server_authorized_principals_command | length > 0'
+      - 'ssh_server_authorized_principals_command_user | length > 0'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                   Authorized Principals Command                   │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ Authorized keys command requires all options set.
+      │
+      │ ssh_server_authorized_principals_command: {{ ssh_server_authorized_principals_command }}
+      │ ssh_server_authorized_principals_command_user: {{ ssh_server_authorized_principals_command_user }}

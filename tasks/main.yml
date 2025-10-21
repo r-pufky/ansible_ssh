@@ -12,8 +12,8 @@
         }}'
     apt_package_update_cache: true
 
-- name: 'Prep'
-  ansible.builtin.include_tasks: 'prep.yml'
+- name: 'Assert'
+  ansible.builtin.include_tasks: 'assert.yml'
 - name: 'SSHD config'
   ansible.builtin.include_tasks: 'sshd_config.yml'
 - name: 'SSH config'

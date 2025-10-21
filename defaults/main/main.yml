@@ -13,7 +13,7 @@
 # * NSA Hardening Guide: https://media.defense.gov/2022/Jun/15/2003018261/-1/-1/0/CTR_NSA_NETWORK_INFRASTRUCTURE_SECURITY_GUIDE_20220615.PDF
 # * SSH Hardening for Audit: https://www.sshaudit.com/hardening_guides.html#os_12
 
-# Forcibly remove specified host keys from system.
+# Forcibly remove specified host keys from system?
 #
 # Host keys are explicitly removed from /etc/ssh. DSA keys are no longer
 # supported in Debian 13.
@@ -21,7 +21,7 @@
 # Default: [] (no keys removed).
 ssh_security_remove_host_keys: []
 
-# Automatically regenerate weak host RSA keys to specified strength.
+# Automatically regenerate weak host RSA keys to specified strength?
 #
 # If RSA keys are disabled in ssh_security_remove_host_keys it will not be
 # re-created. RSA host keys below this value will be re-created using this

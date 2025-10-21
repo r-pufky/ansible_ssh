@@ -79,6 +79,8 @@ CASignatureAlgorithms {{ ssh_server_ca_signature_algorithms | join (',') }}
 {# dict return random order, use list to get idempotent config #}
 {% if ssh_server_channel_timeout | length > 0 %}
 ChannelTimeout{% for i in ssh_server_channel_timeout %}{% for k, v in i.items() %} {{ k }}={{ v }}{%- endfor +%}{%- endfor +%}
+{% else %}
+ChannelTimeout none
 {% endif %}
 {% if ssh_server_chroot_directory | length > 0 %}
 ChrootDirectory {{ ssh_server_chroot_directory }}
@@ -114,7 +116,7 @@ GSSAPICleanupCredentials {{ 'yes' if ssh_server_gssapi_cleanup_credentials else 
 GSSAPIKeyExchange {{ 'yes' if ssh_client_gssapi_key_exchange else 'no' }}
 GSSAPIStrictAcceptorCheck {{ 'yes' if ssh_server_gssapi_strict_acceptor_check else 'no' }}
 GSSAPIStoreCredentialsOnRekey {{ 'yes' if ssh_server_gssapi_store_credentials_on_rekey else 'no' }}
-GSSAPIKexAlgorithms {{ ssh_server_gssapi_key_algorithms | join(',') }}
+GSSAPIKexAlgorithms {{ ssh_server_gssapi_kex_algorithms | join(',') }}
 HostbasedAcceptedAlgorithms {{ ssh_server_hostbased_accepted_algorithms | join(',') }}
 HostbasedAuthentication {{ 'yes' if ssh_server_hostbased_authentication else 'no' }}
 HostbasedUsesNameFromPacketOnly {{ 'yes' if ssh_server_hostbased_uses_name_from_packet_only else 'no' }}
@@ -175,9 +177,11 @@ ModuliFile {{ ssh_server_moduli_file | default('/etc/ssh/moduli') }}
 PAMServiceName {{ ssh_server_pam_service_name | default('sshd') }}
 PasswordAuthentication {{ 'yes' if ssh_server_password_authentication else 'no' }}
 PermitEmptyPasswords {{ 'yes' if ssh_server_permit_empty_passwords else 'no' }}
-{% for listen in ssh_server_permit_listen %}
-PermitListen {{ 'none' if listen | length == 0 else listen }}
-{% endfor %}
+{% if ssh_server_permit_listen | length == 0 or ssh_server_permit_listen[0] == 'none' %}
+PermitListen none
+{% else %}
+PermitListen {{ ssh_server_permit_listen | join(' ') }}
+{% endif %}
 {% if ssh_server_permit_open | length == 0 or ssh_server_permit_open[0] == 'none' %}
 PermitOpen none
 {% else %}
@@ -209,14 +213,17 @@ PerSourceMaxStartups none
 {% if ssh_server_per_source_penalties | length > 0 %}
 PerSourcePenalties{% for i in ssh_server_per_source_penalties %}{% for k, v in i.items() %} {{ k }}:{{ v }}{%- endfor +%}{%- endfor +%}
 {% endif %}
-{% if ssh_server_per_source_penalty_exempt_list | length > 0 %}
-PerSourcePenaltyExemptList {{ ssh_server_per_source_penalty_exempt_list | join(',') }}
-{% endif %}
 {% if ssh_server_per_source_net_block_size | length > 1 %}
 PerSourceNetBlockSize {{ ssh_server_per_source_net_block_size.ipv4 }}:{{ ssh_server_per_source_net_block_size.ipv6 }}
 {% else %}
 PerSourceNetBlockSize {{ ssh_server_per_source_net_block_size.ipv4 }}
 {% endif %}
+{% if ssh_server_per_source_penalty_exempt_list | length > 0 %}
+PerSourcePenaltyExemptList {{ ssh_server_per_source_penalty_exempt_list | join(',') }}
+{% else %}
+PerSourcePenaltyExemptList none
+{% endif %}
+PidFile {{ ssh_server_pid_file | default('/run/sshd.pid') }}
 {% for port in ssh_server_port %}
 Port {{ port }}
 {% endfor %}
@@ -271,4 +278,4 @@ VersionAddendum none
 X11DisplayOffset {{ ssh_server_x11_display_offset | default(10) }}
 X11Forwarding {{ 'yes' if ssh_server_x11_forwarding else 'no' }}
 X11UseLocalhost {{ 'yes' if ssh_server_x11_use_localhost else 'no' }}
-XAuthLocation {{ ssh_server_xauth_location | default('/use/bin/xauth') }}
+XAuthLocation {{ ssh_server_xauth_location | default('/usr/bin/xauth') }}

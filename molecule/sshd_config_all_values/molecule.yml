@@ -30,35 +30,43 @@ provisioner:
         ssh_server_accept_env: ''
         ssh_server_address_family: 'inet'
         ssh_server_allow_agent_forwarding: false
-        ssh_server_allow_groups: ['ssh', 'mono']
+        ssh_server_allow_groups:
+          - 'ssh'
+          - 'mono'
         ssh_server_allow_stream_local_forwarding: 'local'
         ssh_server_allow_tcp_forwarding: 'local'
-        ssh_server_allow_stream_remote_forwarding: 'local'
-        ssh_server_allow_users: ['ssh', 'mono']
+        ssh_server_allow_users:
+          - 'ssh'
+          - 'mono'
         ssh_server_authentication_methods:
-          - - 'keyboard-interactive'
+          - - 'keyboard-interactive'  # Not an error, list of list of one.
         ssh_server_authorized_keys_command: '/run/authorized-keys-command'
         ssh_server_authorized_keys_command_user: 'authorize-keys-users'
-        ssh_server_authorized_keys_file: ['.ssh/authorized_keys']
+        ssh_server_authorized_keys_file:
+          - '.ssh/authorized_keys'
         ssh_server_authorized_principals_command:
           '/run/authorized-principals-command'
         ssh_server_authorized_principals_command_user:
           'principal-commands-user'
         ssh_server_authorized_principals_file: '/etc/ssh/principals-file'
         ssh_server_banner: 'this is a test banner'
-        ssh_server_ca_signature_algorithms: ['ssh-ed25519']
+        ssh_server_ca_signature_algorithms:
+          - 'ssh-ed25519'
         ssh_server_channel_timeout:
           - 'session': '5m'
           - 'tun-connection': '1h'
           - '*': '30m'
         ssh_server_chroot_directory: '/tmp'
-        ssh_server_ciphers: ['chacha20-poly1305@openssh.com']
+        ssh_server_ciphers:
+          - 'chacha20-poly1305@openssh.com'
         ssh_server_client_alive_count_max: 5
         ssh_server_client_alive_interval: 10
         ssh_server_compression: false
         ssh_server_os_banner: false
-        ssh_server_deny_groups: ['deny-groups']
-        ssh_server_deny_users: ['denied-user']
+        ssh_server_deny_groups:
+          - 'deny-groups'
+        ssh_server_deny_users:
+          - 'denied-user'
         ssh_server_disable_forwarding: true
         ssh_server_expose_auth_info: true
         ssh_server_fingerprint_hash: 'md5'
@@ -69,7 +77,8 @@ provisioner:
         ssh_server_gssapi_key_exchange: true
         ssh_server_gssapi_strict_acceptor_check: false
         ssh_server_gssapi_store_credentials_on_rekey: true
-        ssh_server_gssapi_key_algorithms: ['gss-group14-sha256-']
+        ssh_server_gssapi_kex_algorithms:
+          - 'gss-group14-sha256-'
         ssh_server_hostbased_accepted_algorithms:
           - 'ssh-ed25519-cert-v01@openssh.com'
         ssh_server_hostbased_authentication: true
@@ -77,24 +86,29 @@ provisioner:
         # Dynamically generated keys/signature in prepare.yml
         # ssh_server_host_certificate:
         # ssh_server_host_key:
-        ssh_server_host_key_algorithms: ['ssh-ed25519-cert-v01@openssh.com']
+        ssh_server_host_key_algorithms:
+          - 'ssh-ed25519-cert-v01@openssh.com'
         ssh_server_ignore_rhosts: 'shosts-only'
         ssh_server_ignore_user_known_hosts: true
-        ssh_server_ip_qos: ['']
+        ssh_server_ip_qos:
+          - ''
         ssh_server_kbd_interactive_authentication: true
         ssh_server_kerberos_authentication: true
-        ssh_server_kerberos_get_afs_token: true
+        ssh_server_kerberos_get_afs_token: false
         ssh_server_kerberos_or_local_passwd: false
         ssh_server_kerberos_ticket_cleanup: false
-        ssh_server_kex_algorithms: ['sntrup761x25519-sha512@openssh.com']
-        ssh_server_listen_address: ['127.0.0.1:22']
+        ssh_server_kex_algorithms:
+          - 'sntrup761x25519-sha512@openssh.com'
+        ssh_server_listen_address:
+          - '127.0.0.1:22'
         ssh_server_login_grace_time: 10
         ssh_server_log_level: 'DEBUG'
         ssh_client_log_verbose:
           - 'kex.c:*:1000'
           - '*:kex_exchange_identification():*'
           - 'packet.c:*'
-        ssh_server_macs: ['umac-64-etm@openssh.com']
+        ssh_server_macs:
+          - 'umac-64-etm@openssh.com'
         ssh_server_max_auth_tries: 3
         ssh_server_max_sessions: 1
         ssh_server_max_startups:
@@ -137,7 +151,9 @@ provisioner:
         ssh_server_print_motd: false
         ssh_server_pubkey_accepted_algorithms:
           - 'ssh-ed25519-cert-v01@openssh.com'
-        ssh_server_pubkey_auth_options: ['touch-required', 'verify-required']
+        ssh_server_pubkey_auth_options:
+          - 'touch-required'
+          - 'verify-required'
         ssh_server_pubkey_authentication: false
         ssh_server_refuse_connection: true
         ssh_server_rekey_limit:

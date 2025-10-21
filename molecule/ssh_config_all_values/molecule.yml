@@ -87,7 +87,7 @@ provisioner:
         ssh_client_gssapi_renewal_forces_rekey: true
         ssh_client_gssapi_server_identity: 'test-server-identity'
         ssh_client_gssapi_trust_dns: true
-        ssh_client_gssapi_key_algorithms:
+        ssh_client_gssapi_kex_algorithms:
           - 'gss-group14-sha256-'
         ssh_client_hash_known_hosts: false
         ssh_client_hostbased_accepted_algorithms:

@@ -31,7 +31,7 @@ ssh_security_regenerate_host_rsa_keys: 4096
 host_vars/sshd.example.com/vars/sshd_config.yml
 ``` yaml
 ssh_server_allow_agent_forwarding: false
-ssh_server_allow_groups: ['ssh']
+ssh_server_allow_groups: ['_ssh']
 ssh_server_channel_timeout:
   'session': '5m'
   'tun-connection': '1h'
@@ -107,15 +107,19 @@ with existing users and groups, or migrate users to `_ssh`.
 https://salsa.debian.org/ssh-team/openssh/-/commit/18da782ebe789d0cf107a550e474ba6352e68911
 
 #### SSH pubkey authentication with locked accounts
-SSH now distinguishes between `!` and `*` password locking:
-
-* `*`: lock password, allow SSH pubkey auth.
-* `!`: lock password, deny SSH pubkey auth.
-
-Any other means to lock the password will result in SSH pubkey failures. Do not
-enable `ssh_server_use_pam=true` as this leads to security vulnerabilities.
-
-[Reference](https://github.com/r-pufky/ansible_ssh/blob/main/defaults/main/sshd_config.yml)
+WARNING
+> Locked accounts cannot SSH pubkey auth.
+>
+> SSH now distinguishes between ! and * password locking:
+>
+> * `*`: Lock password - allow SSH pubkey auth.
+> * `!`: Lock password - deny SSH pubkey auth.
+>
+> Any other means to lock the password will result in SSH pubkey failures. Do
+> NOT set ssh_server_use_pam=true as this leads to security vulnerabilities.
+>
+> [Vulnerability](https://arlimus.github.io/articles/usepam/)
+> [Mitigataion](https://unix.stackexchange.com/questions/193066/how-to-unlock-account-for-public-key-ssh-authorization-but-not-for-password-aut)
 
 ## Development
 Configure [environment](https://github.com/r-pufky/ansible_collection_docs/blob/main/ansible/environment.md)

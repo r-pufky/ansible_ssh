@@ -1,0 +1,74 @@
+---
+- name: 'Converge'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Converge | assert deprecated variables are detected'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'assertions.yml'
+      vars:
+        test_name: 'Converge | assert deprecated variables are detected'
+        test_role: 'r_pufky.deb.ssh'
+        test_fail_message:
+          'ssh_client_gssapi_key_algorithms did not trigger assertion.'
+        ssh_client_gssapi_key_algorithms: ['test', 'test2']
+
+    - name: 'Converge | assert host and match mutually exclusive'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'assertions.yml'
+      vars:
+        test_name: 'Converge | assert host and match mutually exclusive'
+        test_role: 'r_pufky.deb.ssh'
+        test_fail_message:
+          'ssh_client_match set did not trigger assertion.'
+        ssh_client_host: ['*']
+        ssh_client_match: {test: '*'}
+
+    - name: 'Converge | assert kerberos AFS token not used'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'assertions.yml'
+      vars:
+        test_name: 'Converge | assert kerberos AFS token not used'
+        test_role: 'r_pufky.deb.ssh'
+        test_fail_message:
+          'ssh_server_kerberos_get_afs_token=true did not trigger assertion.'
+        ssh_server_kerberos_get_afs_token: true
+
+    - name: 'Converge | assert RSA required key strength only increased'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'assertions.yml'
+      vars:
+        test_name: 'Converge | assert RSA required key strength only increased'
+        test_role: 'r_pufky.deb.ssh'
+        test_fail_message:
+          'ssh_client_required_rsa_size=96 did not trigger assertion.'
+        ssh_client_required_rsa_size: 96
+
+    - name: 'Converge | assert authorized keys command'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'assertions.yml'
+      vars:
+        test_name: 'Converge | assert authorized keys command'
+        test_role: 'r_pufky.deb.ssh'
+        test_fail_message: >
+          ssh_server_authorized_keys_command_user="" did not trigger assertion.
+        ssh_server_authorized_keys_command: 'echo "hi"'
+        ssh_server_authorized_keys_command_user: ''
+
+    - name: 'Converge | assert authorized principals command'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'assertions.yml'
+      vars:
+        test_name: 'Converge | assert authorized principals command'
+        test_role: 'r_pufky.deb.ssh'
+        test_fail_message: >
+          ssh_server_authorized_principals_command_user="" did not trigger
+          assertion.
+        ssh_server_authorized_principals_command: 'echo "hi"'
+        ssh_server_authorized_principals_command_user: ''

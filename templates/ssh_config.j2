@@ -48,7 +48,7 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
 {% endif %}
   CanonicalizeFallbackLocal {{ 'yes' if ssh_client_canonicalize_fallback_local else 'no' }}
 {% if ssh_client_canonicalize_hostname is string %}
-  CanonicalizeHostname none
+  CanonicalizeHostname {{ ssh_client_canonicalize_hostname if ssh_client_canonicalize_hostname | length > 0 else 'none' }}
 {% else %}
   CanonicalizeHostname {{ 'yes' if ssh_client_canonicalize_hostname else 'no' }}
 {% endif %}
@@ -113,11 +113,13 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
   GSSAPIServerIdentity {{ ssh_client_gssapi_server_identity }}
 {% endif %}
   GSSAPITrustDNS {{ 'yes' if ssh_client_gssapi_trust_dns else 'no' }}
-  GSSAPIKexAlgorithms {{ ssh_client_gssapi_key_algorithms | join(',') }}
+  GSSAPIKexAlgorithms {{ ssh_client_gssapi_kex_algorithms | join(',') }}
   HashKnownHosts {{ 'yes' if ssh_client_hash_known_hosts else 'no' }}
   HostbasedAcceptedAlgorithms {{ ssh_client_hostbased_accepted_algorithms | join(',') }}
   HostbasedAuthentication {{ 'yes' if ssh_client_hostbased_authentication else 'no' }}
+{% if ssh_client_host_key_algorithms | length > 0 %}
   HostKeyAlgorithms {{ ssh_client_host_key_algorithms | join(',') }}
+{% endif %}
 {% if ssh_client_host_key_alias | length > 0 %}
   HostKeyAlias {{ ssh_client_host_key_alias }}
 {% endif %}
@@ -161,7 +163,7 @@ Match {% for k, v in ssh_client_match.items() %}{{ k }} {{ v }} {%- endfor +%}
   NoHostAuthenticationForLocalhost {{ 'yes' if ssh_client_no_host_authentication_for_local_host else 'no' }}
   NumberOfPasswordPrompts {{ ssh_client_number_of_password_prompts | default('3') }}
 {% if ssh_client_obscure_keystroke_timing is string %}
-  ObscureKeystrokeTiming {{ ssh_client_obscure_keystroke_timing | default('yes') | lower }}
+  ObscureKeystrokeTiming interval:{{ ssh_client_obscure_keystroke_timing | default('20') | lower }}
 {% else %}
   ObscureKeystrokeTiming {{ 'yes' if ssh_client_obscure_keystroke_timing else 'no' }}
 {% endif %}

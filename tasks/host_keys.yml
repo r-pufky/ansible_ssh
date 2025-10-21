@@ -55,7 +55,7 @@
       ├───────────────────────────────────────────────────────────────────╯
       │ WILL produce host warning. Remove previously saved key:
       │
-      │   ssh-keygen -R {{ _ssh_hostname_msg }}
+      │   ssh-keygen -R {{ inventory_hostname }}
       │
       │ It might be prudent to ignore one-time for playbook:
       │

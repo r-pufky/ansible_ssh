@@ -82,8 +82,9 @@ PermitUserEnvironment LANG,LC*
 PermitUserRC no
 PerSourceMaxStartups 15
 PerSourcePenalties crash:90s authfail:5s refuseconnection:10s noauth:1s grace-exceeded:10s max:10m min:15s max-sources4:65536 overflow:permissive overflow6:permissive
-PerSourcePenaltyExemptList 192.168.0.0/24
 PerSourceNetBlockSize 32
+PerSourcePenaltyExemptList 192.168.0.0/24
+PidFile /run/sshd.pid
 Port 22
 Port 2222
 PrintLastLog no
