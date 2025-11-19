@@ -15,6 +15,8 @@ Secure Shell (SSH/SSHD) global configuration.
 Read through defaults and [Debian SSH Changes](#debian-ssh-changes) before
 proceeding.
 
+[Additional documentation](http://r-pufky.github.io/r-pufky/docs/service/ssh).
+
 All `ssh_config` and `sshd_config` options are supported. A machine may
 simultaneously be configured with both.
 
