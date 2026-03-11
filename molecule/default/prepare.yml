@@ -3,7 +3,8 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Prepare | create /run/sshd for verifying SSHD (sshd -T)'
+    # For verifying SSHD (sshd -T).
+    - name: 'Prepare | filesystem | create /run/sshd'
       ansible.builtin.file:
         path: '/run/sshd'
         owner: 'root'

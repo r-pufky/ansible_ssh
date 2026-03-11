@@ -3,12 +3,12 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | /etc/ssh/sshd_config'
+    - name: 'Verify | test | /etc/ssh/sshd_config'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | /etc/ssh/sshd_config'
+        test_name: 'Verify | test | /etc/ssh/sshd_config'
         test_src: 'files/sshd_config'
         test_file: '/etc/ssh/sshd_config'
         test_owner: 'root'
@@ -16,12 +16,12 @@
         test_mode: '0644'
         test_diff: true
 
-    - name: 'Verify | /etc/ssh/sshd_config.d/test_config.conf'
+    - name: 'Verify | test | /etc/ssh/sshd_config.d/test_config.conf'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | /etc/ssh/sshd_config.d/test_config.conf'
+        test_name: 'Verify | test | /etc/ssh/sshd_config.d/test_config.conf'
         test_src: 'files/local_config'
         test_file: '/etc/ssh/sshd_config.d/test_config.conf'
         test_owner: 'root'
@@ -30,17 +30,17 @@
         test_diff: true
 
     # Values are internal values NOT ssh_config values; check exit code only.
-    - name: 'Verify | test SSH configuration for static errors'
+    - name: 'Verify | cmd | query SSH configuration'
       ansible.builtin.command: 'sshd -T'  # requires /run/sshd to exist.
       changed_when: false
       failed_when: false
-      register: _test_ssh_sshd_t_test
+      register: ssh__test_sshd_t_test
 
-    - name: 'Verify | assert no static errors'
+    - name: 'Verify | assert | SSH configuration no static errors'
       ansible.builtin.assert:
         quiet: true
         that:
-          - _test_ssh_sshd_t_test.rc == 0
-        fail_msg: >
+          - ssh__test_sshd_t_test.rc == 0
+        fail_msg: >-
           ✘ 'sshd -T' returned static errors:
-          {{ _test_ssh_sshd_t_test.stderr }}.
+          {{ ssh__test_sshd_t_test.stderr }}.

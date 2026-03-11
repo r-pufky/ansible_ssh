@@ -13,7 +13,7 @@
 #
 #   ssh -Q help; ssh -Q key
 #
-# Define Host and Match directives within ssh_server_include_files.
+# Define Host and Match directives within ssh_cfg_server_include_files.
 #
 # See reference sections for syntax formats:
 # * TOKEN (string replacement tokens)
@@ -31,11 +31,11 @@
 # Source include directives from location.
 #
 # Additional directives are included before global configuration values. Manage
-# included files with ssh_server_include_files.
+# included files with ssh_cfg_server_include_files.
 #
 # Special Case:
-#        *: ssh_server_include_files using base directory of first element to
-#           manage files.
+#        *: ssh_cfg_server_include_files using base directory of first element
+#           to manage files.
 #        *: Wildcards will be expanded in lexical order.
 #       []: Disable includes.
 #   {PATH}: Relative paths anchored to /etc/ssh.
@@ -45,7 +45,7 @@
 #
 # Default:
 #   - '/etc/ssh/sshd_config.d/*.conf'
-ssh_server_include:
+ssh_cfg_server_include:
   - '/etc/ssh/sshd_config.d/*.conf'
 
 # Client environment variables that should be accepted on the server.
@@ -58,7 +58,7 @@ ssh_server_include:
 #
 # Default:
 #   - 'LANG LC_*'
-ssh_server_accept_env:
+ssh_cfg_server_accept_env:
   - 'LANG LC_*'
 
 # Address family to use for SSHD.
@@ -69,7 +69,7 @@ ssh_server_accept_env:
 #   inet6: Use IPv6 only.
 #
 # Default: 'any'.
-ssh_server_address_family: 'any'
+ssh_cfg_server_address_family: 'any'
 
 # Allow ssh-agent forwarding?
 #
@@ -77,7 +77,7 @@ ssh_server_address_family: 'any'
 # denied shell access, as they can always install their own forwarders.
 #
 # Default: True.
-ssh_server_allow_agent_forwarding: true
+ssh_cfg_server_allow_agent_forwarding: true
 
 # Allow login for users with matching primary or supplementary groups.
 #
@@ -91,7 +91,7 @@ ssh_server_allow_agent_forwarding: true
 #          []: Allow all groups (default).
 #
 # Default: [] (allow all).
-ssh_server_allow_groups: []
+ssh_cfg_server_allow_groups: []
 
 # Permit stream local (Unix-domain socket) forwarding?
 #
@@ -106,7 +106,7 @@ ssh_server_allow_groups: []
 #    False: Prevent all.
 #
 # Default: True.
-ssh_server_allow_stream_local_forwarding: true
+ssh_cfg_server_allow_stream_local_forwarding: true
 
 # Permit TCP forwarding?
 #
@@ -121,7 +121,7 @@ ssh_server_allow_stream_local_forwarding: true
 #    False: Prevent all.
 #
 # Default: True.
-ssh_server_allow_tcp_forwarding: true
+ssh_cfg_server_allow_tcp_forwarding: true
 
 # Allow logins only for user names that match one of the patterns.
 #
@@ -139,7 +139,7 @@ ssh_server_allow_tcp_forwarding: true
 #              []: Allow all users (default).
 #
 # Default: [] (allow all).
-ssh_server_allow_users: []
+ssh_cfg_server_allow_users: []
 
 # Authentication methods that must succeed for a user to be granted access.
 #
@@ -156,7 +156,7 @@ ssh_server_allow_users: []
 #   keyboard-interactive:bsdauth: BSD auth keyboard interactive only.
 #       keyboard-interactive:pam: PAM auth keyboard interactive only.
 #                           none: Passwordless authentication when
-#                                 ssh_server_permit_empty_passwords is True.
+#                                 ssh_cfg_server_permit_empty_passwords is True.
 #                       password: Password authentication.
 #                      publickey: Publickey authentication; if listed more
 #                                 than once, SSH verifies that keys that have
@@ -169,7 +169,7 @@ ssh_server_allow_users: []
 # for this example it would not be possible to attempt password or
 # keyboard-interactive authentication before public key:
 #
-#   ssh_server_authentication_methods:
+#   ssh_cfg_server_authentication_methods:
 #     - - 'publickey'
 #       - 'password'
 #     - - 'publickey'
@@ -178,16 +178,17 @@ ssh_server_allow_users: []
 #       - 'publickey'
 #
 # Default: [] (any).
-ssh_server_authentication_methods: []
+ssh_cfg_server_authentication_methods: []
 
 # Program to look up user public keys.
 #
-# Requires ssh_server_authorized_keys_command_user set.
+# Requires ssh_cfg_server_authorized_keys_command_user set.
 #
 # The program should produce on standard output zero or more lines of
-# AUTHORIZED_KEYS output (see reference). ssh_server_authorized_keys_command is
-# tried after the usual ssh_server_authorized_keys_file files and will not be
-# executed if a matching key is found there.
+# AUTHORIZED_KEYS output (see reference).
+# ssh_cfg_server_authorized_keys_command is tried after the usual
+# ssh_cfg_server_authorized_keys_file files and will not be executed if a
+# matching key is found there.
 #
 # Special Case:
 #     {TOKEN}: TOKEN FORMAT supported.
@@ -199,11 +200,11 @@ ssh_server_authentication_methods: []
 #          '': 'none' - explicitly disable command (default).
 #
 # Default: '' (disabled).
-ssh_server_authorized_keys_command: ''
+ssh_cfg_server_authorized_keys_command: ''
 
-# User to run ssh_server_authorized_keys_command.
+# User to run ssh_cfg_server_authorized_keys_command.
 #
-# Requires ssh_server_authorized_keys_command set.
+# Requires ssh_cfg_server_authorized_keys_command set.
 #
 # Recommend using a dedicated user on host that only runs authorized keys
 # commands.
@@ -213,7 +214,7 @@ ssh_server_authorized_keys_command: ''
 #       '': 'none' - explicitly disable command (default).
 #
 # Default: '' (disable).
-ssh_server_authorized_keys_command_user: ''
+ssh_cfg_server_authorized_keys_command_user: ''
 
 # Files that contain public keys for user authentication
 #
@@ -229,18 +230,18 @@ ssh_server_authorized_keys_command_user: ''
 #
 # Reference:
 # * https://marc.info/?l=openssh-unix-dev&m=100508718416162
-ssh_server_authorized_keys_file:
+ssh_cfg_server_authorized_keys_file:
   - '.ssh/authorized_keys'
 
 # Program to generate list of allowed certificate principals.
 #
-# Requires ssh_server_authorized_principals_command_user set.
+# Requires ssh_cfg_server_authorized_principals_command_user set.
 #
 # The program should produce on standard output zero or more lines of
-# ssh_server_authorized_principals_file output. Certificates offered by client
-# for authentication must contain a principal that is listed in:
-# * ssh_server_authorized_principals_command
-# * ssh_server_authorized_principals_file
+# ssh_cfg_server_authorized_principals_file output. Certificates offered by
+# client for authentication must contain a principal that is listed in:
+# * ssh_cfg_server_authorized_principals_command
+# * ssh_cfg_server_authorized_principals_file
 #
 # Special Case:
 #     {TOKEN}: TOKEN FORMAT supported.
@@ -252,11 +253,11 @@ ssh_server_authorized_keys_file:
 #          '': 'none' - explicitly disable command (default).
 #
 # Default: '' (disabled).
-ssh_server_authorized_principals_command: ''
+ssh_cfg_server_authorized_principals_command: ''
 
-# User to run ssh_server_authorized_principals_command.
+# User to run ssh_cfg_server_authorized_principals_command.
 #
-# Requires ssh_server_authorized_principals_command set.
+# Requires ssh_cfg_server_authorized_principals_command set.
 #
 # Recommend using a dedicated user on host that only runs authorized principals
 # commands.
@@ -266,12 +267,12 @@ ssh_server_authorized_principals_command: ''
 #       '': 'none' - explicitly disable command (default).
 #
 # Default: '' (disable).
-ssh_server_authorized_principals_command_user: ''
+ssh_cfg_server_authorized_principals_command_user: ''
 
 # File listing principal names accepted for certificate authentication.
 #
-# ssh_server_authorized_principals_file is only used when authentication
-# proceeds using a CA listed in ssh_server_trusted_user_ca_keys and is not
+# ssh_cfg_server_authorized_principals_file is only used when authentication
+# proceeds using a CA listed in ssh_cfg_server_trusted_user_ca_keys and is not
 # consulted for certification authorities trusted via ~/.ssh/authorized_keys;
 # though principals= key option offers a similar facility.
 #
@@ -285,17 +286,17 @@ ssh_server_authorized_principals_command_user: ''
 #           (default).
 #
 # Default: '' (disabled).
-ssh_server_authorized_principals_file: ''
+ssh_cfg_server_authorized_principals_file: ''
 
 # Pre-login banner.
 #
 # Values:
 #   {CONTENTS}: Contents of banner; file automatically managed in
-#               /etc/ssh/ssh_server_banner.
+#               /etc/ssh/ssh_cfg_server_banner.
 #           '': 'none' - No pre-login banner (disabled) (default).
 #
 # Default: '' (disabled).
-ssh_server_banner: ''
+ssh_cfg_server_banner: ''
 
 # Algorithms allowed for signing of certificates by certificate authorities.
 #
@@ -318,7 +319,7 @@ ssh_server_banner: ''
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_server_ca_signature_algorithms:
+ssh_cfg_server_ca_signature_algorithms:
   - 'ssh-ed25519'
   - 'ecdsa-sha2-nistp256'
   - 'ecdsa-sha2-nistp384'
@@ -345,7 +346,7 @@ ssh_server_ca_signature_algorithms:
 #        0: Disables timeout for specific option.
 #       []: 'none' - Disables channel timeouts (default).
 #
-# ssh_server_channel_timeout:
+# ssh_cfg_server_channel_timeout:
 #     list of dict - one or more channel type and time specifications
 #   - global: TIME - Applies to all active channels (measured together).
 #         Traffic on any active channel resets timeout. All connections closed
@@ -364,16 +365,16 @@ ssh_server_ca_signature_algorithms:
 #         ssh remote forwarding (RemoteForward).
 #   - session: TIME - Interactive sessions - shell, session, commands, scp,
 #         sfp, etc.
-#   - tun-connection: TIME - Open ssh_client_tunnel_forward connections.
+#   - tun-connection: TIME - Open ssh_cfg_client_tunnel_forward connections.
 #   - x11-connection: TIME - Open X11 forwarding sessions.
 #
-# ssh_server_channel_timeout:
+# ssh_cfg_server_channel_timeout:
 #   - session: '5m'
 #   - tun-connection: '1h'
 #   - *: '30m'
 #
 # Default: [] (disabled)
-ssh_server_channel_timeout: []
+ssh_cfg_server_channel_timeout: []
 
 # Directory directory to chroot to after authentication.
 #
@@ -400,7 +401,7 @@ ssh_server_channel_timeout: []
 #       '': 'none' - explicitly disable chroot (default).
 #
 # Default: '' (disabled).
-ssh_server_chroot_directory: ''
+ssh_cfg_server_chroot_directory: ''
 
 # Ciphers allowed in order of preference.
 #
@@ -433,7 +434,7 @@ ssh_server_chroot_directory: ''
 #   - 'aes256-ctr'
 #   - 'aes128-gcm@openssh.com'
 #   - 'aes256-gcm@openssh.com'
-ssh_server_ciphers:
+ssh_cfg_server_ciphers:
   - 'aes128-ctr'
   - 'aes192-ctr'
   - 'aes256-ctr'
@@ -443,16 +444,17 @@ ssh_server_ciphers:
 # Number of client alive messages without receiving any messages back.
 #
 # Client alive messages are sent through encrypted channel and therefore will
-# not be spoofable. TCP keepalive option enabled by ssh_server_tcp_keep_alive
-# is spoofable. Server alive mechanism is valuable when client or server depend
-# on knowing when a connection has become unresponsive.
+# not be spoofable. TCP keepalive option enabled by
+# ssh_cfg_server_tcp_keep_alive is spoofable. Server alive mechanism is
+# valuable when client or server depend on knowing when a connection has become
+# unresponsive.
 #
-# For example if ssh_server_client_alive_interval is 15 and
-# ssh_server_client_alive_count_max is 3, if the server becomes unresponsive,
-# SSH will disconnect after approximately 45 seconds.
+# For example if ssh_cfg_server_client_alive_interval is 15 and
+# ssh_cfg_server_client_alive_count_max is 3, if the server becomes
+# unresponsive, SSH will disconnect after approximately 45 seconds.
 #
 # Default: 3.
-ssh_server_client_alive_count_max: 3
+ssh_cfg_server_client_alive_count_max: 3
 
 # Timeout interval in seconds if no data received to send a client response.
 #
@@ -462,7 +464,7 @@ ssh_server_client_alive_count_max: 3
 #     0: Never send messages to client (default).
 #
 # Default: 0 (disabled).
-ssh_server_client_alive_interval: 0
+ssh_cfg_server_client_alive_interval: 0
 
 # Enable compression?
 #
@@ -470,10 +472,10 @@ ssh_server_client_alive_interval: 0
 #   delayed: Deprecated legacy option that equates to True.
 #
 # Default: True.
-ssh_server_compression: true
+ssh_cfg_server_compression: true
 
 # Include distribution specific version suffix in handshake? Default: True.
-ssh_server_os_banner: true
+ssh_cfg_server_os_banner: true
 
 # Deny login for users with matching primary or supplementary groups.
 #
@@ -487,7 +489,7 @@ ssh_server_os_banner: true
 #          []: Allow all groups (default).
 #
 # Default: [] (allow all).
-ssh_server_deny_groups: []
+ssh_cfg_server_deny_groups: []
 
 # Deny logins only for user names that match one of the patterns.
 #
@@ -505,7 +507,7 @@ ssh_server_deny_groups: []
 #              []: Allow all users (default).
 #
 # Default: [] (allow all).
-ssh_server_deny_users: []
+ssh_cfg_server_deny_users: []
 
 # Disable forwarding (all including: X11, ssh-agent, TCP, StreamLocal)?
 #
@@ -513,12 +515,12 @@ ssh_server_deny_users: []
 # configurations.
 #
 # Default: False.
-ssh_server_disable_forwarding: false
+ssh_cfg_server_disable_forwarding: false
 
 # Expose authentication methods and public credentials to SSH_USER_AUTH?
 #
 # Default: False.
-ssh_server_expose_auth_info: false
+ssh_cfg_server_expose_auth_info: false
 
 # Hash algorithm used when logging key fingerprints.
 #
@@ -527,7 +529,7 @@ ssh_server_expose_auth_info: false
 #   sha256: Show SHA256 hash.
 #
 # Default: 'sha256'
-ssh_server_fingerprint_hash: 'sha256'
+ssh_cfg_server_fingerprint_hash: 'sha256'
 
 # Force execution of command specified.
 #
@@ -540,11 +542,12 @@ ssh_server_fingerprint_hash: 'sha256'
 #       {COMMAND}: Command to invoke using user login shell with -c option.
 #                  Applies to shell, command, or subsystem execution.
 #   internal-sftp: Force use of an in-process SFTP server that requires no
-#                  support files when used with ssh_server_chroot_directory.
+#                  support files when used with
+#                  ssh_cfg_server_chroot_directory.
 #              '': 'none' - disabled (default).
 
 # Default: '' (disabled).
-ssh_server_force_command: ''
+ssh_cfg_server_force_command: ''
 
 # Allow remote hosts to connect to ports forwarded for client?
 #
@@ -556,16 +559,16 @@ ssh_server_force_command: ''
 #                    (default).
 #
 # Default: False.
-ssh_server_gateway_ports: false
+ssh_cfg_server_gateway_ports: false
 
 # Allow authentication based on GSSAPI? Default: False.
-ssh_server_gssapi_authentication: false
+ssh_cfg_server_gssapi_authentication: false
 
 # Automatically destroy user credential cache on logout? Default: True.
-ssh_server_gssapi_cleanup_credentials: true
+ssh_cfg_server_gssapi_cleanup_credentials: true
 
 # Allow key exchange based on GSSAPI? Default: False.
-ssh_server_gssapi_key_exchange: false
+ssh_cfg_server_gssapi_key_exchange: false
 
 # Strict check identity of GSSAPI acceptor client authenticated against?
 #
@@ -576,16 +579,16 @@ ssh_server_gssapi_key_exchange: false
 #          multi homed machines.
 #
 # Default: True.
-ssh_server_gssapi_strict_acceptor_check: true
+ssh_cfg_server_gssapi_strict_acceptor_check: true
 
 # Update user GSSAPI credentials on successful connection rekeying?
 #
 # Used to accepted renewed or updated credentials from a compatible client.
-# ssh_server_gssapi_key_exchange needs to be enabled on server and also used by
-# client.
+# ssh_cfg_server_gssapi_key_exchange needs to be enabled on server and also
+# used by client.
 #
 # Default: False.
-ssh_server_gssapi_store_credentials_on_rekey: false
+ssh_cfg_server_gssapi_store_credentials_on_rekey: false
 
 # Algorithms for GSSAPI key exchange (kex).
 #
@@ -603,7 +606,7 @@ ssh_server_gssapi_store_credentials_on_rekey: false
 #   - 'gss-curve25519-sha256-'
 #   - 'gss-group14-sha1-'
 #   - 'gss-gex-sha1-'
-ssh_server_gssapi_kex_algorithms:
+ssh_cfg_server_gssapi_kex_algorithms:
   - 'gss-group14-sha256-'
   - 'gss-group16-sha512-'
   - 'gss-nistp256-sha256-'
@@ -637,7 +640,7 @@ ssh_server_gssapi_kex_algorithms:
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_server_hostbased_accepted_algorithms:
+ssh_cfg_server_hostbased_accepted_algorithms:
   - 'ssh-ed25519-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp256-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp384-cert-v01@openssh.com'
@@ -656,7 +659,7 @@ ssh_server_hostbased_accepted_algorithms:
   - 'rsa-sha2-256'
 
 # Host based authentication with public key authentication? Default: False.
-ssh_server_hostbased_authentication: false
+ssh_cfg_server_hostbased_authentication: false
 
 # Perform a reverse lookup when matching host names.
 #
@@ -664,38 +667,38 @@ ssh_server_hostbased_authentication: false
 # from TCP connection itself.
 #
 # Default: False.
-ssh_server_hostbased_uses_name_from_packet_only: false
+ssh_cfg_server_hostbased_uses_name_from_packet_only: false
 
 # Public host certificate.
 #
 # Requires: Certificate public key must match a private host key already
-#     specified by ssh_server_host_key.
+#     specified by ssh_cfg_server_host_key.
 #
 # Values:
 #   {CONTENTS}: Contents of host certificate - file automatically managed in
-#               /etc/ssh/ssh_server_host_certificate.
+#               /etc/ssh/ssh_cfg_server_host_certificate.
 #           '': Disabled.
 #
 # Default: '' (disabled).
-ssh_server_host_certificate: ''
+ssh_cfg_server_host_certificate: ''
 
 # Absolute file paths or contents containing a private host key.
 #
 # SSHD will refuse to use a file if it is group/world-accessible, and
-# ssh_server_host_key_algorithms restrictions. DSA keys are considered
+# ssh_cfg_server_host_key_algorithms restrictions. DSA keys are considered
 # insecure. These are forcibly removed in SSH 9.8.
 #
 # Values:
 #     [{FILE}]: Paths to files containing host key (not managed).
 #   {CONTENTS}: Contents of host key - file will be managed automatically in
-#               /etc/ssh/ssh_server_host_key.
+#               /etc/ssh/ssh_cfg_server_host_key.
 #           '': Disabled.
 #
 # Default:
 #   - '/etc/ssh/ssh_host_rsa_key'
 #   - '/etc/ssh/ssh_host_ecdsa_key'
 #   - '/etc/ssh/ssh_host_ed25519_key'
-ssh_server_host_key:
+ssh_cfg_server_host_key:
   - '/etc/ssh/ssh_host_rsa_key'
   - '/etc/ssh/ssh_host_ecdsa_key'
   - '/etc/ssh/ssh_host_ed25519_key'
@@ -708,7 +711,7 @@ ssh_server_host_key:
 #              '': 'none' - Disabled (default).
 #
 # Default: '' (disabled).
-ssh_server_host_key_agent: ''
+ssh_cfg_server_host_key_agent: ''
 
 # Server host key signature algorithm preference.
 #
@@ -736,7 +739,7 @@ ssh_server_host_key_agent: ''
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_server_host_key_algorithms:
+ssh_cfg_server_host_key_algorithms:
   - 'ssh-ed25519-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp256-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp384-cert-v01@openssh.com'
@@ -754,7 +757,7 @@ ssh_server_host_key_algorithms:
   - 'rsa-sha2-512'
   - 'rsa-sha2-256'
 
-# Use per user .rhosts/.shosts files with ssh_server_hostbased_authentication?
+# Per user .rhosts/.shosts files with ssh_cfg_server_hostbased_authentication?
 #
 # System wide /etc/hosts.equiv and /etc/ssh/shosts.equiv are still used
 # regardless of this setting.
@@ -765,14 +768,14 @@ ssh_server_host_key_algorithms:
 #         False: Allow rhosts/shosts.
 #
 # Default: True.
-ssh_server_ignore_rhosts: true
+ssh_cfg_server_ignore_rhosts: true
 
-# Ignore user ~/.ssh/known_hosts during ssh_server_hostbased_authentication?
+# Ignore user ~/.ssh/known_hosts with ssh_cfg_server_hostbased_authentication?
 #
 # System wide /etc/ssh/ssh_known_hosts will be used instead.
 #
 # Default: False.
-ssh_server_ignore_user_known_hosts: false
+ssh_cfg_server_ignore_user_known_hosts: false
 
 # Specifies the IPv4 type-of-service or DSCP class for connections.
 #
@@ -819,22 +822,22 @@ ssh_server_ignore_user_known_hosts: false
 # Reference:
 # * https://en.wikipedia.org/wiki/Differentiated_services
 # * https://en.wikipedia.org/wiki/Type_of_service
-ssh_server_ip_qos:
+ssh_cfg_server_ip_qos:
   - 'lowdelay'
   - 'throughput'
 
 # Use keyboard-interactive authentication? Default: False.
-ssh_server_kbd_interactive_authentication: false
+ssh_cfg_server_kbd_interactive_authentication: false
 
-# Validate ssh_server_password_authentication through Kerberos KDC?
+# Validate ssh_cfg_server_password_authentication through Kerberos KDC?
 #
 # Server needs a Kerberos servtab which allows verification of KDC's identity.
 #
 # Enabling this option will trigger kerberos dependencies to install; see
-# vars/ssh_role_kerberos_minimum_packages.
+# vars/ssh___kerberos_minimum_packages.
 #
 # Default: False.
-ssh_server_kerberos_authentication: false
+ssh_cfg_server_kerberos_authentication: false
 
 # Get AFS token before accessing user home directory?
 #
@@ -850,13 +853,13 @@ ssh_server_kerberos_authentication: false
 #
 # Reference:
 # * https://github.com/clearlinux-pkgs/openssh/blob/05440f1924e9cada620444f21c181d790d27666c/configure
-ssh_server_kerberos_get_afs_token: false
+ssh_cfg_server_kerberos_get_afs_token: false
 
 # Validate password with local mechanisms if Kerberos fails? Default: True.
-ssh_server_kerberos_or_local_passwd: true
+ssh_cfg_server_kerberos_or_local_passwd: true
 
 # Destroy user ticket cache file on logout? Default: True.
-ssh_server_kerberos_ticket_cleanup: true
+ssh_cfg_server_kerberos_ticket_cleanup: true
 
 # Available KEX (key exchange) algorithms.
 #
@@ -876,7 +879,7 @@ ssh_server_kerberos_ticket_cleanup: true
 #   - 'ecdh-sha2-nistp256'
 #   - 'ecdh-sha2-nistp384'
 #   - 'ecdh-sha2-nistp521'
-ssh_server_kex_algorithms:
+ssh_cfg_server_kex_algorithms:
   - 'mlkem768x25519-sha256'
   - 'sntrup761x25519-sha512'
   - 'sntrup761x25519-sha512@openssh.com'
@@ -899,7 +902,7 @@ ssh_server_kex_algorithms:
 # Default: (listen on all local addresses IPv4/6).
 #   - '[::]:22'
 #   - '0.0.0.0:22'
-ssh_server_listen_address:
+ssh_cfg_server_listen_address:
   - '[::]:22'
   - '0.0.0.0:22'
 
@@ -910,7 +913,7 @@ ssh_server_listen_address:
 #        0: Disable time limit.
 #
 # Default: 120 (seconds).
-ssh_server_login_grace_time: 120
+ssh_cfg_server_login_grace_time: 120
 
 # SSHD log level.
 #
@@ -928,7 +931,7 @@ ssh_server_login_grace_time: 120
 #    DEBUG3: Log everything.
 #
 # Default: 'INFO'.
-ssh_server_log_level: 'INFO'
+ssh_cfg_server_log_level: 'INFO'
 
 # Specify one or more overrides to LogLevel.
 #
@@ -936,7 +939,7 @@ ssh_server_log_level: 'INFO'
 # function and line number to force detailed logging for. For example an
 # override pattern of:
 #
-# ssh_client_log_verbose:
+# ssh_cfg_client_log_verbose:
 #   - 'kex.c:*:1000'
 #   - '*:kex_exchange_identification():*'
 #   - 'packet.c:*'
@@ -946,7 +949,7 @@ ssh_server_log_level: 'INFO'
 # This option is intended for debugging.
 #
 # Default: [] (no overrides).
-ssh_server_log_verbose: []
+ssh_cfg_server_log_verbose: []
 
 # MAC (message authentication code) algorithms in order of preference.
 #
@@ -985,7 +988,7 @@ ssh_server_log_verbose: []
 #   - 'hmac-sha2-256'
 #   - 'hmac-sha2-512'
 #   - 'hmac-sha1'
-ssh_server_macs:
+ssh_cfg_server_macs:
   - 'umac-64@openssh.com'
   - 'umac-128@openssh.com'
   - 'hmac-sha2-256'
@@ -997,7 +1000,7 @@ ssh_server_macs:
 # Additional failures are logged after reaching half of this value.
 #
 # Default: 6.
-ssh_server_max_auth_tries: 6
+ssh_cfg_server_max_auth_tries: 6
 
 # Max number of open sessions permitted per network connection.
 #
@@ -1010,28 +1013,28 @@ ssh_server_max_auth_tries: 6
 #   1: Effectively disables session multiplexing.
 #
 # Default: 10.
-ssh_server_max_sessions: 10
+ssh_cfg_server_max_sessions: 10
 
 # Max concurrent unauthenticated connections to the SSH daemon.
 #
 # Additional connections will be dropped until authentication succeeds or
-# ssh_server_login_grace_time expires for a connection.
+# ssh_cfg_server_login_grace_time expires for a connection.
 #
-# ssh_server_max_startups:
+# ssh_cfg_server_max_startups:
 #     dict - Start/rate/full startup specification.
 #   start: int - Number of started unauthenticated connections.
 #   rate: int - Probability of refusing unauthenticated connections (rate/100).
 #       Optional.
 #   full: int - Refuse all connections after this limit. Optional.
 #
-# ssh_server_max_startups:
+# ssh_cfg_server_max_startups:
 #   start: 10
 #
 # Default:
 #   start: 10
 #   rate: 30
 #   full: 100
-ssh_server_max_startups:
+ssh_cfg_server_max_startups:
   start: 10
   rate: 30
   full: 100
@@ -1039,18 +1042,18 @@ ssh_server_max_startups:
 # Moduli file containing Diffie-Hellman groups used for DH key exchange.
 #
 # Default: '/etc/ssh/moduli'.
-ssh_server_moduli_file: '/etc/ssh/moduli'
+ssh_cfg_server_moduli_file: '/etc/ssh/moduli'
 
 # Service name used for Pluggable Authentication Modules (PAM).
 #
 # Default: 'sshd'.
-ssh_server_pam_service_name: 'sshd'
+ssh_cfg_server_pam_service_name: 'sshd'
 
 # Use password authentication? Default: True.
-ssh_server_password_authentication: true
+ssh_cfg_server_password_authentication: true
 
 # Allow login with empty password strings. Default: False.
-ssh_server_permit_empty_passwords: false
+ssh_cfg_server_permit_empty_passwords: false
 
 # Addresses and ports that remote TCP port forwarding may listen.
 #
@@ -1068,14 +1071,14 @@ ssh_server_permit_empty_passwords: false
 #   [{ADDRESS}:]{PORT}: Remote TCP port forwarding bind address. Wildcard (*)
 #                       may be used to allow all ports.
 #
-# ssh_server_permit_listen:
+# ssh_cfg_server_permit_listen:
 #   - ''
 #
-# ssh_server_permit_listen:
+# ssh_cfg_server_permit_listen:
 #   - '127.0.0.1:22'
 #
 # Default: ['any'].
-ssh_server_permit_listen:
+ssh_cfg_server_permit_listen:
   - 'any'
 
 # Permitted TCP port forwarding destinations.
@@ -1092,13 +1095,13 @@ ssh_server_permit_listen:
 #     {IPv4}:{PORT}: IPv4 port.
 #   [{IPv6}]:{PORT}: IPv6 port.
 #
-# ssh_server_permit_open:
+# ssh_cfg_server_permit_open:
 #   - 'localhost:1000'
 #   - '192.168.0.3:*'
 #   - '[::]:1500'
 #
 # Default: ['any'].
-ssh_server_permit_open:
+ssh_cfg_server_permit_open:
   - 'any'
 
 # Allow root to login via SSH?
@@ -1116,10 +1119,10 @@ ssh_server_permit_open:
 #                  False: Do NOT allow root login.
 #
 # Default: 'prohibit-password'.
-ssh_server_permit_root_login: 'prohibit-password'
+ssh_cfg_server_permit_root_login: 'prohibit-password'
 
 # Allow pseudo-tty (pty) allocations? Default: True.
-ssh_server_permit_tty: true
+ssh_cfg_server_permit_tty: true
 
 # Allow tunnel device forwarding between client and server?
 #
@@ -1132,7 +1135,7 @@ ssh_server_permit_tty: true
 #            False: No tunneling (default).
 #
 # Default: False (disabled).
-ssh_server_permit_tunnel: false
+ssh_cfg_server_permit_tunnel: false
 
 # Process user environment options in SSHD.
 #
@@ -1147,39 +1150,39 @@ ssh_server_permit_tunnel: false
 #              names.
 #       False: Do NOT allow user environments (default).
 #
-# ssh_server_permit_user_environment:
+# ssh_cfg_server_permit_user_environment:
 #   - 'LANG'
 #   - 'LC*'
 #
 # Default: False (disabled).
-ssh_server_permit_user_environment: false
+ssh_cfg_server_permit_user_environment: false
 
 # Allow ~/.ssh/rc execution? Default: True.
-ssh_server_permit_user_rc: true
+ssh_cfg_server_permit_user_rc: true
 
 # Max unauthenticated connections allowed from a given source address.
 #
-# Applied in addition to ssh_server_max_startups - whichever is lower.
+# Applied in addition to ssh_cfg_server_max_startups - whichever is lower.
 #
 # Special Case:
 #   -1: 'none' - No limit (disabled) (default).
 #
 # Default: -1 (disabled).
-ssh_server_per_source_max_startups: -1
+ssh_cfg_server_per_source_max_startups: -1
 
-# Source address netblock bits to apply ssh_server_per_source_max_startups to.
+# Source address netblock bits for ssh_cfg_server_per_source_max_startups.
 #
-# ssh_server_per_source_net_block_size:
+# ssh_cfg_server_per_source_net_block_size:
 #   ipv4: int - Bits in IPv4 netblock to consider (ALL IPv4/6 if only value).
 #   ipv6: int - Bits in IPv6 netblock to consider.
 #
-# ssh_server_per_source_net_block_size:
+# ssh_cfg_server_per_source_net_block_size:
 #   ipv4: 32
 #
 # Default:
 #   ipv4: 32
 #   ipv6:128
-ssh_server_per_source_net_block_size:
+ssh_cfg_server_per_source_net_block_size:
   ipv4: 32
   ipv6: 128
 
@@ -1187,13 +1190,13 @@ ssh_server_per_source_net_block_size:
 #
 # If a penalty is enforced against a client then its source address and any
 # others in the same network, as defined by
-# ssh_server_per_source_net_block_size, will be refused connection for a
+# ssh_cfg_server_per_source_net_block_size, will be refused connection for a
 # period. A penalty doesn't affect concurrent connections in progress, but
 # multiple penalties from the same source from concurrent connections will
 # accumulate up to a maximum. Conversely, penalties are not applied until a
 # minimum threshold time has been accumulated.
 #
-# ssh_server_per_source_penalties:
+# ssh_cfg_server_per_source_penalties:
 #     list of dict - One or more channel type and time specifications.
 #   - crash: TIME - How long to refuse clients that cause a crash of sshd.
 #   - authfail: TIME - How long to refuse clients that disconnect after making
@@ -1206,7 +1209,7 @@ ssh_server_per_source_net_block_size:
 #         otherwise it may penalise legitimate scanning tools such as
 #         ssh-keyscan.
 #   - grace-exceeded: TIME - How long to refuse clients that fail to
-#         authenticate after ssh_server_login_grace_time.
+#         authenticate after ssh_cfg_server_login_grace_time.
 #   - max: TIME - Maximum time a particular source address range will be
 #         refused access for. Repeated penalties will accumulate up to this
 #         maximum.
@@ -1219,7 +1222,7 @@ ssh_server_per_source_net_block_size:
 #         exceeded.
 #         Values:
 #             deny-all: Deny all incoming connections other than those exempted
-#                       via ssh_server_per_source_penalty_exempt_list until
+#                       via ssh_cfg_server_per_source_penalty_exempt_list until
 #                       penalty expires.
 #           permissive: Allows new connections by removing existing penalties
 #                       early. Client penalties below the min threshold count
@@ -1229,7 +1232,7 @@ ssh_server_per_source_net_block_size:
 #   - overflow6: str - Specifying a different overflow mode for IPv6 addresses.
 #         Values:
 #             deny-all: Deny all incoming connections other than those exempted
-#                       via ssh_server_per_source_penalty_exempt_list until
+#                       via ssh_cfg_server_per_source_penalty_exempt_list until
 #                       penalty expires.
 #           permissive: Allows new connections by removing existing penalties
 #                       early. Client penalties below the min threshold count
@@ -1249,7 +1252,7 @@ ssh_server_per_source_net_block_size:
 #   - max-sources6: 65536
 #   - overflow: 'permissive'
 #   - overflow6: 'permissive'
-ssh_server_per_source_penalties:
+ssh_cfg_server_per_source_penalties:
   - crash: '90s'
   - authfail: '5s'
   - refuseconnection: '10s'
@@ -1277,20 +1280,20 @@ ssh_server_per_source_penalties:
 #     {IP}: IPv4/IPv6.
 #
 # Default: [] (disabled).
-ssh_server_per_source_penalty_exempt_list: []
+ssh_cfg_server_per_source_penalty_exempt_list: []
 
 # Process ID file of SSHD. Default: '/run/sshd.pid'.
-ssh_server_pid_file: '/run/sshd.pid'
+ssh_cfg_server_pid_file: '/run/sshd.pid'
 
 # List of ports that SSHD listens on. Default: [22].
-ssh_server_port:
+ssh_cfg_server_port:
   - 22
 
 # Print time/date of last user login for interactive login? Default: True.
-ssh_server_print_last_log: true
+ssh_cfg_server_print_last_log: true
 
 # Print /etc/motd for interactive login? Default: True.
-ssh_server_print_motd: true
+ssh_cfg_server_print_motd: true
 
 # Signatures to accept for public key authentication.
 #
@@ -1318,7 +1321,7 @@ ssh_server_print_motd: true
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_server_pubkey_accepted_algorithms:
+ssh_cfg_server_pubkey_accepted_algorithms:
   - 'ssh-ed25519-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp256-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp384-cert-v01@openssh.com'
@@ -1355,7 +1358,7 @@ ssh_server_pubkey_accepted_algorithms:
 # non-FIDO, public key types.
 #
 # Default: [] (no additional options).
-ssh_server_pubkey_auth_options: []
+ssh_cfg_server_pubkey_auth_options: []
 
 # Allow public key authentication?
 #
@@ -1367,27 +1370,28 @@ ssh_server_pubkey_auth_options: []
 # >   !: Lock password - deny SSH pubkey auth.
 # >
 # > Any other means to lock the password will result in SSH pubkey failures. Do
-# > NOT set ssh_server_use_pam=true as this leads to security vulnerabilites.
+# > NOT set ssh_cfg_server_use_pam=true as this leads to security
+# > vulnerabilites.
 # >
 # > Reference:
 # > * https://arlimus.github.io/articles/usepam/
 # > * https://unix.stackexchange.com/questions/193066/how-to-unlock-account-for-public-key-ssh-authorization-but-not-for-password-aut
 #
 # Default: True.
-ssh_server_pubkey_authentication: true
+ssh_cfg_server_pubkey_authentication: true
 
 # Unconditionally terminate connection?
 #
 # A refuse connection penalty may be recorded against source of  connection if
-# ssh_server_per_source_penalties are enabled. This option is only really
+# ssh_cfg_server_per_source_penalties are enabled. This option is only really
 # useful in a Match block.
 #
 # Default: False.
-ssh_server_refuse_connection: false
+ssh_cfg_server_refuse_connection: false
 
 # Session rekey limits.
 #
-# ssh_server_rekey_limit:
+# ssh_cfg_server_rekey_limit:
 #     dict - SSH rekey limits.
 #   data: str - Max data transmitted/received before session key renegotiation.
 #       Valid suffixes:
@@ -1403,12 +1407,12 @@ ssh_server_refuse_connection: false
 # Default: (use cipher limits).
 #   data: '0'
 #   time: '0'
-ssh_server_rekey_limit:
+ssh_cfg_server_rekey_limit:
   data: '0'
   time: '0'
 
 # Minimum RSA key size (may only be increased from 1024). Default: 1024.
-ssh_server_required_rsa_size: 1024
+ssh_cfg_server_required_rsa_size: 1024
 
 # Revoked public key file.
 #
@@ -1423,7 +1427,7 @@ ssh_server_required_rsa_size: 1024
 #
 # Reference:
 # * https://manpages.debian.org/trixie/openssh-client/ssh-keygen.1.en.html#KEY_REVOCATION_LISTS
-ssh_server_revoked_keys: ''
+ssh_cfg_server_revoked_keys: ''
 
 # Library path for loading any FIDO-based authenticator-hosted keys.
 #
@@ -1434,69 +1438,69 @@ ssh_server_revoked_keys: ''
 #        containing the path to the library.
 #
 # Default: 'internal'.
-ssh_server_security_key_provider: 'internal'
+ssh_cfg_server_security_key_provider: 'internal'
 
 # Environment variables and contents set in child sessions started by SSHD.
 #
-# Spaces require quotes. Environment variables set by ssh_server_set_env
+# Spaces require quotes. Environment variables set by ssh_cfg_server_set_env
 # override default environment and any variables specified by user via
-# ssh_server_accept_env or ssh_server_permit_user_environment.
+# ssh_cfg_server_accept_env or ssh_cfg_server_permit_user_environment.
 #
-# ssh_server_set_env:
+# ssh_cfg_server_set_env:
 #   - 'TEST_ENV="value with spaces"'
 #
 # Default: [] (disabled).
-ssh_server_set_env: []
+ssh_cfg_server_set_env: []
 
 # Override default path to sshd-auth binary.
 #
 # This option is intended for use by tests.
 #
 # Default: '/usr/lib/openssh/sshd-auth'.
-ssh_server_sshd_auth_path: '/usr/lib/openssh/sshd-auth'
+ssh_cfg_server_sshd_auth_path: '/usr/lib/openssh/sshd-auth'
 
 # Override default path to sshd-session binary
 #
 # This option is intended for use by tests.
 #
 # Default: '/usr/lib/openssh/sshd-session'.
-ssh_server_sshd_session_path: '/usr/lib/openssh/sshd-session'
+ssh_cfg_server_sshd_session_path: '/usr/lib/openssh/sshd-session'
 
 # Octal file creation mode mask (umask) when creating a Unix-domain socket.
 #
 # This option is only used for port forwarding to a Unix-domain socket file.
 #
 # Default: '0177'.
-ssh_server_stream_local_bind_mask: '0177'
+ssh_cfg_server_stream_local_bind_mask: '0177'
 
 # Remove existing Unix-domain socket file before creating a new one?
 #
 # This option is only used for port forwarding to a Unix-domain socket file.
 #
-# If socket file already exists and ssh_server_stream_local_bind_unlink is not
-# enabled, SSHD will be unable to forward the port to the Unix-domain socket
-# file.
+# If socket file already exists and ssh_cfg_server_stream_local_bind_unlink is
+# not enabled, SSHD will be unable to forward the port to the Unix-domain
+# socket file.
 #
 # Default: False.
-ssh_server_stream_local_bind_unlink: false
+ssh_cfg_server_stream_local_bind_unlink: false
 
 # Check file modes/ownership of user files/home directory before login?
 #
 # Novices sometimes accidentally leave their directory or files world-writable.
-# Does not apply to ssh_server_chroot_directory, whose permissions and
+# Does not apply to ssh_cfg_server_chroot_directory, whose permissions and
 # ownership are checked unconditionally.
 #
 # Default: True.
-ssh_server_strict_modes: true
+ssh_cfg_server_strict_modes: true
 
 # Configure external subsystems.
 #
-# ssh_server_subsystem:
+# ssh_cfg_server_subsystem:
 #     list of dict - Subsystem type and configuration.
 #   - system: str - Subsystem type (sftp, scp, tunnel, etc).
 #     config: str - Subsystem config (/usr/lib/openssh/sftp-server).
 #
-# ssh_server_subsystem:
+# ssh_cfg_server_subsystem:
 #   - system: 'sftp'
 #     config: 'internal-sftp'
 #   - system: 'scp'
@@ -1505,7 +1509,7 @@ ssh_server_strict_modes: true
 # Default:
 #   - system: 'sftp'
 #     config: '/usr/lib/openssh/sftp-server'
-ssh_server_subsystem:
+ssh_cfg_server_subsystem:
   - system: 'sftp'
     config: '/usr/lib/openssh/sftp-server'
 
@@ -1525,16 +1529,16 @@ ssh_server_subsystem:
 #   LOCAL7: Local use 7.
 #
 # Default: 'AUTH'.
-ssh_server_syslog_facility: 'AUTH'
+ssh_cfg_server_syslog_facility: 'AUTH'
 
 # Send TCP keepalive messages?
 #
 # Detect when connection death or crash of one of the machines happens.
 #
-# Consider ssh_server_client_alive_interval as well.
+# Consider ssh_cfg_server_client_alive_interval as well.
 #
 # Default: True.
-ssh_server_tcp_keep_alive: true
+ssh_cfg_server_tcp_keep_alive: true
 
 # Public keys of trusted CAs.
 #
@@ -1543,18 +1547,18 @@ ssh_server_tcp_keep_alive: true
 # in this file, then it may be used for authentication for any user listed in
 # the certificate's principals list. Note that certificates that lack a list of
 # principals will not be permitted for authentication using
-# ssh_server_trusted_user_ca_keys.
+# ssh_cfg_server_trusted_user_ca_keys.
 #
 # Values:
 #   {CONTENTS}: Contents of trusted CA keys - file automatically managed in
-#               /etc/ssh/ssh_server_trusted_user_ca_keys.
+#               /etc/ssh/ssh_cfg_server_trusted_user_ca_keys.
 #           '': 'none' - disabled (default).
 #
 # Default: '' (disabled).
 #
 # Reference:
 # * https://manpages.debian.org/trixie/openssh-client/ssh-keygen.1.en.html#CERTIFICATES
-ssh_server_trusted_user_ca_keys: ''
+ssh_cfg_server_trusted_user_ca_keys: ''
 
 # Close client connections with no open channels.
 #
@@ -1568,14 +1572,14 @@ ssh_server_trusted_user_ca_keys: ''
 # provide sufficient time for the client to request and open its channels
 # before terminating the connection.
 #
-# This option may be useful in conjunction with ssh_server_channel_timeout.
+# This option may be useful in conjunction with ssh_cfg_server_channel_timeout.
 #
 # Values:
 #   {TIME}: Connection timout TIME specification.
 #       '': 'none' - never expire connections (default).
 #
 # Default: '' (disabled).
-ssh_server_unused_connection_timeout: ''
+ssh_cfg_server_unused_connection_timeout: ''
 
 # Verify resolved host name for remote IP maps back to same IP?
 #
@@ -1583,16 +1587,18 @@ ssh_server_unused_connection_timeout: ''
 # ~/.ssh/authorized_keys from and sshd_config Match Host directives.
 #
 # Default: False.
-ssh_server_use_dns: false
+ssh_cfg_server_use_dns: false
 
 # Enable Pluggable Authentication Module (PAM) interface?
 #
-# Enables PAM authentication using ssh_server_kbd_interactive_authentication
-# and ssh_server_password_authentication in addition to PAM account and session
+# Enables PAM authentication using
+# ssh_cfg_server_kbd_interactive_authentication and
+# ssh_cfg_server_password_authentication in addition to PAM account and session
 # module processing for all authentication types. Because PAM
 # keyboard-interactive authentication usually serves an equivalent role to
-# password authentication, disable either ssh_server_password_authentication
-# or ssh_server_kbd_interactive_authentication.
+# password authentication, disable either
+# ssh_cfg_server_password_authentication or
+# ssh_cfg_server_kbd_interactive_authentication.
 #
 # Enabling with passwordless accounts will lead to security vulnerabilites. If
 # enabled SSHD will not run as a non-root user.
@@ -1606,7 +1612,7 @@ ssh_server_use_dns: false
 #   * https://unix.stackexchange.com/questions/193066/how-to-unlock-account-for-public-key-ssh-authorization-but-not-for-password-aut
 #
 # Default: False.
-ssh_server_use_pam: false
+ssh_cfg_server_use_pam: false
 
 # Text to append to SSH protocol banner on connection.
 #
@@ -1614,30 +1620,30 @@ ssh_server_use_pam: false
 #   '': 'none' - disable (default).
 #
 # Default: '' (disabled).
-ssh_server_version_addendum: ''
+ssh_cfg_server_version_addendum: ''
 
 # Specifies first display number available for SSHD X11 forwarding.
 #
 # This prevents SSHD from interfering with real X11 servers.
 #
 # Default: 10.
-ssh_server_x11_display_offset: 10
+ssh_cfg_server_x11_display_offset: 10
 
 # Permit X11 forwarding?
 #
 # There may be additional exposure to server and to client displays if SSHD
 # proxy display is configured to listen on wildcard address (see
-# ssh_server_x11_use_localhost), though this is not the default. Additionally
-# authentication spoofing, authentication data verification, and substitution
-# occur on client side. The security risk of using X11 forwarding is that
-# client's X11 display server may be exposed to attack when SSH client requests
-# forwarding (see ssh_client_forward_x11).
+# ssh_cfg_server_x11_use_localhost), though this is not the default.
+# Additionally authentication spoofing, authentication data verification, and
+# substitution occur on client side. The security risk of using X11 forwarding
+# is that client's X11 display server may be exposed to attack when SSH client
+# requests forwarding (see ssh_cfg_client_forward_x11).
 #
 # Note that disabling X11 forwarding does not prevent users from forwarding X11
 # traffic, as users can always install their own forwarders.
 #
 # Default: True.
-ssh_server_x11_forwarding: true
+ssh_cfg_server_x11_forwarding: true
 
 # Bind X11 forwarding server to loopback address instead of wildcard address?
 #
@@ -1647,17 +1653,17 @@ ssh_server_x11_forwarding: true
 # this configuration.
 #
 # Default: True.
-ssh_server_x11_use_localhost: true
+ssh_cfg_server_x11_use_localhost: true
 
 # Full path to xauth. Default: '/usr/bin/xauth'.
-ssh_server_xauth_location: '/usr/bin/xauth'
+ssh_cfg_server_xauth_location: '/usr/bin/xauth'
 
 ###############################################################################
 # SSHD Includes Directory (/etc/ssh/sshd_config.d)
 ###############################################################################
-# Manage files within the first directory listed in ssh_server_include.
+# Manage files within the first directory listed in ssh_cfg_server_include.
 #
-# ssh_server_include_files:
+# ssh_cfg_server_include_files:
 #     list of dict - For sshd_config local configuration..
 #   - config: str - Name of local config ({INCLUDE}/{CONFIG}).
 #     state: str - Whether config should be managed or removed.
@@ -1667,10 +1673,10 @@ ssh_server_xauth_location: '/usr/bin/xauth'
 #         Default: 'present'.
 #     options: str - sshd_config options to manage (per sshd_config options).
 #
-# ssh_server_include:
+# ssh_cfg_server_include:
 #   - '/etc/ssh/sshd_config.d/*.conf'
 #
-# ssh_server_include_files:
+# ssh_cfg_server_include_files:
 #   - config: 'custom_sshd_config'
 #     state: 'present'
 #     options: |
@@ -1685,4 +1691,4 @@ ssh_server_xauth_location: '/usr/bin/xauth'
 #
 # Reference:
 # * https://manpages.debian.org/trixie/openssh-server/sshd_config.5.en.html
-ssh_server_include_files: []
+ssh_cfg_server_include_files: []

@@ -10,10 +10,10 @@
 #
 # This should not return 'unsupported option "none".'
 #
-# This test confirms that ssh_client_canonicalize_hostname: '' fails as
+# This test confirms that ssh_cfg_client_canonicalize_hostname: '' fails as
 # expected. Once fixed, update ssh_config_all_values test with
 #
-#   converge.yml/ssh_client_canonicalize_hostname: ''
+#   converge.yml/ssh_cfg_client_canonicalize_hostname: ''
 #
 # Which will enforce testing the 'none' option.
 #
@@ -36,9 +36,9 @@ provisioner:
   inventory:
     group_vars:
       all:
-        ssh_client_canonicalize_hostname: ''
+        ssh_cfg_client_canonicalize_hostname: ''
 platforms:
-  - name: 'ssh-debian-13-regression_ssh_client_canonicalize_hostname'
+  - name: 'ssh-cfg-client-canonicalize-hostname'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
@@ -47,21 +47,12 @@ platforms:
     pre_build_image: true
 verifier:
   name: 'ansible'
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
 scenario:
   test_sequence:
-    # - 'dependency'
-    # - 'cleanup'
     - 'destroy'
     - 'syntax'
     - 'create'
-    # - 'prepare'
     - 'converge'
     - 'idempotence'
-    # - 'side_effect'
     - 'verify'
-    # - 'cleanup'
     - 'destroy'

@@ -1,22 +1,9 @@
 ---
-- name: 'Install packages'
-  ansible.builtin.include_role:
-    name: 'r_pufky.deb.apt'
-  vars:
-    apt_packages:
-      - '{{ ssh_role_packages }}'
-      - '{{
-          ssh_role_kerberos_minimum_packages
-          if ssh_server_kerberos_authentication else
-          []
-        }}'
-    apt_package_update_cache: true
-
-- name: 'Assert'
-  ansible.builtin.include_tasks: 'assert.yml'
+- name: 'Prep'
+  ansible.builtin.import_tasks: 'prep.yml'
 - name: 'SSHD config'
-  ansible.builtin.include_tasks: 'sshd_config.yml'
+  ansible.builtin.import_tasks: 'sshd_config.yml'
 - name: 'SSH config'
-  ansible.builtin.include_tasks: 'ssh_config.yml'
+  ansible.builtin.import_tasks: 'ssh_config.yml'
 - name: 'Host keys'
-  ansible.builtin.include_tasks: 'host_keys.yml'
+  ansible.builtin.import_tasks: 'host_keys.yml'

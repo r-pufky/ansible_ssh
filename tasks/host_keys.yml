@@ -6,59 +6,60 @@
 # Remove user-defined insecure keys and upgrade RSA host keys to minimum bit
 # length if specified.
 
-- name: 'Host keys | remove insecure host keys'
-  notify: 'Handlers | restart SSH'
+- name: 'Host keys | filesystem | remove insecure host keys'
+  notify: 'Handlers | SSH'
   ansible.builtin.file:
-    path: '/etc/ssh/{{ item }}'
+    path: '{{ "/etc/ssh/" ~ item }}'
     state: 'absent'
   loop: '{{ ssh_security_remove_host_keys }}'
 
-- name: 'Host keys | detect host RSA key'
+- name: 'Host keys | filesystem | detect host RSA key'
   ansible.builtin.stat:
     path: '/etc/ssh/ssh_host_rsa_key'
-  register: _ssh_rsa_host_key
+  register: ssh__rsa_host_key
 
-- name: 'Host keys | query host RSA key strength'
-  when: _ssh_rsa_host_key.stat.exists
+- name: 'Host keys | cmd | query host RSA key strength'
+  when: ssh__rsa_host_key.stat.exists
   ansible.builtin.command: 'ssh-keygen -lf /etc/ssh/ssh_host_rsa_key'
-  register: _ssh_rsa_host_key_strength
+  register: ssh__rsa_host_key_strength
   changed_when: false
   failed_when: >
-    _ssh_rsa_host_key_strength.rc != 0 and
-    _ssh_rsa_host_key_strength.rc != 255
+    ssh__rsa_host_key_strength.rc != 0 and
+    ssh__rsa_host_key_strength.rc != 255
 
-- name: >
-    Host keys |
-    regenerate host RSA key to {{ ssh_security_regenerate_host_rsa_keys }}
+- name: '{{
+      "Host keys | RSA | regenerate to " ~
+      ssh_security_regenerate_host_rsa_keys
+    }}'
   when: >
-    _ssh_rsa_host_key.stat.exists and
+    ssh__rsa_host_key.stat.exists and
     ssh_security_regenerate_host_rsa_keys != '' and
-    _ssh_rsa_host_key_strength.stdout.split(' ')[0] | int <
+    ssh__rsa_host_key_strength.stdout.split(' ')[0] | int <
         ssh_security_regenerate_host_rsa_keys
-  notify: 'Handlers | restart SSH'
+  notify: 'Handlers | SSH'
   community.crypto.openssh_keypair:
     path: '/etc/ssh/ssh_host_rsa_key'
     size: '{{ ssh_security_regenerate_host_rsa_keys }}'
     type: 'rsa'
     state: 'present'
     force: true
-  register: _ssh_rsa_host_key_changed
+  register: ssh__rsa_host_key_changed
 
 - name: 'Host keys | HOST KEY CHANGE WARNING ⚠'  # noqa no-handler immediate.
-  when: _ssh_rsa_host_key_changed.changed
+  when: ssh__rsa_host_key_changed.changed
   ansible.builtin.debug:
     msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │                Target RSA host keys have changed.                 │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ WILL produce host warning. Remove previously saved key:
-      │
-      │   ssh-keygen -R {{ inventory_hostname }}
-      │
-      │ It might be prudent to ignore one-time for playbook:
-      │
-      │   ansible-playbook site.yml \
-      │       --ssh-common-args '-o UserKnownHostsFile=/dev/null'
+
+      ⚠ HOST KEY CHANGE WARNING ⚠
+
+      Target RSA host keys have changed.
+
+      WILL produce host warning. Remove previously saved key:
+
+        ssh-keygen -R {{ inventory_hostname }}
+
+      It might be prudent to ignore one-time for playbook:
+
+        ansible-playbook site.yml \
+            --ssh-common-args '-o UserKnownHostsFile=/dev/null'
   changed_when: false

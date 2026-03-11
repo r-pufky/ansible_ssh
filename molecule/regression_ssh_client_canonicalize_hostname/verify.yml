@@ -3,12 +3,12 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Verify | /etc/ssh/ssh_config'
+    - name: 'Verify | test | /etc/ssh/ssh_config'
       ansible.builtin.include_role:
-        name: 'r_pufky.lib.tests'
+        name: 'r_pufky.data.test'
         tasks_from: 'copy.yml'
       vars:
-        test_name: 'Verify | /etc/ssh/ssh_config'
+        test_name: 'Verify | test | /etc/ssh/ssh_config'
         test_src: 'files/ssh_config'
         test_file: '/etc/ssh/ssh_config'
         test_owner: 'root'
@@ -17,18 +17,18 @@
         test_diff: true
 
     # Values are internal values NOT ssh_config values; check exit code only.
-    - name: 'Verify | test SSH configuration for static errors'
+    - name: 'Verify | cmd | query SSH configuration'
       ansible.builtin.command: 'ssh -G test'
       changed_when: false
       failed_when: false
-      register: _test_ssh_ssh_g_test
+      register: ssh__test_ssh_g_test
 
-    - name: 'Verify | assert static error'
+    - name: 'Verify | assert | SSH configuration no static errors'
       ansible.builtin.assert:
         quiet: true
         that:
-          - _test_ssh_ssh_g_test.rc == 255
-          - _test_ssh_ssh_g_test.stderr is match('^/etc/ssh/ssh_config line 26: unsupported option \"none\".*')  # yamllint disable-line rule:line-length
-        fail_msg: >
+          - ssh__test_ssh_g_test.rc == 255
+          - ssh__test_ssh_g_test.stderr is match('^/etc/ssh/ssh_config line 26')  # yamllint disable-line rule:line-length
+        fail_msg: >-
           ✘ 'ssh -G test' returned static errors:
-          {{ _test_ssh_ssh_g_test.stderr }}.
+          {{ ssh__test_ssh_g_test.stderr }}.

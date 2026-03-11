@@ -10,10 +10,10 @@
 # Tests:
 # * sshd_config all options correct.
 # * No static errors.
-# * /etc/ssh/ssh_server_banner removed.
-# * /etc/ssh/ssh_server_host_certificate removed.
-# * /etc/ssh/ssh_server_host_key removed.
-# * /etc/ssh/ssh_server_trusted_user_ca_keys removed.
+# * /etc/ssh/ssh_cfg_server_banner removed.
+# * /etc/ssh/ssh_cfg_server_host_certificate removed.
+# * /etc/ssh/ssh_cfg_server_host_key removed.
+# * /etc/ssh/ssh_cfg_server_trusted_user_ca_keys removed.
 
 dependency:
   name: 'galaxy'
@@ -28,7 +28,7 @@ provisioner:
     ssh_connection:
       pipelining: false
 platforms:
-  - name: 'ssh-debian-13-sshd_config_remove'
+  - name: 'ssh-sshd-config-remove'
     image: 'ghcr.io/hifis-net/debian-systemd:13'
     systemd: 'always'
     volumes:
@@ -37,21 +37,12 @@ platforms:
     pre_build_image: true
 verifier:
   name: 'ansible'
-lint: |
-  set -e
-  yamllint .
-  ansible-lint .
 scenario:
   test_sequence:
-    # - 'dependency'
-    # - 'cleanup'
     - 'destroy'
     - 'syntax'
     - 'create'
     - 'prepare'
     - 'converge'
-    # - 'idempotence'  # sshd_config managed files are created and removed.
-    # - 'side_effect'
     - 'verify'
-    # - 'cleanup'
     - 'destroy'

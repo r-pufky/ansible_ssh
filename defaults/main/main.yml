@@ -1,22 +1,12 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
-# SSH Security Optimizations
+# Service
 ###############################################################################
-# Find security mitigations by searching for CVE or security headers:
-#
-# grep -ri 'CVE'
-# grep -ri 'Security:'
-#
-# SSH Hardening Guidance:
-# * OpenSSH security advisories: https://www.openssh.com/security.html
-# * NSA Hardening Guide: https://media.defense.gov/2022/Jun/15/2003018261/-1/-1/0/CTR_NSA_NETWORK_INFRASTRUCTURE_SECURITY_GUIDE_20220615.PDF
-# * SSH Hardening for Audit: https://www.sshaudit.com/hardening_guides.html#os_12
 
 # Forcibly remove specified host keys from system?
 #
 # Host keys are explicitly removed from /etc/ssh. DSA keys are no longer
-# supported in Debian 13.
+# supported in Debian 13+.
 #
 # Default: [] (no keys removed).
 ssh_security_remove_host_keys: []

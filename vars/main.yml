@@ -3,24 +3,28 @@
 # SSH Role Options
 ###############################################################################
 
-# Last time SSH options were validated against a default configuration.
-ssh_role_validate_date: '2025-08-21'
-ssh_role_validate_release: 'trixie'
+ssh___release: "{{ {} | r_pufky.data.v3(
 
-# Minimum debian enforced RSA key size.
-ssh_role_os_rsa_key_minimum_size: 1024
+    _date='2025-08-21',
+    _release='trixie',
+  ) }}"
+
+ssh___app: '{{ {} | r_pufky.data.v3(
+
+    _rsa_key_minimum_size=1024,
+  ) }}'
 
 ###############################################################################
 # APT Packages
 ###############################################################################
 
-ssh_role_packages:
+ssh___packages:
   - 'ssh'  # ssh, sshd.
 
-# KerberosGetAFSToken (ssh_server_kerberos_get_afs_token) requires these
+# KerberosGetAFSToken (ssh_cfg_server_kerberos_get_afs_token) requires these
 # packages installed or SSHD will fail to start in addition to a custom SSHD
 # binary (not provided in debian packaging).
-ssh_role_kerberos_minimum_packages:
+ssh___kerberos_minimum_packages:
   - 'krb5-user'
   - 'openafs-krb5'
   - 'libpam-krb5'

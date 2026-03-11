@@ -1,0 +1,90 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Prep
+###############################################################################
+# Sanity check options to stop preventable errors and accidental data deletion.
+
+- name: 'Prep | assert | host and match options mutually exclusive'
+  when: ssh_cfg_client_host | length > 0
+  ansible.builtin.assert:
+    quiet: true
+    that: 'ssh_cfg_client_match | length == 0'
+    fail_msg: |
+
+      ✘ Host and Match directives are mutually exclusive.
+
+      Refer to defaults and update variables:
+
+      ssh_cfg_client_host: {{ ssh_cfg_client_host }}
+      ssh_cfg_client_match: {{ ssh_cfg_client_match }}
+
+- name: 'Prep | assert | kerberos AFS token not used'
+  ansible.builtin.assert:
+    quiet: true
+    that: 'not ssh_cfg_server_kerberos_get_afs_token'
+    fail_msg: |
+
+      ✘ ssh_cfg_server_kerberos_get_afs_token
+
+      Kerberos AFS token support is not compiled in Debian SSH binaries.
+      This option cannot be enabled.
+
+      ssh_cfg_server_kerberos_get_afs_token: {{ ssh_cfg_server_kerberos_get_afs_token }}
+
+- name: 'Prep | assert | RSA required key strength only increased'
+  ansible.builtin.assert:
+    quiet: true
+    that: 'ssh_cfg_client_required_rsa_size >= ssh___app._rsa_key_minimum_size'
+    fail_msg: |
+
+      ✘ ssh_cfg_client_required_rsa_size
+
+      ssh_cfg_client_required_rsa_size must be >= {{ ssh___app._rsa_key_minimum_size }}
+
+      ssh_cfg_client_required_rsa_size: {{ ssh_cfg_client_required_rsa_size }}
+
+- name: 'Prep | assert | authorized keys command'
+  when: ssh_cfg_server_authorized_keys_command | length > 0
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - 'ssh_cfg_server_authorized_keys_command | length > 0'
+      - 'ssh_cfg_server_authorized_keys_command_user | length > 0'
+    fail_msg: |
+
+      ✘ Authorized Keys Command
+
+      Authorized keys command requires all options set.
+
+      ssh_cfg_server_authorized_keys_command: {{ ssh_cfg_server_authorized_keys_command }}
+      ssh_cfg_server_authorized_keys_command_user: {{ ssh_cfg_server_authorized_keys_command_user }}
+
+- name: 'Prep | assert | authorized principals command'
+  when: ssh_cfg_server_authorized_principals_command | length > 0
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - 'ssh_cfg_server_authorized_principals_command | length > 0'
+      - 'ssh_cfg_server_authorized_principals_command_user | length > 0'
+    fail_msg: |
+
+      ✘ Authorized Principals Command
+
+      Authorized keys command requires all options set.
+
+      ssh_cfg_server_authorized_principals_command: {{ ssh_cfg_server_authorized_principals_command }}
+      ssh_cfg_server_authorized_principals_command_user: {{ ssh_cfg_server_authorized_principals_command_user }}
+
+- name: 'Prep | packages'
+  ansible.builtin.include_role:
+    name: 'r_pufky.deb.apt'
+  vars:
+    apt_packages:
+      - '{{ ssh___packages }}'
+      - '{{
+          ssh___kerberos_minimum_packages
+          if ssh_cfg_server_kerberos_authentication else
+          []
+        }}'
+    apt_srv_package_update_cache: true

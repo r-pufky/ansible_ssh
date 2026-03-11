@@ -29,10 +29,10 @@
 # Source include directives from location.
 #
 # Additional directives are included before global configuration values. Manage
-# included files with ssh_client_include_files.
+# included files with ssh_cfg_client_include_files.
 #
 # Special Case:
-#        *: ssh_client_include_files using base directory of first element to
+#        *: ssh_cfg_client_include_files using base directory of first element to
 #           manage files.
 #        *: Wildcards will be expanded in lexical order.
 #       []: Disable includes.
@@ -43,12 +43,12 @@
 #
 # Default:
 #   - '/etc/ssh/ssh_config.d/*.conf'
-ssh_client_include:
+ssh_cfg_client_include:
   - '/etc/ssh/ssh_config.d/*.conf'
 
 # Host match to apply client configuration.
 #
-# Mutually exclusive with ssh_client_match.
+# Mutually exclusive with ssh_cfg_client_match.
 #
 # Special Case:
 #   []: Disable host matching.
@@ -59,19 +59,19 @@ ssh_client_include:
 #
 # Default:
 #   - '*' (all hosts).
-ssh_client_host:
+ssh_cfg_client_host:
   - '*'
 
 # Match hosts based on conditions to apply client configuration.
 #
-# Mutually exclusive with ssh_client_host.
+# Mutually exclusive with ssh_cfg_client_host.
 #
 # Special Case:
 #            *: All specified options must match (logical AND).
 #   !{PATTERN}: Negate matching criteria.
 #           {}: Disable matching (default).
 #
-# ssh_client_match:
+# ssh_cfg_client_match:
 #     dict - One or more match keywords and options.
 #   all: str - Always match (empty string).
 #   canonical: str - Hostname canonicalization conditions that work with
@@ -97,17 +97,17 @@ ssh_client_host:
 #         useful in system-wide ssh_config.
 #   version: str - Match against the version string of ssh ('OpenSSH_10.0').
 #
-# ssh_client_match:
+# ssh_cfg_client_match:
 #   all: ''
 #
-# ssh_client_match:
+# ssh_cfg_client_match:
 #   canonical: 'host="*.example.com"'
 #
-# ssh_client_match:
+# ssh_cfg_client_match:
 #   canonical: 'all'
 #
 # Default: {} (disabled).
-ssh_client_match: {}
+ssh_cfg_client_match: {}
 
 # Add keys to ssh-agent?
 #
@@ -121,7 +121,7 @@ ssh_client_match: {}
 #     False: Do not add keys.
 #
 # Default: False.
-ssh_client_add_keys_to_agent: false
+ssh_cfg_client_add_keys_to_agent: false
 
 # Address family to use when connecting.
 #
@@ -131,7 +131,7 @@ ssh_client_add_keys_to_agent: false
 #   inet6: Use IPv6 only.
 #
 # Default: 'any'.
-ssh_client_address_family: 'any'
+ssh_cfg_client_address_family: 'any'
 
 # Enable batch mode processing?
 #
@@ -139,7 +139,7 @@ ssh_client_address_family: 'any'
 # other batch jobs where no user is present to supply the password.
 #
 # Default: False.
-ssh_client_batch_mode: false
+ssh_cfg_client_batch_mode: false
 
 # Bind to specified address for source address of connections.
 #
@@ -148,11 +148,11 @@ ssh_client_batch_mode: false
 # Values:
 #       '': Autodetect and bind to any address (default).
 #        *: Autodetect and bind to any address (affects
-#           ssh_client_remote_forward).
+#           ssh_cfg_client_remote_forward).
 #   {IPv6}: Enclose IPv6 addresses in square brackets ([::]).
 #
 # Default: ''.
-ssh_client_bind_address: ''
+ssh_cfg_client_bind_address: ''
 
 # Bind to address of specified interface for source address of connections.
 #
@@ -161,11 +161,11 @@ ssh_client_bind_address: ''
 # Values:
 #       '': Autodetect and bind to any address (default).
 #        *: Autodetect and bind to any address (affects
-#           ssh_client_remote_forward).
+#           ssh_cfg_client_remote_forward).
 #   {IPv6}: Enclose IPv6 addresses in square brackets ([::]).
 #
 # Default: ''.
-ssh_client_bind_interface: ''
+ssh_cfg_client_bind_interface: ''
 
 # List of domain suffixes to search for specified destination host.
 #
@@ -173,46 +173,46 @@ ssh_client_bind_interface: ''
 #   []: 'none' - Do not search domain suffixes (default).
 #
 # Default: [] (disabled).
-ssh_client_canonical_domains: []
+ssh_cfg_client_canonical_domains: []
 
 # Fail with error when hostname canonicalization fails? Default: True.
-ssh_client_canonicalize_fallback_local: true
+ssh_cfg_client_canonicalize_fallback_local: true
 
 # Enforce explicit hostname canonicalization?
 #
-# Connections not using ssh_client_proxy_command or ssh_client_proxy_jump, SSH
-# will attempt to canonicalize the hostname using ssh_client_canonical_domains
-# and ssh_client_canonical_permitted_cnames. If
-# ssh_client_canonicalize_hostname is set to always then canonicalization is
+# Connections not using ssh_cfg_client_proxy_command or ssh_cfg_client_proxy_jump, SSH
+# will attempt to canonicalize the hostname using ssh_cfg_client_canonical_domains
+# and ssh_cfg_client_canonical_permitted_cnames. If
+# ssh_cfg_client_canonicalize_hostname is set to always then canonicalization is
 # applied to proxied connections too.
 #
 # Values:
 #     True: Configuration files are processed again using new target name to
-#           pick up any new configuration in matching ssh_client_host and
-#           ssh_client_match.
+#           pick up any new configuration in matching ssh_cfg_client_host and
+#           ssh_cfg_client_match.
 #   always: Enables hostname canonicalization for all connections - including
-#           ssh_client_proxy_command.
-#       '': Disables the use of a ssh_client_proxy_jump host.
+#           ssh_cfg_client_proxy_command.
+#       '': Disables the use of a ssh_cfg_client_proxy_jump host.
 #    False: Do NOT enforce explicit hostname canonicalization (default).
 #
 # Default: False (disabled).
-ssh_client_canonicalize_hostname: false
+ssh_cfg_client_canonicalize_hostname: false
 
 # Max number of dot characters in hostname before canonicalization disabled.
 #
 # Default: 1 (hostname.subdomain).
-ssh_client_canonicalize_max_dots: 1
+ssh_cfg_client_canonicalize_max_dots: 1
 
 # Rules to determine when CNAMEs should be followed canonicalizing hostnames.
 #
 # Special Case:
 #   {}: 'none' - Disable (default).
 #
-# ssh_client_canonicalize_permitted_cnames:
+# ssh_cfg_client_canonicalize_permitted_cnames:
 #     dict - One or more source domains and target domains.
 #   {SOURCE DOMAIN}: list of str - Target domain list.
 #
-# ssh_client_canonicalize_permitted_cnames:
+# ssh_cfg_client_canonicalize_permitted_cnames:
 #   '*.a.example.com':
 #     - '*.b.example.com'
 #     - '*.c.example.com'
@@ -220,7 +220,7 @@ ssh_client_canonicalize_max_dots: 1
 #     - '*.t.example.com'
 #
 # Default: {} (disabled).
-ssh_client_canonicalize_permitted_cnames: {}
+ssh_cfg_client_canonicalize_permitted_cnames: {}
 
 # Algorithms allowed for signing of certificates by certificate authorities.
 #
@@ -243,7 +243,7 @@ ssh_client_canonicalize_permitted_cnames: {}
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_client_ca_signature_algorithms:
+ssh_cfg_client_ca_signature_algorithms:
   - 'ssh-ed25519'
   - 'ecdsa-sha2-nistp256'
   - 'ecdsa-sha2-nistp384'
@@ -256,8 +256,8 @@ ssh_client_ca_signature_algorithms:
 # List of user certificate locations.
 #
 # A corresponding private key must be provided separately in order to use this
-# certificate - either from ssh_client_identity_file directive,
-# ssh_client_pkcs11_provider, or ssh_client_security_key_provider.
+# certificate - either from ssh_cfg_client_identity_file directive,
+# ssh_cfg_client_pkcs11_provider, or ssh_cfg_client_security_key_provider.
 #
 # Special Case:
 #        []: Disabled (default).
@@ -266,7 +266,7 @@ ssh_client_ca_signature_algorithms:
 #     {ENV}: ENVIRONMENT VARIABLES supported.
 #
 # Default: [] (disabled).
-ssh_client_certificate_file: []
+ssh_cfg_client_certificate_file: []
 
 # Inactive channel timeout.
 #
@@ -284,7 +284,7 @@ ssh_client_certificate_file: []
 #   {TIME}: All options use TIME FORMAT interval.
 #        0: Disables timeout.
 #
-# ssh_client_channel_timeout:
+# ssh_cfg_client_channel_timeout:
 #     list of dict - One or more channel type and time specifications.
 #   - global: TIME - Applies to all active channels (measured together).
 #         Traffic on any active channel resets timeout. All connections closed
@@ -306,20 +306,20 @@ ssh_client_certificate_file: []
 #   - tun-connection: TIME - Open TunnelForward connections.
 #   - x11-connection: TIME - Open X11 forwarding sessions.
 #
-# ssh_client_channel_timeout:
+# ssh_cfg_client_channel_timeout:
 #   - global: 0
 #   - agent-connection: '1m'
 #   - x11-connection: '15m'
 #
 # Default: [] (no channel expiration).
-ssh_client_channel_timeout: []
+ssh_cfg_client_channel_timeout: []
 
 # Check host IP address in known_hosts file?
 #
 # This allows SSH to detect if a host key changed due to DNS spoofing.
 #
 # Default: True.
-ssh_client_check_host_ip: true
+ssh_cfg_client_check_host_ip: true
 
 # Ciphers allowed in order of preference.
 #
@@ -357,7 +357,7 @@ ssh_client_check_host_ip: true
 #   - 'aes256-ctr'
 #   - 'aes128-gcm@openssh.com'
 #   - 'aes256-gcm@openssh.com'
-ssh_client_ciphers:
+ssh_cfg_client_ciphers:
   - 'aes128-cbc'
   - 'aes192-cbc'
   - 'aes256-cbc'
@@ -368,13 +368,13 @@ ssh_client_ciphers:
   - 'aes256-gcm@openssh.com'
 
 # Clear all local, remote, and dynamic port forwardings? Default: False.
-ssh_client_clear_all_forwardings: false
+ssh_cfg_client_clear_all_forwardings: false
 
 # Use compression? Default: False.
-ssh_client_compression: false
+ssh_cfg_client_compression: false
 
 # Number of connection attempts before exiting. Default: 1.
-ssh_client_connection_attempts: 1
+ssh_cfg_client_connection_attempts: 1
 
 # Connection timeout (in seconds).
 #
@@ -382,20 +382,20 @@ ssh_client_connection_attempts: 1
 # when it refuses the connection.
 #
 # Default: 0.
-ssh_client_connect_timeout: 0
+ssh_cfg_client_connect_timeout: 0
 
 # Enable sharing of multiple sessions over a single network connection?
 #
 # Values:
 #      True: Listen for connections on a control socket specified using
-#            ssh_client_control_path. Additional sessions can connect to this
-#            socket using the same ssh_client_control_path with
-#            ssh_client_control_master set to no. Sessions will try to reuse
+#            ssh_cfg_client_control_path. Additional sessions can connect to this
+#            socket using the same ssh_cfg_client_control_path with
+#            ssh_cfg_client_control_master set to no. Sessions will try to reuse
 #            the master instance's network connection rather than initiating
 #            new ones, but will fall back to connecting normally if the control
 #            socket does not exist, or is not listening.
 #       ask: Listen for control connections, but require confirmation. If the
-#            ssh_client_control_path cannot be opened, continue without
+#            ssh_cfg_client_control_path cannot be opened, continue without
 #            connecting to a master instance.
 #      auto: Try to use a master connection but fall back to creating a new one
 #            if one does not already exist.
@@ -404,9 +404,9 @@ ssh_client_connect_timeout: 0
 #     False: Do not share connections (default).
 #
 # Default: False (disabled).
-ssh_client_control_master: false
+ssh_cfg_client_control_master: false
 
-# Path to control socket used for ssh_client_control_master.
+# Path to control socket used for ssh_cfg_client_control_master.
 #
 # It is recommended that any path used for opportunistic connection sharing
 # include at least %h, %p, and %r (or alternatively %C) and be placed in a
@@ -420,7 +420,7 @@ ssh_client_control_master: false
 #     {ENV}: ENVIRONMENT VARIABLES supported.
 #
 # Default: '' (disabled).
-ssh_client_control_path: ''
+ssh_cfg_client_control_path: ''
 
 # Persist master connection after initial connection is closed?
 #
@@ -432,7 +432,7 @@ ssh_client_control_path: ''
 #           closed (default).
 #
 # Default: False.
-ssh_client_control_persist: false
+ssh_cfg_client_control_persist: false
 
 # Dynamically forward TCP ports.
 #
@@ -452,21 +452,21 @@ ssh_client_control_persist: false
 # Values:
 #   [{ADDRESS}:]{PORT}: Optional bind address with port specification.
 #
-# ssh_client_dynamic_forward:
+# ssh_cfg_client_dynamic_forward:
 #   - 'localhost:8080'
 #   - '*:3000'
 #   - '12345'
 #
 # Default: [] (disabled).
-ssh_client_dynamic_forward: []
+ssh_cfg_client_dynamic_forward: []
 
-# Enable command line option ssh_client_escape_char for interactive sessions?
+# Enable command line option ssh_cfg_client_escape_char for interactive sessions?
 #
 # Default: False.
-ssh_client_enable_escape_command_line: false
+ssh_cfg_client_enable_escape_command_line: false
 
 # Use ssh-keysign during host based authentication? Default: False.
-ssh_client_enable_ssh_keysign: false
+ssh_cfg_client_enable_ssh_keysign: false
 
 # Set escape character.
 #
@@ -476,12 +476,12 @@ ssh_client_enable_ssh_keysign: false
 #   '': Empty disables (connection transparent for binary data).
 #
 # Default: '~'.
-ssh_client_escape_char: '~'
+ssh_cfg_client_escape_char: '~'
 
 # Terminate connection if all requested forwardings cannot be setup?
 #
 # Default: False (disabled).
-ssh_client_exit_on_forward_failure: false
+ssh_cfg_client_exit_on_forward_failure: false
 
 # Hash algorithm used when displaying key fingerprints.
 #
@@ -490,25 +490,25 @@ ssh_client_exit_on_forward_failure: false
 #   sha256: Show SHA256 hash.
 #
 # Default: 'sha256'.
-ssh_client_fingerprint_hash: 'sha256'
+ssh_cfg_client_fingerprint_hash: 'sha256'
 
 # Fork SSH to background after authentication?
 #
-# Implies ssh_client_stdin_null=true.
+# Implies ssh_cfg_client_stdin_null=true.
 #
 # Client will wait for all remote port forwards to be successfully established
 # before placing itself in the background when:
-# * ssh_client_exit_on_forward_failure=true
-# * ssh_client_fork_after_authentication=true
+# * ssh_cfg_client_exit_on_forward_failure=true
+# * ssh_cfg_client_fork_after_authentication=true
 #
 # Default: False.
-ssh_client_fork_after_authentication: false
+ssh_cfg_client_fork_after_authentication: false
 
 # Forward authentication agent connection to remote machine? Default: False.
-ssh_client_forward_agent: false
+ssh_cfg_client_forward_agent: false
 
 # Forward X11 connections over secure channel and DISPLAY set? Default: False.
-ssh_client_forward_x11: false
+ssh_cfg_client_forward_x11: false
 
 # Forward X11 untrusted connections will timeout after this amount of time.
 #
@@ -517,49 +517,49 @@ ssh_client_forward_x11: false
 #        0: Disable timeout.
 #
 # Default: 1200 (20 minutes).
-ssh_client_forward_x11_timeout: 1200
+ssh_cfg_client_forward_x11_timeout: 1200
 
 # Trusted (full access) to original X11 display? Default: True.
-ssh_client_forward_x11_trusted: true
+ssh_cfg_client_forward_x11_trusted: true
 
 # Allow remote hosts to connect to local forwarded ports? Default: False.
-ssh_client_gateway_ports: false
+ssh_cfg_client_gateway_ports: false
 
 # Global host key database files.
 #
 # Default:
 #   - '/etc/ssh/ssh_known_hosts'
 #   - '/etc/ssh/ssh_known_hosts2'
-ssh_client_global_known_hosts_file:
+ssh_cfg_client_global_known_hosts_file:
   - '/etc/ssh/ssh_known_hosts'
   - '/etc/ssh/ssh_known_hosts2'
 
 # Allow authentication based on GSSAPI? Default: False.
-ssh_client_gssapi_authentication: false
+ssh_cfg_client_gssapi_authentication: false
 
 # GSSAPI client identity used connecting to server. Default: '' (default).
-ssh_client_gssapi_client_identity: ''
+ssh_cfg_client_gssapi_client_identity: ''
 
 # Forward (delegate) GSSAPI credentials to server? Default: False.
-ssh_client_gssapi_delegate_credentials: false
+ssh_cfg_client_gssapi_delegate_credentials: false
 
 # Allow key exchange based on GSSAPI? Default: False.
-ssh_client_gssapi_key_exchange: false
+ssh_cfg_client_gssapi_key_exchange: false
 
 # Should GSSAPI credential renewal force rekeying of SSH connection?
 #
-# Must set ssh_client_gssapi_key_exchange=true on both client and server.
+# Must set ssh_cfg_client_gssapi_key_exchange=true on both client and server.
 #
 # Default: False.
-ssh_client_gssapi_renewal_forces_rekey: false
+ssh_cfg_client_gssapi_renewal_forces_rekey: false
 
 # GSSAPI server identity SSH should expect when connecting.
 #
 # Default: '' (determined from target hostname).
-ssh_client_gssapi_server_identity: ''
+ssh_cfg_client_gssapi_server_identity: ''
 
 # Trust DNS is able to securely canonicalize for GSSAPI? Default: False.
-ssh_client_gssapi_trust_dns: false
+ssh_cfg_client_gssapi_trust_dns: false
 
 # Algorithms for GSSAPI key exchange (kex).
 #
@@ -577,7 +577,7 @@ ssh_client_gssapi_trust_dns: false
 #   - 'gss-curve25519-sha256-'
 #   - 'gss-group14-sha1-'
 #   - 'gss-gex-sha1-'
-ssh_client_gssapi_kex_algorithms:
+ssh_cfg_client_gssapi_kex_algorithms:
   - 'gss-group14-sha256-'
   - 'gss-group16-sha512-'
   - 'gss-nistp256-sha256-'
@@ -588,7 +588,7 @@ ssh_client_gssapi_kex_algorithms:
 # Hash host names and addresses when they are added to ~/.ssh/known_hosts?
 #
 # Default: True.
-ssh_client_hash_known_hosts: true
+ssh_cfg_client_hash_known_hosts: true
 
 # Algorithms used for host based authentication.
 #
@@ -616,7 +616,7 @@ ssh_client_hash_known_hosts: true
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_client_hostbased_accepted_algorithms:
+ssh_cfg_client_hostbased_accepted_algorithms:
   - 'ssh-ed25519-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp256-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp384-cert-v01@openssh.com'
@@ -635,7 +635,7 @@ ssh_client_hostbased_accepted_algorithms:
   - 'rsa-sha2-256'
 
 # Host based authentication with public key authentication? Default: False.
-ssh_client_hostbased_authentication: false
+ssh_cfg_client_hostbased_authentication: false
 
 # Client host key signature algorithm preference.
 #
@@ -663,7 +663,7 @@ ssh_client_hostbased_authentication: false
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_client_host_key_algorithms:
+ssh_cfg_client_host_key_algorithms:
   - 'ssh-ed25519-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp256-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp384-cert-v01@openssh.com'
@@ -684,7 +684,7 @@ ssh_client_host_key_algorithms:
 # Alias to use instead of real host name when looking up or saving host key.
 #
 # Default: '' (no alias).
-ssh_client_host_key_alias: ''
+ssh_cfg_client_host_key_alias: ''
 
 # Real host name to login to.
 #
@@ -693,14 +693,14 @@ ssh_client_host_key_alias: ''
 #      {IP}: IP addresses may be used.
 #
 # Default: '' (determine automatically using Host).
-ssh_client_hostname: ''
+ssh_cfg_client_hostname: ''
 
 # Use configured authentication identities and certificates only?
 #
 # For situations where ssh-agent may offer many different identities.
 #
 # Default: False.
-ssh_client_identities_only: false
+ssh_cfg_client_identities_only: false
 
 # Unix domain socket to communicate with authentication agent.
 #
@@ -719,13 +719,13 @@ ssh_client_identities_only: false
 #                  variable containing the location of the socket.
 #
 # Default: '' (no agent).
-ssh_client_identity_agent: ''
+ssh_cfg_client_identity_agent: ''
 
 # User authentication identity file location.
 #
 # Any identities represented by the authentication agent will be used for
-# authentication unless ssh_client_identities_only is set. May be used with
-# ssh_client_certificate_file to provide any certificate also needed for
+# authentication unless ssh_cfg_client_identities_only is set. May be used with
+# ssh_cfg_client_certificate_file to provide any certificate also needed for
 # authentication with the identity.
 #
 # Special Case:
@@ -745,7 +745,7 @@ ssh_client_identity_agent: ''
 #
 # Reference:
 # * https://security.stackexchange.com/questions/178958/what-are-the-differences-between-the-rsa-dsa-and-ecdsa-keys-that-ssh-uses
-ssh_client_identity_file:
+ssh_cfg_client_identity_file:
   - '~/.ssh/id_rsa'
   - '~/.ssh/id_ed25519'
 
@@ -758,7 +758,7 @@ ssh_client_identity_file:
 #   {PATTERN}: PATTERN match options to ignore.
 #
 # Default: '' (disabled).
-ssh_client_ignore_unknown: ''
+ssh_cfg_client_ignore_unknown: ''
 
 # Specifies IPv4 type-of-service or DSCP class for connections.
 #
@@ -804,12 +804,12 @@ ssh_client_ignore_unknown: ''
 # Reference:
 # * https://en.wikipedia.org/wiki/Differentiated_services
 # * https://en.wikipedia.org/wiki/Type_of_service
-ssh_client_ip_qos:
+ssh_cfg_client_ip_qos:
   - 'lowdelay'
   - 'throughput'
 
 # Use keyboard-interactive authentication? Default: True.
-ssh_client_kbd_interactive_authentication: true
+ssh_cfg_client_kbd_interactive_authentication: true
 
 # List of str methods to use in keyboard-interactive authentication.
 #
@@ -822,7 +822,7 @@ ssh_client_kbd_interactive_authentication: true
 # Reference:
 # * https://en.wikipedia.org/wiki/BSD_Authentication
 # * https://en.wikipedia.org/wiki/Pluggable_authentication_module
-ssh_client_kbd_interactive_devices: []
+ssh_cfg_client_kbd_interactive_devices: []
 
 # Available KEX (key exchange) algorithms.
 #
@@ -854,7 +854,7 @@ ssh_client_kbd_interactive_devices: []
 #   - 'diffie-hellman-group16-sha512'
 #   - 'diffie-hellman-group18-sha512'
 #   - 'diffie-hellman-group14-sha256'
-ssh_client_kex_algorithms:
+ssh_cfg_client_kex_algorithms:
   - 'mlkem768x25519-sha256'
   - 'sntrup761x25519-sha512@openssh.com'
   - 'curve25519-sha256'
@@ -869,18 +869,18 @@ ssh_client_kex_algorithms:
 
 # Specifies a command to use to obtain a list of host keys.
 #
-# This is in addition to ssh_client_user_known_hosts_file and
-# ssh_client_global_known_hosts_file.
+# This is in addition to ssh_cfg_client_user_known_hosts_file and
+# ssh_cfg_client_global_known_hosts_file.
 #
 # Special Case:
 #   {TOKEN}: TOKEN format supported.
 #
 # Default: '' (no command).
-ssh_client_known_hosts_command: ''
+ssh_cfg_client_known_hosts_command: ''
 
 # Command to execute on local machine after successful connection.
 #
-# Requires ssh_client_permit_local_command=true or is ignored.
+# Requires ssh_cfg_client_permit_local_command=true or is ignored.
 #
 # Executed with user shell.
 #
@@ -888,11 +888,11 @@ ssh_client_known_hosts_command: ''
 #   {TOKEN}: TOKEN format supported.
 #
 # Default: '' (no command).
-ssh_client_local_command: ''
+ssh_cfg_client_local_command: ''
 
 # Forward local TCP port to remote machine.
 #
-# The local port is bound based on ssh_client_gateway_ports unless explicitly
+# The local port is bound based on ssh_cfg_client_gateway_ports unless explicitly
 # defined.
 #
 # The bind_address of localhost indicates that the listening port be bound for
@@ -904,19 +904,19 @@ ssh_client_local_command: ''
 # Special Case:
 #   {IPv6}: Enclose IPv6 addresses in square brackets ([::]).
 #
-# ssh_client_local_forward:
+# ssh_cfg_client_local_forward:
 #     list of dict - Local forward configuration.
 #   - listener: str - [{ADDRESS}:]{PORT} or unix domain socket.
 #     destination: str - host:port or unix domain socket.
 #
-# ssh_client_local_forward:
+# ssh_cfg_client_local_forward:
 #   - listener: '8888'
 #     destination: 'localhost:8888'
 #   - listener: '3000'
 #     destination: '*:3000'
 #
 # Default: [] (no local forwards).
-ssh_client_local_forward: []
+ssh_cfg_client_local_forward: []
 
 # SSH log level.
 #
@@ -932,7 +932,7 @@ ssh_client_local_forward: []
 #    DEBUG3: Log everything.
 #
 # Default: 'INFO'.
-ssh_client_log_level: 'INFO'
+ssh_cfg_client_log_level: 'INFO'
 
 # Specify one or more overrides to LogLevel.
 #
@@ -940,7 +940,7 @@ ssh_client_log_level: 'INFO'
 # function and line number to force detailed logging for. For example an
 # override pattern of:
 #
-# ssh_client_log_verbose:
+# ssh_cfg_client_log_verbose:
 #   - 'kex.c:*:1000'
 #   - '*:kex_exchange_identification():*'
 #   - 'packet.c:*'
@@ -953,7 +953,7 @@ ssh_client_log_level: 'INFO'
 #   '': 'none' - disable overrides (default).
 #
 # Default: [] (disabled).
-ssh_client_log_verbose: []
+ssh_cfg_client_log_verbose: []
 
 # MAC (message authentication code) algorithms in order of preference.
 #
@@ -992,7 +992,7 @@ ssh_client_log_verbose: []
 #   - 'hmac-sha2-256'
 #   - 'hmac-sha2-512'
 #   - 'hmac-sha1'
-ssh_client_macs:
+ssh_cfg_client_macs:
   - 'umac-64@openssh.com'
   - 'umac-128@openssh.com'
   - 'hmac-sha2-256'
@@ -1000,10 +1000,10 @@ ssh_client_macs:
   - 'hmac-sha1'
 
 # Disable localhost host authentication (loopback addresses)? Default: False.
-ssh_client_no_host_authentication_for_local_host: false
+ssh_cfg_client_no_host_authentication_for_local_host: false
 
 # Number of password prompts before giving up. Default: 3.
-ssh_client_number_of_password_prompts: 3
+ssh_cfg_client_number_of_password_prompts: 3
 
 # Obscure inter-keystroke timings from passive observers of network traffic?
 #
@@ -1017,19 +1017,19 @@ ssh_client_number_of_password_prompts: 3
 #        False: Do not fake keystroke packets.
 #
 # Default: 20 (20ms packet interval).
-ssh_client_obscure_keystroke_timing: 20
+ssh_cfg_client_obscure_keystroke_timing: 20
 
 # Use password authentication? Default: True.
-ssh_client_password_authentication: true
+ssh_cfg_client_password_authentication: true
 
 # Permit local command execution?
 #
-# Via ssh_client_local_command or !command escape sequence.
+# Via ssh_cfg_client_local_command or !command escape sequence.
 #
 # Default: False.
-ssh_client_permit_local_command: false
+ssh_cfg_client_permit_local_command: false
 
-# Permit remote TCP port forward destinations with ssh_client_remote_forward.
+# Permit remote TCP port forward destinations with ssh_cfg_client_remote_forward.
 #
 # No pattern matching is done except for Special Cases.
 #
@@ -1043,20 +1043,20 @@ ssh_client_permit_local_command: false
 #     {IPv4}:{PORT}: IPv4 port.
 #   [{IPv6}]:{PORT}: IPv6 port.
 #
-# ssh_client_permit_remote_open:
+# ssh_cfg_client_permit_remote_open:
 #   - 'localhost:1000'
 #   - '192.168.0.3:*'
 #   - '[::]:1500'
 #
 # Default: ['any'].
-ssh_client_permit_remote_open:
+ssh_cfg_client_permit_remote_open:
   - 'any'
 
 # Path to PKCS#11 provider (shared library). Default: ''.
-ssh_client_pkcs11_provider: ''
+ssh_cfg_client_pkcs11_provider: ''
 
 # Port to connect on the remote host. Default: 22.
-ssh_client_port: 22
+ssh_cfg_client_port: 22
 
 # Client order for authentication methods.
 #
@@ -1076,7 +1076,7 @@ ssh_client_port: 22
 #   - 'publickey'
 #   - 'keyboard-interactive'
 #   - 'password
-ssh_client_preferred_authentications:
+ssh_cfg_client_preferred_authentications:
   - 'gssapi-with-mic'
   - 'hostbased'
   - 'publickey'
@@ -1085,9 +1085,9 @@ ssh_client_preferred_authentications:
 
 # Command to use to connect to server.
 #
-# ssh_client_check_host_ip is not available for proxy commands.
+# ssh_cfg_client_check_host_ip is not available for proxy commands.
 #
-# Leave this unset if ssh_client_proxy_jump is used.
+# Leave this unset if ssh_cfg_client_proxy_jump is used.
 #
 # Special Case:
 #   %h: host.
@@ -1096,33 +1096,33 @@ ssh_client_preferred_authentications:
 # This directive is useful in conjunction with nc and its proxy support. For
 # example, the following directive would connect via an HTTP proxy 192.0.2.0:
 #
-#   ssh_client_proxy_command: '/usr/bin/nc -X connect -x 192.0.2.0:8080 %h %p'
+#   ssh_cfg_client_proxy_command: '/usr/bin/nc -X connect -x 192.0.2.0:8080 %h %p'
 #
-# ssh_client_proxy_command: 'ssh -q -W %h:%p gateway.example.com'
+# ssh_cfg_client_proxy_command: 'ssh -q -W %h:%p gateway.example.com'
 #
 # default: '' (disabled).
-ssh_client_proxy_command: ''
+ssh_cfg_client_proxy_command: ''
 
 # Jump proxies for SSH.
 #
 # Proxies are connected in the order they are defined. This option will do
-# nothing if ssh_client_proxy_command is set.
+# nothing if ssh_cfg_client_proxy_command is set.
 #
 # Values:
 #                [user@]host[:port]: SSH target machine to connect to.
 #   ssh://[user@]host[:port]/[path]: SSH URL.
 #
-# ssh_client_proxy_jump:
+# ssh_cfg_client_proxy_jump:
 #   - 'test@jump1.example.com:22'
 #   - 'ssh://test@jump2.example.com:2222'
 #
 # Default: [] (disabled).
-ssh_client_proxy_jump: []
+ssh_cfg_client_proxy_jump: []
 
-# Return file descriptor instead of continuing for ssh_client_proxy_command?
+# Return file descriptor instead of continuing for ssh_cfg_client_proxy_command?
 #
 # Default: False.
-ssh_client_proxy_use_fdpass: false
+ssh_cfg_client_proxy_use_fdpass: false
 
 # Signatures to use for public key authentication.
 #
@@ -1150,7 +1150,7 @@ ssh_client_proxy_use_fdpass: false
 #   - 'sk-ecdsa-sha2-nistp256@openssh.com'
 #   - 'rsa-sha2-512'
 #   - 'rsa-sha2-256'
-ssh_client_pubkey_accepted_algorithms:
+ssh_cfg_client_pubkey_accepted_algorithms:
   - 'ssh-ed25519-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp256-cert-v01@openssh.com'
   - 'ecdsa-sha2-nistp384-cert-v01@openssh.com'
@@ -1177,11 +1177,11 @@ ssh_client_pubkey_accepted_algorithms:
 #        False: Do NOT use public Key.
 #
 # Default: True.
-ssh_client_pubkey_authentication: true
+ssh_cfg_client_pubkey_authentication: true
 
 # Session rekey limits.
 #
-# ssh_client_rekey_limit:
+# ssh_cfg_client_rekey_limit:
 #     dict - SSH rekey limits.
 #   data: str - Max data transmitted/received before session key renegotiation.
 #       Valid suffixes:
@@ -1198,7 +1198,7 @@ ssh_client_pubkey_authentication: true
 # Default: (use cipher limits).
 #   - data: '0'
 #   - time: '0'
-ssh_client_rekey_limit:
+ssh_cfg_client_rekey_limit:
   data: '0'
   time: '0'
 
@@ -1210,7 +1210,7 @@ ssh_client_rekey_limit:
 #   {TOKEN}: TOKEN format supported.
 #
 # Default: '' (disabled).
-ssh_client_remote_command: ''
+ssh_cfg_client_remote_command: ''
 
 # Remote TCP port to be forwarded.
 #
@@ -1219,7 +1219,7 @@ ssh_client_remote_command: ''
 #     {ENV}: ENVIRONMENT VARIABLES supported for unix sockets.
 #    {IPv6}: Enclose IPv6 addresses in square brackets ([::]).
 
-# ssh_client_remote_forwards:
+# ssh_cfg_client_remote_forwards:
 #     list of dict - Remote forward configuration.
 #   - listener: str - [{ADDRESS}:]{PORT} or unix domain socket.
 #         Special Case:
@@ -1231,14 +1231,14 @@ ssh_client_remote_command: ''
 #           interfaces.
 #     destination: str - [{ADDRESS}:]{PORT} or unix domain socket.
 #
-# ssh_client_remote_forwards:
+# ssh_cfg_client_remote_forwards:
 #   - listener: '0.0.0.0:50091'
 #     destination: 'localhost:10091'
 #   - listener: '*:3000'
 #     destination: ''
 #
 # Default: [] (disabled).
-ssh_client_remote_forward: []
+ssh_cfg_client_remote_forward: []
 
 # Request a pseudo-tty for session?
 #
@@ -1249,10 +1249,10 @@ ssh_client_remote_forward: []
 #   False: Never.
 #
 # Default: 'auto'.
-ssh_client_request_tty: 'auto'
+ssh_cfg_client_request_tty: 'auto'
 
 # Minimum RSA key size (may only be increased from 1024). Default: 1024.
-ssh_client_required_rsa_size: 1024
+ssh_cfg_client_required_rsa_size: 1024
 
 # Revoked host public key file.
 #
@@ -1264,7 +1264,7 @@ ssh_client_required_rsa_size: 1024
 #
 # Reference:
 # * https://manpages.debian.org/trixie/openssh-client/ssh-keygen.1.en.html#KEY_REVOCATION_LISTS
-ssh_client_revoked_host_keys: ''
+ssh_cfg_client_revoked_host_keys: ''
 
 # Library path for loading any FIDO-based authenticator-hosted keys.
 #
@@ -1275,14 +1275,14 @@ ssh_client_revoked_host_keys: ''
 #        containing the path to the library.
 #
 # Default: 'internal'.
-ssh_client_security_key_provider: 'internal'
+ssh_cfg_client_security_key_provider: 'internal'
 
 # Local environment variables that should be sent to server.
 #
 # Variables are specified by name which may contain wildcard characters. See
 # PATTERNS for more information on patterns.
 #
-# Refer to AcceptEnv (ssh_server_accept_env) in sshd_config for how to
+# Refer to AcceptEnv (ssh_cfg_server_accept_env) in sshd_config for how to
 # configure the server.
 #
 # Special Case:
@@ -1290,22 +1290,22 @@ ssh_client_security_key_provider: 'internal'
 #           with -.
 #
 # Default: ['LANG LC_*'].
-ssh_client_send_env:
+ssh_cfg_client_send_env:
   - 'LANG LC_*'
 
 # Number of server alive messages without receiving any messages back.
 #
 # Server alive messages are sent through encrypted channel and therefore will
-# not be spoofable. TCP keepalive option enabled by ssh_client_tcp_keep_alive
+# not be spoofable. TCP keepalive option enabled by ssh_cfg_client_tcp_keep_alive
 # is spoofable. Server alive mechanism is valuable when client or server depend
 # on knowing when a connection has become unresponsive.
 #
-# For example if ssh_client_server_alive_interval is 15 and
-# ssh_client_server_alive_count_max is 3, if the server becomes unresponsive,
+# For example if ssh_cfg_client_server_alive_interval is 15 and
+# ssh_cfg_client_server_alive_count_max is 3, if the server becomes unresponsive,
 # SSH will disconnect after approximately 45 seconds.
 #
 # Default: 3.
-ssh_client_server_alive_count_max: 3
+ssh_cfg_client_server_alive_count_max: 3
 
 # Timeout interval in seconds if no data received to request a server response.
 #
@@ -1313,10 +1313,10 @@ ssh_client_server_alive_count_max: 3
 #
 # Special Case:
 #     0: Never send messages to server (default).
-#   300: Default if ssh_client_batch_mode set.
+#   300: Default if ssh_cfg_client_batch_mode set.
 #
 # Default: 0 (disabled).
-ssh_client_server_alive_interval: 0
+ssh_cfg_client_server_alive_interval: 0
 
 # Set session type options.
 #
@@ -1326,42 +1326,42 @@ ssh_client_server_alive_interval: 0
 #
 # Values:
 #        none: Do not execute a remote command.
-#   subsystem: Use subsystem from ssh_client_remote_command.
+#   subsystem: Use subsystem from ssh_cfg_client_remote_command.
 #     default: Shell or command execution (default).
 #
 # Default: 'default'.
-ssh_client_session_type: 'default'
+ssh_cfg_client_session_type: 'default'
 
 # Environment variables and contents to be set on the server.
 #
 # The server must be prepared to accept the environment variable. Spaces
 # require quotes.
 #
-# ssh_client_set_env:
+# ssh_cfg_client_set_env:
 #   - 'TEST_ENV="value with spaces"'
 #
 # Default: [] (disabled).
-ssh_client_set_env: []
+ssh_cfg_client_set_env: []
 
 # Redirect stdin from /dev/null (prevents reading from stdin)? Default: False.
-ssh_client_stdin_null: false
+ssh_cfg_client_stdin_null: false
 
 # Octal file creation mode mask (umask) when creating a Unix-domain socket.
 #
 # Only used for port forwarding to a Unix-domain socket file.
 #
 # Default: '0177'.
-ssh_client_stream_local_bind_mask: '0177'
+ssh_cfg_client_stream_local_bind_mask: '0177'
 
 # Remove existing Unix-domain socket file before creating a new one?
 #
 # Only used for port forwarding to a Unix-domain socket file.
 #
-# If socket file already exists and ssh_client_stream_local_bind_unlink=false,
+# If socket file already exists and ssh_cfg_client_stream_local_bind_unlink=false,
 # SSH will be unable to forward port to Unix-domain socket file.
 #
 # Default: False.
-ssh_client_stream_local_bind_unlink: false
+ssh_cfg_client_stream_local_bind_unlink: false
 
 # Enable strict host key checking?
 #
@@ -1382,7 +1382,7 @@ ssh_client_stream_local_bind_unlink: false
 #          files.
 #
 # Default: 'ask'.
-ssh_client_strict_host_key_checking: 'ask'
+ssh_cfg_client_strict_host_key_checking: 'ask'
 
 # Syslog facility code used when logging messages from SSH.
 #
@@ -1400,20 +1400,20 @@ ssh_client_strict_host_key_checking: 'ask'
 #   LOCAL7: Local use 7.
 #
 # Default: 'USER'.
-ssh_client_syslog_facility: 'USER'
+ssh_cfg_client_syslog_facility: 'USER'
 
 # Send TCP keepalive messages?
 #
 # Connection death or crash of one of the machines will be properly noticed.
 # This option takes a long time to notice when connection dies.
 #
-# Consider ssh_client_server_alive_interval as well.
+# Consider ssh_cfg_client_server_alive_interval as well.
 #
 # Default: True.
-ssh_client_tcp_keep_alive: true
+ssh_cfg_client_tcp_keep_alive: true
 
 # Specify configuration tag name for use by a match directive. Default: ''.
-ssh_client_tag: ''
+ssh_cfg_client_tag: ''
 
 # Request tunnel device forwarding between client and server?
 #
@@ -1424,11 +1424,11 @@ ssh_client_tag: ''
 #            False: No tunneling (default).
 #
 # Default: False.
-ssh_client_tunnel: false
+ssh_cfg_client_tunnel: false
 
 # Tunnel device to open on the client.
 #
-# ssh_client_tunnel_device:
+# ssh_cfg_client_tunnel_device:
 #     dict - Tunnel configuration.
 #   local: str - Local tunnel.
 #       Values:
@@ -1439,14 +1439,14 @@ ssh_client_tunnel: false
 #           #: Int numerical tunnel ID.
 #         any: Use next available tunnel device.
 #
-# ssh_client_tunnel_device:
+# ssh_cfg_client_tunnel_device:
 #   local: '1234'
 #   remote: ''
 #
 # Default:
 #   - local: 'any'
 #   - remote: 'any'
-ssh_client_tunnel_device:
+ssh_cfg_client_tunnel_device:
   local: 'any'
   remote: 'any'
 
@@ -1461,10 +1461,10 @@ ssh_client_tunnel_device:
 #   False: Do NOT update host keys.
 #
 # Default: True.
-ssh_client_update_host_keys: true
+ssh_cfg_client_update_host_keys: true
 
 # Specify user to login as. Default: '' (use logged in user).
-ssh_client_user: ''
+ssh_cfg_client_user: ''
 
 # Files to use for user host key database.
 #
@@ -1477,7 +1477,7 @@ ssh_client_user: ''
 # Default:
 #   - '~/.ssh/known_hosts'
 #   - '~/.ssh/known_hosts2'
-ssh_client_user_known_hosts_file:
+ssh_cfg_client_user_known_hosts_file:
   - '~/.ssh/known_hosts'
   - '~/.ssh/known_hosts2'
 
@@ -1488,36 +1488,36 @@ ssh_client_user_known_hosts_file:
 #          insecure fingerprints handled as if option is set to ask.
 #     ask: Information on fingerprint match will be displayed, but the user
 #          will still need to confirm new host keys according to the
-#          ssh_client_strict_host_key_checking option.
+#          ssh_cfg_client_strict_host_key_checking option.
 #   False: Do NOT verify host DNS (default).
 #
 # Default: False.
 #
 # Reference:
 # * https://manpages.debian.org/trixie/openssh-client/ssh_config.5.en.html#VERIFYING_HOST_KEYS
-ssh_client_verify_host_key_dns: false
+ssh_cfg_client_verify_host_key_dns: false
 
 # Text to append to SSH protocol banner sent by client on connection.
 #
 # Default: '' (disabled).
-ssh_client_version_addendum: ''
+ssh_cfg_client_version_addendum: ''
 
 # Print ASCII art and HEX fingerprint of remote host key at login?
 #
 # Always prints HEX fingerprint for unknown host keys.
 #
 # Default: False.
-ssh_client_visual_host_key: false
+ssh_cfg_client_visual_host_key: false
 
 # Full path to xauth. Default: '/usr/bin/xauth'.
-ssh_client_xauth_location: '/usr/bin/xauth'
+ssh_cfg_client_xauth_location: '/usr/bin/xauth'
 
 ###############################################################################
 # SSH Includes Directory (/etc/ssh/ssh_config.d)
 ###############################################################################
-# Manage files within first directory listed in ssh_client_include.
+# Manage files within first directory listed in ssh_cfg_client_include.
 #
-# ssh_client_include_files:
+# ssh_cfg_client_include_files:
 #     list of dict - ssh_config local configuration.
 #   - config: str - Name of local config ({INCLUDE}/{CONFIG}).
 #     state: str - Whether config should be managed or removed.
@@ -1527,10 +1527,10 @@ ssh_client_xauth_location: '/usr/bin/xauth'
 #         Default: 'present'.
 #     options: str - ssh_config options to manage (per ssh_config options).
 #
-# ssh_client_include:
+# ssh_cfg_client_include:
 #   - '/etc/ssh/ssh_config.d/*.conf'
 #
-# ssh_client_include_files:
+# ssh_cfg_client_include_files:
 #   - config: 'custom_ssh_config'
 #     state: 'present'
 #     options: |
@@ -1567,7 +1567,7 @@ ssh_client_xauth_location: '/usr/bin/xauth'
 #
 # Reference:
 # * https://manpages.debian.org/trixie/openssh-client/ssh_config.5.en.html
-ssh_client_include_files:
+ssh_cfg_client_include_files:
   - config: '20-systemd-ssh-proxy'
     state: 'present'
     options: |

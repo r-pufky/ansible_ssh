@@ -3,7 +3,7 @@
 # SSHD Handlers
 ###############################################################################
 
-- name: 'Handlers | restart SSH'
+- name: 'Handlers | SSH'
   ansible.builtin.systemd:
     name: 'ssh'
     state: 'restarted'
