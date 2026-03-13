@@ -45,9 +45,9 @@
     force: true
   register: ssh__rsa_host_key_changed
 
-- name: 'Host keys | HOST KEY CHANGE WARNING ⚠'  # noqa no-handler immediate.
+- name: 'Host keys | ⚠ HOST KEY CHANGE WARNING ⚠'
   when: ssh__rsa_host_key_changed.changed
-  ansible.builtin.debug:
+  ansible.builtin.debug:  # noqa no-handler immediate.
     msg: |
 
       ⚠ HOST KEY CHANGE WARNING ⚠
